@@ -9,7 +9,7 @@ def getStatus():
     STATUS_MATCHES = {"##": "branch", " M": "modified", "M ": "added",
                       "??": "untracked", "": "unknown",
                       "R ": "renamed", "A ": "added", "AM": "added",
-                      " D": "deleted"}
+                      " D": "deleted", "MM": "added"}
 
     status_data = subprocess.run(
         ["git", "status", "-sb"], stdout=subprocess.PIPE).stdout
