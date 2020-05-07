@@ -33,13 +33,12 @@ def showStatus():
     messages = Messages.MESSAGES
     print()
 
+    if "branch" in status:
+        branch_name = status.pop("branch")[0]
+        print(messages["branch"].format(branch_name))
+
     for change_name in status:
         changes = status[change_name]
-
-        if change_name == "branch":
-            branch_name = changes[0]
-            print(messages["branch"].format(branch_name))
-            continue
 
         print(messages[change_name])
         for change in changes:
