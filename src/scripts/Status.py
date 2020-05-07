@@ -37,13 +37,18 @@ def showStatus():
         branch_name = status.pop("branch")[0]
         print(messages["branch"].format(branch_name))
 
+    if len(status) == 0:
+        print(messages["clean"])
+        return
+
     for change_name in status:
         changes = status[change_name]
 
         print(messages[change_name])
         for change in changes:
             print(messages["change"].format(change))
-        print()
+
+    print()
 
 
 def Router(leftKeys):
