@@ -1,10 +1,9 @@
 import Status
 
-PIX_STUFF = {
+PIX_STORE = {
     "Status": Status
 }
 
 
 def Router(route, leftKeys):
-    Status.showStatus()
-    pass
+    PIX_STORE[route].Router(leftKeys)
