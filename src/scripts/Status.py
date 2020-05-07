@@ -39,14 +39,13 @@ def showStatus():
 
     if len(status) == 0:
         print(messages["clean"])
-        return
 
     for change_name in status:
         changes = status[change_name]
 
-        print(messages[change_name])
+        print(messages[f"{change_name}-title"])
         for change in changes:
-            print(messages["change"].format(change))
+            print(messages[change_name].format(change))
 
     print()
 
