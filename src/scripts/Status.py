@@ -5,22 +5,39 @@ import subprocess
 import Messages
 
 
+def run(command=[]):
+    stdout = subprocess.run(
+        command, stdout=subprocess.PIPE).stdout
+    return str(stdout)[2:-3]
+
+
 def getStatus():
     STATUS_MATCHES = {"#": "branch", "M": "modified",
                       "?": "untracked",
                       "R": "renamed", "A": "added",
                       "D": "deleted"}
 
-    status_data = subprocess.run(
-        ["git", "status", "-sb"], stdout=subprocess.PIPE).stdout
-    status_data = str(status_data)[2:-3].split("\\n")
+    status_data = run(["git", "status", "-sb"])
+    status_data = str(status_data).split("\\n")
 
     status = {}
     for change in status_data:
+        prefix = change[:2]
         firstCode = change[0]
         secondCode = change[1]
         content = change[3:]
         change_name = ''
+
+        if "R" in prefix:
+            files = content.split(" -> ")
+            oldFilePaths = files[0].split("/")
+            newFilePaths = files[1].split("/")
+
+            for index in range(0, len(oldFilePaths)):
+                if not oldFilePaths[index] == newFilePaths[index]:
+                    content = Messages.MESSAGES["renamed-modify"].format(
+                        '/'.join(oldFilePaths[0:index]), '/'.join(newFilePaths[index:]))
+                    break
 
         if firstCode.isalpha():
             change_name = STATUS_MATCHES["A"]
