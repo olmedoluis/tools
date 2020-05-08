@@ -6,10 +6,10 @@ import Messages
 
 
 def getStatus():
-    STATUS_MATCHES = {"##": "branch", " M": "modified", "M ": "added",
-                      "??": "untracked", "": "unknown",
-                      "R ": "renamed", "A ": "added", "AM": "added",
-                      " D": "deleted", "MM": "added"}
+    STATUS_MATCHES = {"#": "branch", "M": "modified",
+                      "?": "untracked",
+                      "R": "renamed", "A": "added",
+                      "D": "deleted"}
 
     status_data = subprocess.run(
         ["git", "status", "-sb"], stdout=subprocess.PIPE).stdout
@@ -17,13 +17,20 @@ def getStatus():
 
     status = {}
     for change in status_data:
-        prefix = change[:2]
+        firstCode = change[0]
+        secondCode = change[1]
         content = change[3:]
-        change_name = STATUS_MATCHES[prefix]
-        if change_name in status:
-            status[change_name].append(content)
+        change_name = ''
+
+        if firstCode.isalpha():
+            change_name = STATUS_MATCHES["A"]
         else:
-            status[change_name] = [content]
+            change_name = STATUS_MATCHES[secondCode] if firstCode == ' ' else STATUS_MATCHES[firstCode]
+
+        if not change_name in status:
+            status[change_name] = []
+
+        status[change_name].append(content)
 
     return status
 
