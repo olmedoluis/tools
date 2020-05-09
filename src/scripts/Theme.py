@@ -25,5 +25,6 @@ def getTheme():
         "deleted": mod("bold") + font_high("red"),
         "untracked": mod("bold") + font_high("blue"),
         "renamed": mod("bold") + font_low("red"),
+        "error": mod("bold") + font_high("red"),
         "reset": mod("reset"),
     }
