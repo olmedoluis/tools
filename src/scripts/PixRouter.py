@@ -5,5 +5,5 @@ PIX_STORE = {
 }
 
 
-def Router(route, leftKeys):
-    PIX_STORE[route].Router(leftKeys)
+def Router(route_name, router):
+    PIX_STORE[route_name].Router(router)

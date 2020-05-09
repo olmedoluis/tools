@@ -2,23 +2,34 @@
 
 import os
 import subprocess
-import Messages
+from Messages import getMessages
+
+messages = getMessages()
 
 
 def run(command=[]):
-    stdout = subprocess.run(
-        command, stdout=subprocess.PIPE).stdout
-    return str(stdout)[2:-3]
+    process = subprocess.Popen(
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
+    output, error = process.communicate()
+
+    if process.returncode != 0:
+        if error.find("not a git repository") != -1:
+            print(messages["notGitRepository"])
+        exit()
+        # print("bitcoin failed %d %s %s" % (process.returncode, output, error))
+
+    return output
 
 
-def getStatus():
+def getStatus(messages):
     STATUS_MATCHES = {"#": "branch", "M": "modified",
                       "?": "untracked",
                       "R": "renamed", "A": "added",
                       "D": "deleted"}
 
     status_data = run(["git", "status", "-sb"])
-    status_data = str(status_data).split("\\n")
+    status_data = status_data.rstrip().split("\n")
 
     status = {}
     for change in status_data:
@@ -35,7 +46,8 @@ def getStatus():
 
             for index in range(0, len(oldFilePaths)):
                 if not oldFilePaths[index] == newFilePaths[index]:
-                    content = Messages.MESSAGES["renamed-modify"].format(
+                    print(messages)
+                    content = messages["renamed-modify"].format(
                         '/'.join(oldFilePaths[0:index]), '/'.join(newFilePaths[index:]))
                     break
 
@@ -52,11 +64,10 @@ def getStatus():
     return status
 
 
-def showStatus():
-    status = getStatus()
-    messages = Messages.MESSAGES
-    print()
+def showStatus(messages):
+    status = getStatus(messages)
 
+    print()
     if "branch" in status:
         branch_name = status.pop("branch")[0]
         print(messages["branch"].format(branch_name))
@@ -75,4 +86,5 @@ def showStatus():
 
 
 def Router(leftKeys):
-    showStatus()
+    messages = getMessages()
+    showStatus(messages)
