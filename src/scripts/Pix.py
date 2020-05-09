@@ -35,6 +35,7 @@ class mainRouter():
         self.user_routes = argv
         self.actual_route = argv[0]
         self.leftKeys = argv[1:]
+        self.messages = messages
 
     def runAgain(self, router):
         run(router)
