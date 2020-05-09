@@ -2,7 +2,7 @@
 
 import os
 import subprocess
-import Messages
+from Messages import getMessages
 
 
 def run(command=[]):
@@ -11,7 +11,7 @@ def run(command=[]):
     return str(stdout)[2:-3]
 
 
-def getStatus():
+def getStatus(messages):
     STATUS_MATCHES = {"#": "branch", "M": "modified",
                       "?": "untracked",
                       "R": "renamed", "A": "added",
@@ -35,7 +35,8 @@ def getStatus():
 
             for index in range(0, len(oldFilePaths)):
                 if not oldFilePaths[index] == newFilePaths[index]:
-                    content = Messages.MESSAGES["renamed-modify"].format(
+                    print(messages)
+                    content = messages["renamed-modify"].format(
                         '/'.join(oldFilePaths[0:index]), '/'.join(newFilePaths[index:]))
                     break
 
@@ -52,11 +53,10 @@ def getStatus():
     return status
 
 
-def showStatus():
-    status = getStatus()
-    messages = Messages.MESSAGES
-    print()
+def showStatus(messages):
+    status = getStatus(messages)
 
+    print()
     if "branch" in status:
         branch_name = status.pop("branch")[0]
         print(messages["branch"].format(branch_name))
@@ -75,4 +75,5 @@ def showStatus():
 
 
 def Router(leftKeys):
-    showStatus()
+    messages = getMessages()
+    showStatus(messages)

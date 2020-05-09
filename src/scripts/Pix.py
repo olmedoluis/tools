@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 
 import sys
-import PixRoutes
-import PixRouter
+from PixRouter import Router
+from PixRoutes import ROUTES
+from Messages import getMessages
 
 
 def checkPixShortcut(keyword):
-    routes = PixRoutes.ROUTES
-
-    for entityId in routes:
-        entity = routes[entityId]
+    for entityId in ROUTES:
+        entity = ROUTES[entityId]
         posibleRoutes = entity["keys"] + entity["alias"]
 
         if keyword in posibleRoutes:
@@ -26,4 +25,6 @@ if __name__ == "__main__":
         route = checkPixShortcut(mainKey)
 
         if route != False:
-            PixRouter.Router(route, leftKeys)
+            Router(route, leftKeys)
+        else:
+            print()
