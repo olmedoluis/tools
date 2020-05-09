@@ -30,7 +30,7 @@ def run(router):
         print(messages["unknownRoute"].format(good_routes, wrong_routes))
 
 
-class mainRouter():
+class PixTools():
     def __init__(self, argv):
         self.user_routes = argv
         self.actual_route = argv[0]
@@ -54,5 +54,5 @@ class mainRouter():
 if __name__ == "__main__":
     arg = sys.argv[1:]
     if(len(arg) != 0):
-        router = mainRouter(arg)
-        run(router)
+        pixTools = PixTools(arg)
+        run(pixTools)
