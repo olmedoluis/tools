@@ -1,15 +1,11 @@
 #!/usr/bin/python3
 
-import os
-import subprocess
-from Messages import getMessages
 
-messages = getMessages()
+from subprocess import Popen, PIPE
 
 
 def run(command=[]):
-    process = subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
     output, error = process.communicate()
 
@@ -17,12 +13,11 @@ def run(command=[]):
         if error.find("not a git repository") != -1:
             print(messages["notGitRepository"])
         exit()
-        # print("bitcoin failed %d %s %s" % (process.returncode, output, error))
 
     return output
 
 
-def getStatus(messages):
+def getStatus():
     STATUS_MATCHES = {"#": "branch", "M": "modified",
                       "?": "untracked",
                       "R": "renamed", "A": "added",
@@ -64,8 +59,8 @@ def getStatus(messages):
     return status
 
 
-def showStatus(messages):
-    status = getStatus(messages)
+def showStatus():
+    status = getStatus()
 
     print()
     if "branch" in status:
@@ -85,6 +80,8 @@ def showStatus(messages):
     print()
 
 
-def Router(pixTools):
-    messages = getMessages()
-    showStatus(messages)
+def Router(router):
+    global messages
+
+    messages = router.messages
+    showStatus()
