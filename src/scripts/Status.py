@@ -17,7 +17,6 @@ def run(command=[]):
         if error.find("not a git repository") != -1:
             print(messages["notGitRepository"])
         exit()
-        # print("bitcoin failed %d %s %s" % (process.returncode, output, error))
 
     return output
 
