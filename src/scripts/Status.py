@@ -2,9 +2,6 @@
 
 import os
 import subprocess
-from Messages import getMessages
-
-messages = getMessages()
 
 
 def run(command=[]):
@@ -21,7 +18,7 @@ def run(command=[]):
     return output
 
 
-def getStatus(messages):
+def getStatus():
     STATUS_MATCHES = {"#": "branch", "M": "modified",
                       "?": "untracked",
                       "R": "renamed", "A": "added",
@@ -63,8 +60,8 @@ def getStatus(messages):
     return status
 
 
-def showStatus(messages):
-    status = getStatus(messages)
+def showStatus():
+    status = getStatus()
 
     print()
     if "branch" in status:
@@ -84,6 +81,8 @@ def showStatus(messages):
     print()
 
 
-def Router(leftKeys):
-    messages = getMessages()
-    showStatus(messages)
+def Router(router):
+    global messages
+
+    messages = router.messages
+    showStatus()
