@@ -19,14 +19,14 @@ def checkPixShortcut(keyword):
     return False
 
 
-def run(router):
-    route_name = checkPixShortcut(router.actual_route)
+def run(pixTools):
+    route_name = checkPixShortcut(pixTools.actual_route)
 
     if route_name != False:
-        Router(route_name, router)
+        Router(route_name, pixTools)
     else:
-        good_routes = f"pix {' '.join(router.getGoodRoutes())}"
-        wrong_routes = f"{router.actual_route} {' '.join(router.leftKeys)}"
+        good_routes = f"pix {' '.join(pixTools.getGoodRoutes())}"
+        wrong_routes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
         print(messages["unknownRoute"].format(good_routes, wrong_routes))
 
 
