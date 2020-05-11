@@ -1,14 +1,11 @@
 import curses
+from time import sleep
 
 word = ""
 last_word = ""
 
-outputs = []
-
 
 def prompts(data):
-    word = ""
-    last_word = ""
     if not "placeholder" in data:
         data["placeholder"] = ""
 
@@ -18,9 +15,7 @@ def prompts(data):
     def setup():
         title = data["title"]
 
-        stdscr.addstr(0, 0, "")
         stdscr.addstr(1, 0, f" {title}")
-        stdscr.addstr(4, 0, "")
 
     def text():
         global word, last_word
@@ -50,15 +45,18 @@ def prompts(data):
 
             if "\n" in char:
                 break
-            elif char == "\x7f":
+            elif char == "KEY_BACKSPACE":
                 word = word[:-1]
             else:
                 word += char
 
-            outputs.append(char)
+    def multitext():
+        print("multiselect")
+        sleep(5)
 
     prompts_store = {
-        "text": text
+        "text": text,
+        "multitext": multitext
     }
 
     actual_prompt = prompts_store[data["type"]]
