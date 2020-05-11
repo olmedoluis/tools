@@ -1,62 +1,85 @@
-import time
-import sys
-from pynput.keyboard import Key, Listener
-from pynput import keyboard
+import curses
 
+word = ""
+last_word = ""
 
-def selection():
-    pass
-
-
-question = "que onda perro?"
-texto = ""
-template = "{}({}){}"
-last_frame = ""
-frame = ""
 outputs = []
 
 
-def on_press(key):
-    global texto
+def prompts(data):
+    word = ""
+    last_word = ""
+    if not "placeholder" in data:
+        data["placeholder"] = ""
 
-    keyString = '{0}'.format(key)
+    if not "title" in data:
+        data["title"] = ""
 
-    if key == keyboard.Key.esc:
-        return False
+    def setup():
+        title = data["title"]
 
-    if key == keyboard.Key.space:
-        texto += " "
-        update_screen(texto)
+        stdscr.addstr(0, 0, "")
+        stdscr.addstr(1, 0, f" {title}")
+        stdscr.addstr(4, 0, "")
 
-    if key == keyboard.Key.backspace:
-        texto += "\b"
-        update_screen(texto)
+    def text():
+        global word, last_word
 
-    if len(keyString) != 3:
-        return
+        def getDisplayString(word):
+            placeholder = data["placeholder"]
 
-    texto += keyString[1]
-    update_screen(texto)
+            if word == "":
+                return placeholder
 
+            return word
 
-def update_screen(textToShow):
-    global template, last_frame, frame, texto
+        while True:
+            stdscr.clear()
+            setup()
 
-    clean_up = '\b' * (len(last_frame) + 2)
-    last_frame = textToShow
+            user_input = getDisplayString(word)
+            stdscr.addstr(3, 0, f"\t{user_input}")
+            stdscr.refresh()
 
-    sys.stdout.write(clean_up)
-    sys.stdout.write(textToShow)
-    sys.stdout.flush()
-    outputs.append(textToShow)
+            last_word += word
 
+            try:
+                char = stdscr.getkey()
+            except:
+                break
 
-with Listener(on_press=on_press) as listener:
+            if "\n" in char:
+                break
+            elif char == "\x7f":
+                word = word[:-1]
+            else:
+                word += char
+
+            outputs.append(char)
+
+    prompts_store = {
+        "text": text
+    }
+
+    actual_prompt = prompts_store[data["type"]]
+
+    stdscr = curses.initscr()
+    curses.cbreak()
+    stdscr.keypad(True)
+
     try:
-        listener.join()
-    except KeyboardInterrupt:
-        print("\ntexto", texto)
-        # print("outputs", outputs)
-        print("frame", frame)
-        print("buffer", sys.stdout.buffer)
+        actual_prompt()
+    finally:
+        curses.nocbreak()
+        stdscr.keypad(False)
+        curses.echo()
+        curses.endwin()
+
+
+prompts({
+    "type": "text",
+    "placeholder": "weon",
+    "title": "que onda weon?"
+})
+
 exit()
