@@ -1,22 +1,6 @@
 from time import sleep
-import os
-import sys
-import time
 import getch
 from ConsoleControl import console
-
-
-def terminal(height):
-    my_terminal = console(height)
-
-    class terminal_ui():
-        def showAt(self, data):
-            my_terminal.show(data)
-
-        def refresh(self):
-            my_terminal.refresh()
-
-    return terminal_ui()
 
 
 # prompts({
@@ -27,17 +11,51 @@ def terminal(height):
 #     "template": "{}({}):{}"
 # })
 
-myTerm = terminal(2)
-myTerm.showAt(["hola", "holi"])
+class prompt():
+    def __init__(self, variety, title="", placeHolder="", children=[], template=""):
+        self.variety = variety
+        self.title = title
+        self.placeHolder = placeHolder
+        self.children = children
+        self.template = template
 
-myTerm.refresh()
-time.sleep(1)
 
-myTerm.showAt(["noice", "aaa"])
-# myTerm.showAt(1, "holis")
-myTerm.refresh()
-time.sleep(1)
+def simpleTextInput(data):
+    currentPrompt = prompt(**data)
+    word = ""
+    title = f" {currentPrompt.title}"
+    placeHolder = currentPrompt.placeHolder
 
-# myTerm.finish()
+    print()
+    while True:
+        wordShown = word if word != "" else placeHolder
+        formatedWord = f"\t{wordShown}$C"
+        myTerm.show([title, "", formatedWord])
+        myTerm.refresh()
+        char = getch.getch()
+        if not char.isalpha():
+            break
+        word += char
+    print()
 
+    return word if word != "" else placeHolder
+
+
+myTerm = console(0)
+
+try:
+    simpleTextInput({
+        "variety": "multitext",
+        "title": "que ondis?",
+        "placeHolder": "weon"
+    })
+finally:
+    myTerm.finish()
 exit()
+
+
+# simpleTextInput({
+#     "variety": "multitext",
+#     "title": "que ondis?",
+#     "placeHolder": "weon"
+# })
