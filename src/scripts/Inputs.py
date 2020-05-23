@@ -39,7 +39,6 @@ def simpleTextInput(data):
     title = f" {currentPrompt.title}"
     placeHolder = currentPrompt.placeHolder
 
-    print()
     while True:
         wordShown = word if word != "" else placeHolder
         formatedWord = f"\t{wordShown}$C"
@@ -49,7 +48,6 @@ def simpleTextInput(data):
         if not char.isalpha():
             break
         word += char
-    print()
 
     return word if word != "" else placeHolder
 
@@ -95,7 +93,6 @@ def multiTextInput(data):
         childrenContents.append(initValue)
     childrenContents[0] = addCursor(childrenContents[0])
 
-    print()
     while True:
         indexInRange = index % childrenAvailable
         child = children[indexInRange]
@@ -103,9 +100,10 @@ def multiTextInput(data):
         childPlaceHolder = childrenPlaceHolders[indexInRange]
         childPrompt = prompt(**child)
         title = childPrompt.title
+        myTerm.setConsoleLine(0, title)
 
         formatWord = currentPrompt.template.format(*childrenContents)
-        myTerm.show([title, "", formatWord])
+        myTerm.setConsoleLine(1, formatWord)
         myTerm.refresh()
         char = getch.getch()
 
