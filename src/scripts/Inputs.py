@@ -11,17 +11,6 @@ from ConsoleControl import console
 #     "template": "{}({}):{}"
 # })
 
-def removeCursor(string):
-    return string.replace("$C", "")
-
-
-def addCursor(string):
-    return string + "$C"
-
-
-def updateCursor(string, stringToAdd):
-    return string.replace("$C", "") + stringToAdd + "$C"
-
 
 class prompt():
     def __init__(self, variety, title="", placeHolder="", children=[], template="", content=""):
@@ -34,6 +23,8 @@ class prompt():
 
 
 def simpleTextInput(data):
+    myTerm = console(2)
+
     currentPrompt = prompt(**data)
     word = ""
     title = f" {currentPrompt.title}"
@@ -58,23 +49,25 @@ class ShownValue():
         self.showPlaceHolder = True
 
     def getValue(self, string):
-        if self.showPlaceHolder == True and removeCursor(string) == "":
+        if self.showPlaceHolder == True and string == "":
             return self.placeHolder
 
-        elif self.showPlaceHolder == False and removeCursor(string) == "":
+        elif self.showPlaceHolder == False and string == "":
             self.showPlaceHolder = True
             return self.placeHolder
 
-        elif self.showPlaceHolder == True and removeCursor(string) == self.placeHolder:
+        elif self.showPlaceHolder == True and string == self.placeHolder:
             self.showPlaceHolder = False
             return self.placeHolder
 
         output = string.replace(
-            self.placeHolder, "") if self.showPlaceHolder == True else addCursor(string)
+            self.placeHolder, "") if self.showPlaceHolder == True else string
         return output
 
 
 def multiTextInput(data):
+    myTerm = console(2)
+
     word = ""
     currentPrompt = prompt(**data)
     children = currentPrompt.children
@@ -91,7 +84,6 @@ def multiTextInput(data):
         initValue = defaultValue.getValue(childPrompt.content)
 
         childrenContents.append(initValue)
-    childrenContents[0] = addCursor(childrenContents[0])
 
     while True:
         indexInRange = index % childrenAvailable
@@ -109,7 +101,7 @@ def multiTextInput(data):
 
         if char == "\n":
             index = index + 1
-            childrenContents[indexInRange] = removeCursor(childContent)
+            childrenContents[indexInRange] = childContent
             if indexInRange == childrenAvailable - 1:
                 break
             continue
@@ -117,25 +109,19 @@ def multiTextInput(data):
         #     break
 
         childrenContents[indexInRange] = childPlaceHolder.getValue(
-            updateCursor(childContent, char))
-    print()
+            childContent + char)
 
+    myTerm.finish()
     return word if word != "" else currentPrompt.template.format(*childrenContents)
 
 
-myTerm = console(0)
-
-try:
-    wea = multiTextInput({
-        "variety": "multitext",
-        "title": "que ondis?",
-        "placeHolder": "weon",
-        "children": [{"variety": "type", "placeHolder": "feat", "title": "escribi el tipo:"}, {"variety": "type", "placeHolder": "scope", "title": "tira el scope:"}, {"variety": "type", "title": "escribi la descri:"}],
-        "template": "{0}({1}):{2}"
-    })
-finally:
-    myTerm.finish()
-print(wea)
+wea = multiTextInput({
+    "variety": "multitext",
+    "title": "que ondis?",
+    "placeHolder": "weon",
+    "children": [{"variety": "type", "placeHolder": "feat", "title": "escribi el tipo:"}, {"variety": "type", "placeHolder": "scope", "title": "tira el scope:"}, {"variety": "type", "title": "escribi la descri:"}],
+    "template": "{0}({1}):{2}"
+})
 exit()
 
 
@@ -143,4 +129,13 @@ exit()
 #     "variety": "single-text",
 #     "title": "que ondis?",
 #     "placeHolder": "weon"
+# })
+
+
+# multiTextInput({
+#     "variety": "multitext",
+#     "title": "que ondis?",
+#     "placeHolder": "weon",
+#     "children": [{"variety": "type", "placeHolder": "feat", "title": "escribi el tipo:"}, {"variety": "type", "placeHolder": "scope", "title": "tira el scope:"}, {"variety": "type", "title": "escribi la descri:"}],
+#     "template": "{0}({1}):{2}"
 # })
