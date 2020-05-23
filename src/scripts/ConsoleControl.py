@@ -7,8 +7,7 @@ def console(height):
         import ctypes
 
         class _CursorInfo(ctypes.Structure):
-            _fields_ = [("size", ctypes.c_int),
-                        ("visible", ctypes.c_byte)]
+            _fields_ = [("size", ctypes.c_int), ("visible", ctypes.c_byte)]
 
     def hide_cursor():
         if os.name == 'nt':
@@ -59,6 +58,9 @@ def console(height):
 
         def show(self, data):
             self.display = data
+
+        def setConsoleLine(self, row, content):
+            self.display[row] = content
 
         def refresh(self):
             count = len(self.display)
