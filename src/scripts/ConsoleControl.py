@@ -49,9 +49,10 @@ def console(height):
 
     class term():
         def __init__(self, lines):
-            self.display = (" " * (lines + 1)).split(" ")
-            self.test = []
-            cursorDown(3)
+            self.display = (" " * (lines - 1)).split(" ")
+
+            for emptyValue in self.display:
+                print(emptyValue)
 
         def getCode(self, string):
             return f"\x1b[{string}"
