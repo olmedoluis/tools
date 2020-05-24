@@ -59,7 +59,7 @@ def textInput(title="", content="", placeHolder="", finalTitle=""):
 
     inputConsole.finish()
 
-    return word
+    return word if word != "" else placeHolder
 
 
 print()
