@@ -41,13 +41,12 @@ def setIndexValue(array, index, value):
 
 
 def textInput(title="", content="", placeHolder="", finalTitle=""):
-
     inputConsole = console(1)
     word = content
 
     while True:
         wordToShow = word if word != "" else placeHolder
-        inputConsole.setConsoleLine(0, f"{title} ➤ {wordToShow}")
+        inputConsole.setConsoleLine(0, 1, f"{title} {wordToShow}")
         inputConsole.refresh()
 
         char = getch.getch()

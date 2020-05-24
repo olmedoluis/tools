@@ -60,8 +60,8 @@ def console(height):
         def show(self, data):
             self.display = data
 
-        def setConsoleLine(self, row, content):
-            self.display[row] = content
+        def setConsoleLine(self, row=0, column=0, content=""):
+            self.display[row] = " " * column + content
 
         def refresh(self):
             count = len(self.display)
