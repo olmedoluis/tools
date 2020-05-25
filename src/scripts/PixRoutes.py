@@ -8,3 +8,12 @@ ROUTES = {
         "alias": ["w", "st"]
     }
 }
+
+SUBROUTES = {
+    "Status": {
+        "ADD_IGNORE_FILE": {
+            "keys": ["ignore"],
+            "alias": ["i"]
+        }
+    }
+}
