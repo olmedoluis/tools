@@ -305,8 +305,9 @@ def prompts():
                 print(errorMessage)
                 exit()
 
-        selectedOptions = getOptionsSelected(optionsWithStates)
-        selectedOptionsString = ", ".join(getOptionContents(selectedOptions))
+        selectedOptionsWithStates = getOptionsSelected(optionsWithStates)
+        selectedOptions = getOptionContents(selectedOptionsWithStates)
+        selectedOptionsString = ", ".join(selectedOptions)
 
         inputConsole.setConsoleLine(
             0, 1, f"{finalTitle} {selectedOptionsString}")
@@ -315,7 +316,7 @@ def prompts():
 
         inputConsole.finish()
 
-        return selectedOptions, selectedOptionsString
+        return selectedOptions
 
     class prompts_ui():
         def text(self, **arg):
