@@ -21,10 +21,14 @@ from ConsoleControl import console
 def merge(word, char):
     if char == "\n":
         return word + char, "FINISH"
+    elif ord(char) == 27:
+        return word, "BREAK_CHAR"
     elif char == "\x7f":
         return word[:-1], "BACKSPACE"
+    elif len(char) == 1:
+        return word + char, "VALID_CHAR"
     else:
-        return word + char, "UNKNOWN"
+        return word, "UNKNOWN"
 
 
 def getIndexValue(array, index, defaultValue=""):
@@ -40,7 +44,7 @@ def setIndexValue(array, index, value):
     return array
 
 
-def textInput(title="", content="", placeHolder="", finalTitle=""):
+def textInput(title="", content="", placeHolder="", finalTitle="", errorMessage=""):
     inputConsole = console(1)
     finalTitle = finalTitle if finalTitle != "" else title
     word = content
@@ -56,6 +60,9 @@ def textInput(title="", content="", placeHolder="", finalTitle=""):
 
         if state == "FINISH":
             break
+        if state == "BREAK_CHAR":
+            print(errorMessage)
+            exit()
 
     inputConsole.setConsoleLine(0, 1, f"{finalTitle} {wordToShow}")
     inputConsole.refresh()
