@@ -4,7 +4,7 @@ from ConsoleControl import console
 
 def merge(word, char):
     if char == "\n":
-        return word + char, "FINISH"
+        return word, "FINISH"
     elif ord(char) == 27:
         return word, "BREAK_CHAR"
     elif char == "\x7f":
@@ -160,8 +160,8 @@ def confirmInput(title="", content="", finalTitle="", errorMessage=""):
 
 
 options = ["feature", "refactor", "bugfix", "style"]
-output = selectInput(title="me das la data gil?", options=options)
-output = confirmInput(title="DECIMELO Y/N")
+# output = selectInput(title="me das la data gil?", options=options)
+# output = confirmInput(title="DECIMELO Y/N")
 output = textInput(title="algo", placeHolder="answer")
 print("output", output)
 
