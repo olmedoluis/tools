@@ -74,7 +74,9 @@ def console(height):
             lastNumberOfLines = len(self.display)
             newNumberOfLines = lastNumberOfLines - lines
             self.display = (" " * (newNumberOfLines)).split(" ")
-            cursorUp(lines)
+            for i in range(0, lines):
+                cleanLine()
+                cursorUp(1)
 
         def finish(self):
             show_cursor()
