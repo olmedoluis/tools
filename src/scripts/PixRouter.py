@@ -1,5 +1,5 @@
 import Status
-from PixRoutes import SUBROUTES
+from Data.PixRoutes import SUBROUTES
 
 
 def checkRoute(keyword, routes):

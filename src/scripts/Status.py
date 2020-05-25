@@ -41,7 +41,6 @@ def getStatus():
 
             for index in range(0, len(oldFilePaths)):
                 if not oldFilePaths[index] == newFilePaths[index]:
-                    print(messages)
                     content = messages["renamed-modify"].format(
                         '/'.join(oldFilePaths[0:index]), '/'.join(newFilePaths[index:]))
                     break
