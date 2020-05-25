@@ -80,8 +80,11 @@ def showStatus():
     print()
 
 
-def Router(router):
+def Router(router, subroute):
     global messages
-
     messages = router.messages
-    showStatus()
+
+    if subroute == "ADD_IGNORE_FILE":
+        print("hola")
+    elif subroute == "DEFAULT":
+        showStatus()
