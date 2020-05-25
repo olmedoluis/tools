@@ -54,4 +54,9 @@ def getMessages():
         "unknownRoute": "\n {}\n".format(themeUp("{error}✖ Command not found: {success}${error}$")),
         "untracked-title": "\n {}\n".format(themeUp("{normal}Untracked files:")),
         "untracked": "\t{}".format(themeUp("{untracked}✱ $")),
+        "add-nofiles-error": "\n {}\n".format(themeUp("{error}✖ There is no files to add")),
+        "add-nofileschoosen-error": "\n {}\n".format(themeUp("{error}✖ No files has been choosen")),
+        "add-success": "\n {}\n".format(themeUp("{success}⚑ Selected files has been added")),
+        "add-adition-title": "{}".format(themeUp("{normal}Select files to add:")),
+        "add-adition-finaltitle": "{}".format(themeUp("{normal}Files selected:")),
     }
