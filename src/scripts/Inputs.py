@@ -50,6 +50,21 @@ def getMovement(char):
         return "UNKNOWN"
 
 
+def getResponse(char):
+    charLower = char.lower()
+
+    if charLower == "y":
+        return "YES"
+    elif charLower == "n":
+        return "NO"
+    elif char == "\n":
+        return "FINISH"
+    elif ord(char) == 27:
+        return "BREAK_CHAR"
+    else:
+        return "UNKNOWN"
+
+
 def getIndexValue(array, index, defaultValue=""):
     return array[index] if index < len(array) else defaultValue
 
@@ -128,9 +143,43 @@ def selectInput(title="", finalTitle="", options=[""], errorMessage=""):
     return selectedOption
 
 
+def confirmInput(title="", content="", placeHolder="", finalTitle="", errorMessage=""):
+    inputConsole = console(1)
+    finalTitle = finalTitle if finalTitle != "" else title
+    word = content
+
+    while True:
+        wordToShow = word if word != "" else placeHolder
+        inputConsole.setConsoleLine(0, 1, f"{title} {wordToShow}")
+        inputConsole.refresh()
+
+        char = getch.getch()
+        state = getResponse(char)
+
+        if state == "YES":
+            word = "yes"
+            break
+        if state == "NO":
+            word = "no"
+            break
+        if state == "FINISH":
+            break
+        if state == "BREAK_CHAR":
+            print(errorMessage)
+            exit()
+
+    inputConsole.setConsoleLine(0, 1, f"{finalTitle} {word}")
+    inputConsole.refresh()
+
+    inputConsole.finish()
+
+    return word if word != "" else placeHolder
+
+
 options = ["feature", "refactor", "bugfix", "style"]
 output = selectInput(title="me das la data gil?", options=options)
-# output = textInput(title="algo", placeHolder="answer")
+output = confirmInput(title="DECIMELO Y/N", placeHolder="answer")
+output = textInput(title="algo", placeHolder="answer")
 print("output", output)
 
 exit()
