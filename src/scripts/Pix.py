@@ -51,6 +51,9 @@ class PixTools():
 
         return good_routes
 
+    def getNextRoute(self):
+        return "" if 0 == len(self.leftKeys) else self.leftKeys[0]
+
 
 if __name__ == "__main__":
     arg = sys.argv[1:]
