@@ -28,16 +28,18 @@ def add():
         options = options + statusContent
 
     if len(options) == 0:
-        return
+        return print(messages["add-nofiles-error"])
 
-    answer = prompts().multiSelect(title="Choose files to add:",
-                                   finalTitle="files selected",
+    print()
+    answer = prompts().multiSelect(title=messages["add-adition-title"],
+                                   finalTitle=messages["add-adition-finaltitle"],
                                    options=options)
 
     if len(answer) == 0:
-        return
+        return print(messages["add-nofileschoosen-error"])
 
     run(["git", "add"] + answer)
+    print(messages["add-success"])
 
 
 def Router(router, subroute):
