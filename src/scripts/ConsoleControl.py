@@ -70,6 +70,12 @@ def console(height):
                 cleanLine()
                 print(line.replace("$C", "❚"))
 
+        def deleteLastLines(self, lines):
+            lastNumberOfLines = len(self.display)
+            newNumberOfLines = lastNumberOfLines - lines
+            self.display = (" " * (newNumberOfLines)).split(" ")
+            cursorUp(lines)
+
         def finish(self):
             show_cursor()
 
