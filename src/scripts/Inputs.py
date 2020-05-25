@@ -243,15 +243,3 @@ def prompts():
             return multiSelectInput(**arg)
 
     return prompts_ui()
-
-
-myPrompt = prompts()
-
-options = ["feature", "refactor", "bugfix", "style"]
-output = myPrompt.multiSelect(title="me das la data gil?", options=options)
-output = myPrompt.select(title="me das la data gil?", options=options)
-output = myPrompt.confirm(title="DECIMELO Y/N")
-output = myPrompt.text(title="algo", placeHolder="answer")
-print("output", output)
-
-exit()
