@@ -1,22 +1,6 @@
-from time import sleep
 import getch
 from ConsoleControl import console
 
-
-# simpleTextInput({
-#     "variety": "single-text",
-#     "title": "que ondis?",
-#     "placeHolder": "weon"
-# })
-
-
-# multiTextInput({
-#     "variety": "multitext",
-#     "title": "que ondis?",
-#     "placeHolder": "weon",
-#     "children": [{"variety": "type", "placeHolder": "feat", "title": "escribi el tipo:"}, {"variety": "type", "placeHolder": "scope", "title": "tira el scope:"}, {"variety": "type", "title": "escribi la descri:"}],
-#     "template": "{0}({1}):{2}"
-# })
 
 def merge(word, char):
     if char == "\n":
@@ -143,14 +127,13 @@ def selectInput(title="", finalTitle="", options=[""], errorMessage=""):
     return selectedOption
 
 
-def confirmInput(title="", content="", placeHolder="", finalTitle="", errorMessage=""):
+def confirmInput(title="", content="", finalTitle="", errorMessage=""):
     inputConsole = console(1)
     finalTitle = finalTitle if finalTitle != "" else title
     word = content
 
     while True:
-        wordToShow = word if word != "" else placeHolder
-        inputConsole.setConsoleLine(0, 1, f"{title} {wordToShow}")
+        inputConsole.setConsoleLine(0, 1, f"{title} {word}")
         inputConsole.refresh()
 
         char = getch.getch()
@@ -173,12 +156,12 @@ def confirmInput(title="", content="", placeHolder="", finalTitle="", errorMessa
 
     inputConsole.finish()
 
-    return word if word != "" else placeHolder
+    return word
 
 
 options = ["feature", "refactor", "bugfix", "style"]
 output = selectInput(title="me das la data gil?", options=options)
-output = confirmInput(title="DECIMELO Y/N", placeHolder="answer")
+output = confirmInput(title="DECIMELO Y/N")
 output = textInput(title="algo", placeHolder="answer")
 print("output", output)
 
