@@ -42,6 +42,7 @@ def setIndexValue(array, index, value):
 
 def textInput(title="", content="", placeHolder="", finalTitle=""):
     inputConsole = console(1)
+    finalTitle = finalTitle if finalTitle != "" else title
     word = content
 
     while True:
@@ -55,6 +56,9 @@ def textInput(title="", content="", placeHolder="", finalTitle=""):
 
         if state == "FINISH":
             break
+
+    inputConsole.setConsoleLine(0, 1, f"{finalTitle} {wordToShow}")
+    inputConsole.refresh()
 
     inputConsole.finish()
 
