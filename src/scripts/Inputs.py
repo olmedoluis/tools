@@ -1,8 +1,7 @@
-import getch
-from ConsoleControl import console
-
-
 def prompts():
+    import getch
+    from ConsoleControl import console
+
     def merge(word, char):
         if char == "\n":
             return word, "FINISH"
