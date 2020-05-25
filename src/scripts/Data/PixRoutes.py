@@ -6,14 +6,14 @@ ROUTES = {
     "Status": {
         "keys": ["status", "work"],
         "alias": ["w", "st"]
+    },
+    "Add": {
+        "keys": ["add"],
+        "alias": ["a"]
     }
 }
 
 SUBROUTES = {
-    "Status": {
-        "ADD_IGNORE_FILE": {
-            "keys": ["ignore"],
-            "alias": ["i"]
-        }
-    }
+    "Status": {},
+    "Add": {}
 }
