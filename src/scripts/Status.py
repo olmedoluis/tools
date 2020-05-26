@@ -12,6 +12,8 @@ def run(command=[]):
     if process.returncode != 0:
         if error.find("not a git repository") != -1:
             print(messages["notGitRepository"])
+        else:
+            print(messages["unknown-error"])
         exit()
 
     return output
@@ -41,7 +43,6 @@ def getStatus():
 
             for index in range(0, len(oldFilePaths)):
                 if not oldFilePaths[index] == newFilePaths[index]:
-                    print(messages)
                     content = messages["renamed-modify"].format(
                         '/'.join(oldFilePaths[0:index]), '/'.join(newFilePaths[index:]))
                     break
@@ -80,8 +81,13 @@ def showStatus():
     print()
 
 
-def Router(router):
+def setUp(outsideMessages):
     global messages
+    messages = outsideMessages
 
-    messages = router.messages
-    showStatus()
+
+def Router(router, subroute):
+    setUp(router.messages)
+
+    if subroute == "DEFAULT":
+        showStatus()

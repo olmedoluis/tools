@@ -2,8 +2,8 @@
 
 import sys
 from PixRouter import Router
-from PixRoutes import ROUTES
-from Messages import getMessages
+from Data.PixRoutes import ROUTES
+from Data.Messages import getMessages
 
 messages = getMessages()
 
@@ -50,6 +50,9 @@ class PixTools():
                 break
 
         return good_routes
+
+    def getNextRoute(self):
+        return "" if 0 == len(self.leftKeys) else self.leftKeys[0]
 
 
 if __name__ == "__main__":
