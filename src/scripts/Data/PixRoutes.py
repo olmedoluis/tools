@@ -15,5 +15,10 @@ ROUTES = {
 
 SUBROUTES = {
     "Status": {},
-    "Add": {}
+    "Add": {
+        "ADD_ALL": {
+            "keys": ["all"],
+            "alias": ["."]
+        }
+    }
 }
