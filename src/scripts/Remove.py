@@ -18,7 +18,7 @@ def run(command=[]):
     return output
 
 
-def checkout(filePaths=[]):
+def remove(filePaths=[]):
     from pathlib import Path as isFile
 
     specificFiles = []
@@ -66,7 +66,7 @@ def checkout(filePaths=[]):
     print(messages["add-success"])
 
 
-def checkoutAll():
+def removeAll():
     from Status import getStatus, setUp as setUpStatus
     from Tools.Inputs import prompts
 
@@ -96,7 +96,7 @@ def setUp(outsideMessages):
 def Router(router, subroute):
     setUp(router.messages)
 
-    if subroute == "CHECKOUT_ALL":
-        checkoutAll()
+    if subroute == "REMOVE_ALL":
+        removeAll()
     if subroute == "DEFAULT":
-        checkout(router.leftKeys)
+        remove(router.leftKeys)
