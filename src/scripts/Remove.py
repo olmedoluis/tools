@@ -41,13 +41,7 @@ def remove(filePaths=[]):
     setUpStatus(messages)
     status = getStatus()
 
-    options = []
-    for statusId in status:
-        statusContent = status[statusId]
-        if statusId == "branch" or statusId == "added":
-            continue
-
-        options = options + statusContent
+    options = status["added"] if "added" in status else []
 
     if len(options) == 0:
         return print(messages["add-nofiles-error"])
@@ -62,7 +56,7 @@ def remove(filePaths=[]):
     if len(answer) == 0:
         return print(messages["add-nofileschoosen-error"])
 
-    run(["git", "add"] + answer)
+    run(["git", "reset", "HEAD"] + answer)
     print(messages["add-success"])
 
 
@@ -82,7 +76,7 @@ def removeAll():
         break
 
     if hasFilesToAdd:
-        run(["git", "add", "."])
+        run(["git", "reset", "HEAD", "."])
         print(messages["add-all-success"])
     else:
         print(messages["add-all-nofiles"])
