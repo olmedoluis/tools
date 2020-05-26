@@ -10,6 +10,10 @@ ROUTES = {
     "Add": {
         "keys": ["add"],
         "alias": ["a"]
+    },
+    "Remove": {
+        "keys": ["remove"],
+        "alias": ["una", "rm"]
     }
 }
 
@@ -17,6 +21,12 @@ SUBROUTES = {
     "Status": {},
     "Add": {
         "ADD_ALL": {
+            "keys": ["all"],
+            "alias": ["."]
+        }
+    },
+    "Remove": {
+        "REMOVE_ALL": {
             "keys": ["all"],
             "alias": ["."]
         }
