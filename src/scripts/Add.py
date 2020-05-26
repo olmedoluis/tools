@@ -7,16 +7,18 @@ def run(command=[]):
     output, error = process.communicate()
 
     if process.returncode != 0:
+        if error.find("not a git repository") != -1:
+            print(messages["notGitRepository"])
         exit()
 
     return output
 
 
 def add():
-    from Status import getStatus, setUp
+    from Status import getStatus, setUp as setUpStatus
     from Tools.Inputs import prompts
 
-    setUp(messages)
+    setUpStatus(messages)
     status = getStatus()
 
     options = []
