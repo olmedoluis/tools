@@ -44,9 +44,13 @@ def add():
     print(messages["add-success"])
 
 
-def Router(router, subroute):
+def setUp(outsideMessages):
     global messages
-    messages = router.messages
+    messages = outsideMessages
+
+
+def Router(router, subroute):
+    setUp(router.messages)
 
     if subroute == "DEFAULT":
         add()
