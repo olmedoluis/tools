@@ -86,10 +86,29 @@ def console(height):
 
 
 def prompts():
-    import getch
+    def getGetch():
+        from os import name
+        if name == 'nt':
+            return msvcrt.getch
+
+        def getch():
+            import sys
+            import tty
+            import termios
+            fd = sys.stdin.fileno()
+            old = termios.tcgetattr(fd)
+            try:
+                tty.setraw(fd)
+                return sys.stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+        return getch
+
+    getch = getGetch()
 
     def merge(word, char):
-        if char == "\n":
+        if ord(char) == 13:
             return word, "FINISH"
         elif ord(char) == 27:
             return word, "BREAK_CHAR"
@@ -111,7 +130,7 @@ def prompts():
             return "UP"
         elif charLower == "s":
             return "DOWN"
-        elif char == "\n":
+        elif ord(char) == 13:
             return "FINISH"
         elif ord(char) == 27:
             return "BREAK_CHAR"
@@ -125,7 +144,7 @@ def prompts():
             return "YES"
         elif charLower == "n":
             return "NO"
-        elif char == "\n":
+        elif ord(char) == 13:
             return "FINISH"
         elif ord(char) == 27:
             return "BREAK_CHAR"
@@ -174,7 +193,7 @@ def prompts():
             inputConsole.setConsoleLine(0, 1, f"{title} {wordToShow}")
             inputConsole.refresh()
 
-            char = getch.getch()
+            char = getch()
             newWord, state = merge(word, char)
             word = newWord
 
@@ -207,7 +226,7 @@ def prompts():
                 4, 4, options[(index + 1) % optionsLen])
             inputConsole.refresh()
 
-            char = getch.getch()
+            char = getch()
             state = getMovement(char)
 
             if state == "DOWN":
@@ -238,7 +257,7 @@ def prompts():
             inputConsole.setConsoleLine(0, 1, f"{title} {word}")
             inputConsole.refresh()
 
-            char = getch.getch()
+            char = getch()
             state = getResponse(char)
 
             if state == "YES":
@@ -290,7 +309,7 @@ def prompts():
 
                 inputConsole.refresh()
 
-                char = getch.getch()
+                char = getch()
                 state = getMovement(char)
 
                 if state == "DOWN":
