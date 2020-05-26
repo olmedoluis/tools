@@ -50,7 +50,7 @@ def getMessages():
         "renamed-modify": "{}".format(themeUp("$/{modified}$")),
         "renamed-title": "\n {}\n".format(themeUp("{normal}Renamed files:")),
         "renamed": "\t{}".format(themeUp("{renamed}✦ $")),
-        "unknownError": "\n {}\n".format(themeUp("{error}✖ Unknown error, something went wrong")),
+        "unknown-error": "\n {}\n".format(themeUp("{error}✖ Unknown error, something went wrong")),
         "unknownRoute": "\n {}\n".format(themeUp("{error}✖ Command not found: {success}${error}$")),
         "untracked-title": "\n {}\n".format(themeUp("{normal}Untracked files:")),
         "untracked": "\t{}".format(themeUp("{untracked}✱ $")),
