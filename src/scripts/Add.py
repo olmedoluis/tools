@@ -63,6 +63,28 @@ def add(filePaths=[]):
     print(messages["add-success"])
 
 
+def addAll():
+    from Status import getStatus, setUp as setUpStatus
+    from Tools.Inputs import prompts
+
+    setUpStatus(messages)
+    status = getStatus()
+
+    hasFilesToAdd = False
+    for statusId in status:
+        if statusId == "branch" or statusId == "added":
+            continue
+
+        hasFilesToAdd = True
+        break
+
+    if hasFilesToAdd:
+        run(["git", "add", "."])
+        print(messages["add-all-success"])
+    else:
+        print(messages["add-all-nofiles"])
+
+
 def setUp(outsideMessages):
     global messages
     messages = outsideMessages
@@ -71,5 +93,7 @@ def setUp(outsideMessages):
 def Router(router, subroute):
     setUp(router.messages)
 
+    if subroute == "ADD_ALL":
+        addAll()
     if subroute == "DEFAULT":
         add(router.leftKeys)
