@@ -1,7 +1,8 @@
-from subprocess import Popen, PIPE
 
 
 def run(command=[]):
+    from subprocess import Popen, PIPE
+
     process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
     output, error = process.communicate()
