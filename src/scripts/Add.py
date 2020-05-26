@@ -58,6 +58,8 @@ def add(filePaths=[]):
                                    finalTitle=messages["add-adition-finaltitle"],
                                    options=options)
 
+    if answer == "UNKNOWN_ERROR":
+        return print(messages["unknown-error"])
     if len(answer) == 0:
         return print(messages["add-nofileschoosen-error"])
 
