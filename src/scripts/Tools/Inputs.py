@@ -262,61 +262,68 @@ def prompts():
 
     def multiSelectInput(title="", finalTitle="", options=[""], errorMessage=""):
         inputConsole = console(5)
-        finalTitle = finalTitle if finalTitle != "" else title
-        index = 0
-        optionsLen = len(options)
-        optionsWithStates = getOptionsWithStates(options)
+        selectedOptions = []
+        try:
+            finalTitle = finalTitle if finalTitle != "" else title
+            index = 0
+            optionsLen = len(options)
+            optionsWithStates = getOptionsWithStates(options)
 
-        inputConsole.setConsoleLine(0, 1, title)
+            inputConsole.setConsoleLine(0, 1, title)
 
-        while True:
-            optionAbove = optionsWithStates[(index - 1) % optionsLen]
-            optionSelected = optionsWithStates[index % optionsLen]
-            optionDown = optionsWithStates[(index + 1) % optionsLen]
+            while True:
+                optionAbove = optionsWithStates[(index - 1) % optionsLen]
+                optionSelected = optionsWithStates[index % optionsLen]
+                optionDown = optionsWithStates[(index + 1) % optionsLen]
 
-            color = "\x1b[32m" if optionAbove.state else "\x1b[2m"
+                color = "\x1b[32m" if optionAbove.state else "\x1b[2m"
+                inputConsole.setConsoleLine(
+                    2, 4, f"{color}{optionAbove.getStateString()} {optionAbove.content}\x1b[0m")
+
+                color = "\x1b[32m\x1b[1m" if optionSelected.state else "\x1b[1m"
+                inputConsole.setConsoleLine(
+                    3, 4, f"{color}{optionSelected.getStateString()} {optionSelected.content}\x1b[0m")
+
+                color = "\x1b[32m" if optionDown.state else "\x1b[2m"
+                inputConsole.setConsoleLine(
+                    4, 4, f"{color}{optionDown.getStateString()} {optionDown.content}\x1b[0m")
+
+                inputConsole.refresh()
+
+                char = getch.getch()
+                state = getMovement(char)
+
+                if state == "DOWN":
+                    index = index + 1
+                elif state == "UP":
+                    index = index - 1
+                elif state == "RIGHT":
+                    optionSelected.setState(True)
+                elif state == "LEFT":
+                    optionSelected.setState(False)
+                elif state == "FINISH":
+                    break
+                elif state == "BREAK_CHAR":
+                    print(errorMessage)
+                    exit()
+
+            selectedOptionsWithStates = getOptionsSelected(optionsWithStates)
+            selectedOptions = getOptionContents(selectedOptionsWithStates)
+            selectedOptionsString = ", ".join(selectedOptions)
+
             inputConsole.setConsoleLine(
-                2, 4, f"{color}{optionAbove.getStateString()} {optionAbove.content}\x1b[0m")
-
-            color = "\x1b[32m\x1b[1m" if optionSelected.state else "\x1b[1m"
-            inputConsole.setConsoleLine(
-                3, 4, f"{color}{optionSelected.getStateString()} {optionSelected.content}\x1b[0m")
-
-            color = "\x1b[32m" if optionDown.state else "\x1b[2m"
-            inputConsole.setConsoleLine(
-                4, 4, f"{color}{optionDown.getStateString()} {optionDown.content}\x1b[0m")
-
+                0, 1, f"{finalTitle} {selectedOptionsString}")
             inputConsole.refresh()
 
-            char = getch.getch()
-            state = getMovement(char)
+        except:
+            inputConsole.deleteLastLines(1)
+            selectedOptions = "UNKNOWN_ERROR"
 
-            if state == "DOWN":
-                index = index + 1
-            elif state == "UP":
-                index = index - 1
-            elif state == "RIGHT":
-                optionSelected.setState(True)
-            elif state == "LEFT":
-                optionSelected.setState(False)
-            elif state == "FINISH":
-                break
-            elif state == "BREAK_CHAR":
-                print(errorMessage)
-                exit()
+        finally:
+            inputConsole.deleteLastLines(4)
 
-        selectedOptionsWithStates = getOptionsSelected(optionsWithStates)
-        selectedOptions = getOptionContents(selectedOptionsWithStates)
-        selectedOptionsString = ", ".join(selectedOptions)
-
-        inputConsole.setConsoleLine(
-            0, 1, f"{finalTitle} {selectedOptionsString}")
-        inputConsole.refresh()
-        inputConsole.deleteLastLines(4)
-
-        inputConsole.finish()
-
-        return selectedOptions
+            inputConsole.finish()
+            return selectedOptions
 
     class prompts_ui():
         def text(self, **arg):
