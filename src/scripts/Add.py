@@ -10,12 +10,30 @@ def run(command=[]):
     if process.returncode != 0:
         if error.find("not a git repository") != -1:
             print(messages["notGitRepository"])
+        elif error.find("did not match any files") != 1:
+            print(messages["add-adition-notafile"])
         exit()
 
     return output
 
 
-def add():
+def add(filePaths=[]):
+    from pathlib import Path as isFile
+
+    specificFiles = []
+    for filePath in filePaths:
+        if not isFile(filePath):
+            break
+
+        specificFiles.append(filePath)
+
+    if len(specificFiles) > 0:
+        run(["git", "add"] + specificFiles)
+        return print(messages["add-success"])
+
+    if len(filePaths) > 0:
+        return print("file not found")
+
     from Status import getStatus, setUp as setUpStatus
     from Tools.Inputs import prompts
 
@@ -54,4 +72,4 @@ def Router(router, subroute):
     setUp(router.messages)
 
     if subroute == "DEFAULT":
-        add()
+        add(router.leftKeys)
