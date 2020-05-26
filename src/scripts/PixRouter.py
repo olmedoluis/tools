@@ -1,5 +1,6 @@
 import Status
 import Add
+import Remove
 from Data.PixRoutes import SUBROUTES
 
 
@@ -17,7 +18,8 @@ def checkRoute(keyword, routes):
 def Router(route_name, pixTools):
     PIX_STORE = {
         "Status": Status,
-        "Add": Add
+        "Add": Add,
+        "Remove": Remove
     }
 
     next_route = pixTools.getNextRoute()
