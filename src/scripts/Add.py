@@ -12,6 +12,8 @@ def run(command=[]):
             print(messages["notGitRepository"])
         elif error.find("did not match any files") != 1:
             print(messages["add-adition-notafile"])
+        else:
+            print(messages["unknown-error"])
         exit()
 
     return output

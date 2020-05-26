@@ -12,6 +12,8 @@ def run(command=[]):
     if process.returncode != 0:
         if error.find("not a git repository") != -1:
             print(messages["notGitRepository"])
+        else:
+            print(messages["unknown-error"])
         exit()
 
     return output
