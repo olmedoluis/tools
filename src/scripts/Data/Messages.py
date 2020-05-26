@@ -59,4 +59,5 @@ def getMessages():
         "add-success": "\n {}\n".format(themeUp("{success}⚑ Selected files has been added")),
         "add-adition-title": "{}".format(themeUp("{normal}Select files to add:")),
         "add-adition-finaltitle": "{}".format(themeUp("{normal}Files selected:")),
+        "add-adition-notafile": "\n {}\n".format(themeUp("{error}✖ One of the files you input is not a file")),
     }
