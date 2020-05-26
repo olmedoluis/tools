@@ -69,7 +69,7 @@ def removeAll():
 
     hasFilesToAdd = False
     for statusId in status:
-        if statusId == "branch" or statusId == "added":
+        if statusId != "added":
             continue
 
         hasFilesToAdd = True
