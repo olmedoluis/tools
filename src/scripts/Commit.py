@@ -87,7 +87,7 @@ def save():
         title=messages["commit-confirm"], errorMessage=scapeError)
 
     if isSure:
-        run(["git", "commit", "-m", f"\"{commit}\""])
+        run(["git", "commit", "-m", commit])
         print(messages["commit-success"])
     else:
         print(messages["commit-cancel"])
