@@ -244,7 +244,7 @@ def prompts():
                     index = index + 1
                 elif state == "UP":
                     index = index - 1
-                elif state == "FINISH":
+                elif state == "FINISH" or state == "RIGHT":
                     break
                 elif state == "BREAK_CHAR":
                     print(errorMessage)
