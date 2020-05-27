@@ -219,11 +219,17 @@ def prompts():
         inputConsole.setConsoleLine(0, 1, title)
 
         while True:
+            color = "\x1b[2m"
             inputConsole.setConsoleLine(
-                2, 4, options[(index - 1) % optionsLen])
-            inputConsole.setConsoleLine(3, 4, options[index % optionsLen])
+                2, 4, f"{color}{options[(index - 1) % optionsLen]}\x1b[0m")
+
+            color = f"\x1b[32m"
             inputConsole.setConsoleLine(
-                4, 4, options[(index + 1) % optionsLen])
+                3, 4, f"{color}\x1b[1m❤ {options[index % optionsLen]}\x1b[0m")
+
+            color = "\x1b[2m"
+            inputConsole.setConsoleLine(
+                4, 4, f"{color}{options[(index + 1) % optionsLen]}\x1b[0m")
             inputConsole.refresh()
 
             char = getch()
