@@ -11,7 +11,7 @@ def run(command=[]):
         if error.find("not a git repository") != -1:
             print(messages["notGitRepository"])
         elif error.find("did not match any files") != 1:
-            print(messages["add-adition-notafile"])
+            print(messages["notafile-error"])
         else:
             print(messages["unknown-error"])
         exit()
@@ -55,7 +55,7 @@ def add(filePaths=[]):
 
     print()
     answer = prompts().multiSelect(title=messages["add-adition-title"],
-                                   finalTitle=messages["add-adition-finaltitle"],
+                                   finalTitle=messages["file-selection-finaltitle"],
                                    options=options)
 
     if answer == "UNKNOWN_ERROR":
