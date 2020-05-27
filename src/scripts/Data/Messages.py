@@ -70,5 +70,6 @@ def getMessages():
         "commit-success": "\n {}\n".format(themeUp("{success}⚑ You have commited added files")),
         "commit-cancel": "\n {}\n".format(themeUp("{error}✖ You have cancelled commiting")),
         "commit-empty": "\n {}\n".format(themeUp("{error}✖ You left a field empty")),
+        "commit-nofiles": "\n {}\n".format(themeUp("{error}✖ There is no files to commit")),
         "scape-error": "\n {}\n".format(themeUp("{error}✖ You have exit pix")),
     }
