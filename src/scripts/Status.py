@@ -50,8 +50,8 @@ def getStatus():
 
         if firstCode.isalpha():
             change_name = STATUS_MATCHES["A"]
-            second_name = STATUS_MATCHES[secondCode]
             if secondCode != " ":
+                second_name = STATUS_MATCHES[secondCode]
                 second_change_name = second_name if second_name != '' else ''
         else:
             change_name = STATUS_MATCHES[secondCode] if firstCode == ' ' else STATUS_MATCHES[firstCode]
