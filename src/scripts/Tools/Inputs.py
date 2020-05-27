@@ -210,7 +210,7 @@ def prompts():
 
         return word if word != "" else placeHolder
 
-    def selectInput(title="", finalTitle="", options=[""], errorMessage=""):
+    def selectInput(title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"):
         inputConsole = console(5)
         finalTitle = finalTitle if finalTitle != "" else title
         index = 0
@@ -223,7 +223,7 @@ def prompts():
             inputConsole.setConsoleLine(
                 2, 4, f"{color}{options[(index - 1) % optionsLen]}\x1b[0m")
 
-            color = f"\x1b[32m"
+            color = selectedColor
             inputConsole.setConsoleLine(
                 3, 4, f"{color}\x1b[1m❤ {options[index % optionsLen]}\x1b[0m")
 
