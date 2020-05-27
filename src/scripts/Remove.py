@@ -10,7 +10,7 @@ def run(command=[]):
         if error.find("not a git repository") != -1:
             print(messages["notGitRepository"])
         elif error.find("did not match any files") != 1:
-            print(messages["add-adition-notafile"])
+            print(messages["notafile-error"])
         else:
             print(messages["unknown-error"])
         exit()
@@ -29,11 +29,8 @@ def remove(filePaths=[]):
         specificFiles.append(filePath)
 
     if len(specificFiles) > 0:
-        run(["git", "add"] + specificFiles)
-        return print(messages["add-success"])
-
-    if len(filePaths) > 0:
-        return print("file not found")
+        run(["git", "reset", "HEAD"] + specificFiles)
+        return print(messages["remove-success"])
 
     from Status import getStatus, setUp as setUpStatus
     from Tools.Inputs import prompts
@@ -44,20 +41,20 @@ def remove(filePaths=[]):
     options = status["added"] if "added" in status else []
 
     if len(options) == 0:
-        return print(messages["add-nofiles-error"])
+        return print(messages["remove-nofiles-error"])
 
     print()
-    answer = prompts().multiSelect(title=messages["add-adition-title"],
-                                   finalTitle=messages["add-adition-finaltitle"],
-                                   options=options)
+    answer = prompts().multiSelect(title=messages["remove-removing-title"],
+                                   finalTitle=messages["file-selection-finaltitle"],
+                                   options=options, selectedColor="\x1b[31m")
 
     if answer == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
     if len(answer) == 0:
-        return print(messages["add-nofileschoosen-error"])
+        return print(messages["remove-nofileschoosen-error"])
 
     run(["git", "reset", "HEAD"] + answer)
-    print(messages["add-success"])
+    print(messages["remove-success"])
 
 
 def removeAll():
@@ -69,7 +66,7 @@ def removeAll():
 
     hasFilesToAdd = False
     for statusId in status:
-        if statusId == "branch" or statusId == "added":
+        if statusId != "added":
             continue
 
         hasFilesToAdd = True
@@ -77,9 +74,9 @@ def removeAll():
 
     if hasFilesToAdd:
         run(["git", "reset", "HEAD", "."])
-        print(messages["add-all-success"])
+        print(messages["remove-all-success"])
     else:
-        print(messages["add-all-nofiles"])
+        print(messages["remove-all-nofiles"])
 
 
 def setUp(outsideMessages):

@@ -14,6 +14,10 @@ ROUTES = {
     "Remove": {
         "keys": ["remove"],
         "alias": ["una", "rm"]
+    },
+    "Commit": {
+        "keys": ["commit", "save"],
+        "alias": ["s", "c"]
     }
 }
 
@@ -30,5 +34,6 @@ SUBROUTES = {
             "keys": ["all"],
             "alias": ["."]
         }
-    }
+    },
+    "Commit": {}
 }

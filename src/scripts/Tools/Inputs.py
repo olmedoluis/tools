@@ -86,10 +86,32 @@ def console(height):
 
 
 def prompts():
-    import getch
+    def getGetch():
+        from os import name
+        if name == 'nt':
+            return msvcrt.getch
+
+        def getch():
+            import sys
+            import tty
+            import termios
+            try:
+                fd = sys.stdin.fileno()
+                old = termios.tcgetattr(fd)
+            except:
+                return chr(27)
+            try:
+                tty.setraw(fd)
+                return sys.stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+        return getch
+
+    getch = getGetch()
 
     def merge(word, char):
-        if char == "\n":
+        if ord(char) == 13:
             return word, "FINISH"
         elif ord(char) == 27:
             return word, "BREAK_CHAR"
@@ -111,7 +133,7 @@ def prompts():
             return "UP"
         elif charLower == "s":
             return "DOWN"
-        elif char == "\n":
+        elif ord(char) == 13:
             return "FINISH"
         elif ord(char) == 27:
             return "BREAK_CHAR"
@@ -125,7 +147,7 @@ def prompts():
             return "YES"
         elif charLower == "n":
             return "NO"
-        elif char == "\n":
+        elif ord(char) == 13:
             return "FINISH"
         elif ord(char) == 27:
             return "BREAK_CHAR"
@@ -166,15 +188,15 @@ def prompts():
 
     def textInput(title="", content="", placeHolder="", finalTitle="", errorMessage=""):
         inputConsole = console(1)
-        finalTitle = finalTitle if finalTitle != "" else title
         word = content
+        finalTitle = finalTitle if finalTitle != "" else title
 
         while True:
             wordToShow = word if word != "" else placeHolder
             inputConsole.setConsoleLine(0, 1, f"{title} {wordToShow}")
             inputConsole.refresh()
 
-            char = getch.getch()
+            char = getch()
             newWord, state = merge(word, char)
             word = newWord
 
@@ -191,76 +213,89 @@ def prompts():
 
         return word if word != "" else placeHolder
 
-    def selectInput(title="", finalTitle="", options=[""], errorMessage=""):
+    def selectInput(title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"):
         inputConsole = console(5)
-        finalTitle = finalTitle if finalTitle != "" else title
-        index = 0
-        optionsLen = len(options)
+        selectedOption = ""
+        try:
+            finalTitle = finalTitle if finalTitle != "" else title
+            index = 0
+            optionsLen = len(options)
 
-        inputConsole.setConsoleLine(0, 1, title)
+            inputConsole.setConsoleLine(0, 1, title)
 
-        while True:
-            inputConsole.setConsoleLine(
-                2, 4, options[(index - 1) % optionsLen])
-            inputConsole.setConsoleLine(3, 4, options[index % optionsLen])
-            inputConsole.setConsoleLine(
-                4, 4, options[(index + 1) % optionsLen])
+            while True:
+                color = "\x1b[2m"
+                inputConsole.setConsoleLine(
+                    2, 6, f"{color}{options[(index - 1) % optionsLen]}\x1b[0m")
+
+                color = selectedColor
+                inputConsole.setConsoleLine(
+                    3, 4, f"{color}\x1b[1m❤ {options[index % optionsLen]}\x1b[0m")
+
+                color = "\x1b[2m"
+                inputConsole.setConsoleLine(
+                    4, 6, f"{color}{options[(index + 1) % optionsLen]}\x1b[0m")
+                inputConsole.refresh()
+
+                char = getch()
+                state = getMovement(char)
+
+                if state == "DOWN":
+                    index = index + 1
+                elif state == "UP":
+                    index = index - 1
+                elif state == "FINISH" or state == "RIGHT":
+                    break
+                elif state == "BREAK_CHAR":
+                    print(errorMessage)
+                    inputConsole.deleteLastLines(3)
+                    exit()
+
+            selectedOption = options[index % optionsLen]
+            inputConsole.setConsoleLine(0, 1, f"{finalTitle} {selectedOption}")
             inputConsole.refresh()
 
-            char = getch.getch()
-            state = getMovement(char)
+        finally:
+            inputConsole.deleteLastLines(4)
 
-            if state == "DOWN":
-                index = index + 1
-            elif state == "UP":
-                index = index - 1
-            elif state == "FINISH":
-                break
-            elif state == "BREAK_CHAR":
-                print(errorMessage)
-                exit()
+            inputConsole.finish()
 
-        selectedOption = options[index % optionsLen]
-        inputConsole.setConsoleLine(0, 1, f"{finalTitle} {selectedOption}")
-        inputConsole.refresh()
-        inputConsole.deleteLastLines(4)
+            return selectedOption
 
-        inputConsole.finish()
-
-        return selectedOption
-
-    def confirmInput(title="", content="", finalTitle="", errorMessage=""):
+    def confirmInput(title="", finalTitle="", errorMessage=""):
         inputConsole = console(1)
-        finalTitle = finalTitle if finalTitle != "" else title
-        word = content
+        word = False
+        try:
+            finalTitle = finalTitle if finalTitle != "" else title
 
-        while True:
-            inputConsole.setConsoleLine(0, 1, f"{title} {word}")
+            while True:
+                inputConsole.setConsoleLine(0, 1, f"{title}")
+                inputConsole.refresh()
+
+                char = getch()
+                state = getResponse(char)
+
+                if state == "YES":
+                    word = True
+                    break
+                if state == "NO":
+                    word = False
+                    break
+                if state == "FINISH":
+                    break
+                if state == "BREAK_CHAR":
+                    print(errorMessage)
+                    exit()
+
+            inputConsole.setConsoleLine(0, 1, f"{finalTitle} {word}")
             inputConsole.refresh()
 
-            char = getch.getch()
-            state = getResponse(char)
+        finally:
+            inputConsole.finish()
 
-            if state == "YES":
-                word = "yes"
-                break
-            if state == "NO":
-                word = "no"
-                break
-            if state == "FINISH":
-                break
-            if state == "BREAK_CHAR":
-                print(errorMessage)
-                exit()
+            return word
 
-        inputConsole.setConsoleLine(0, 1, f"{finalTitle} {word}")
-        inputConsole.refresh()
-
-        inputConsole.finish()
-
-        return word
-
-    def multiSelectInput(title="", finalTitle="", options=[""], errorMessage=""):
+    def multiSelectInput(title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"):
         inputConsole = console(5)
         selectedOptions = []
         try:
@@ -276,21 +311,21 @@ def prompts():
                 optionSelected = optionsWithStates[index % optionsLen]
                 optionDown = optionsWithStates[(index + 1) % optionsLen]
 
-                color = "\x1b[32m" if optionAbove.state else "\x1b[2m"
+                color = selectedColor if optionAbove.state else "\x1b[2m"
                 inputConsole.setConsoleLine(
                     2, 4, f"{color}{optionAbove.getStateString()} {optionAbove.content}\x1b[0m")
 
-                color = "\x1b[32m\x1b[1m" if optionSelected.state else "\x1b[1m"
+                color = f"{selectedColor}\x1b[1m" if optionSelected.state else "\x1b[1m\x1b[37m"
                 inputConsole.setConsoleLine(
                     3, 4, f"{color}{optionSelected.getStateString()} {optionSelected.content}\x1b[0m")
 
-                color = "\x1b[32m" if optionDown.state else "\x1b[2m"
+                color = selectedColor if optionDown.state else "\x1b[2m"
                 inputConsole.setConsoleLine(
                     4, 4, f"{color}{optionDown.getStateString()} {optionDown.content}\x1b[0m")
 
                 inputConsole.refresh()
 
-                char = getch.getch()
+                char = getch()
                 state = getMovement(char)
 
                 if state == "DOWN":

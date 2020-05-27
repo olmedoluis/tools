@@ -1,6 +1,7 @@
 import Status
 import Add
 import Remove
+import Commit
 from Data.PixRoutes import SUBROUTES
 
 
@@ -19,7 +20,8 @@ def Router(route_name, pixTools):
     PIX_STORE = {
         "Status": Status,
         "Add": Add,
-        "Remove": Remove
+        "Remove": Remove,
+        "Commit": Commit
     }
 
     next_route = pixTools.getNextRoute()
