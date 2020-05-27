@@ -16,6 +16,29 @@ def run(command=[]):
     return output
 
 
+def getCommonDirectory(directories):
+    directoriesSplited = []
+    for directory in directories:
+        directoriesSplited.append(directory.split("/"))
+
+    if len(directoriesSplited) == 1:
+        return directoriesSplited[0][-1]
+
+    from os.path import basename
+    from os import getcwd
+
+    index = 0
+    for example in directoriesSplited[0]:
+        for directory in directoriesSplited:
+            if example == directory[index]:
+                continue
+            return directory[index - 1] if index > 0 else basename(getcwd())
+
+        index = index + 1
+
+    return basename(getcwd())
+
+
 def save():
     from Status import getStatus, setUp as setUpStatus
 
@@ -44,8 +67,9 @@ def save():
     if kind == "":
         return print(messages["commit-empty"])
 
+    commonDir = getCommonDirectory(status["added"])
     scope = prompts.text(
-        title=messages["commit-scope-title"], placeHolder="file.js", errorMessage=scapeError)
+        title=messages["commit-scope-title"], placeHolder=commonDir, errorMessage=scapeError)
 
     if scope == "":
         return print(messages["commit-empty"])
