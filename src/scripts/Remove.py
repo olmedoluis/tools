@@ -49,7 +49,7 @@ def remove(filePaths=[]):
     print()
     answer = prompts().multiSelect(title=messages["add-adition-title"],
                                    finalTitle=messages["add-adition-finaltitle"],
-                                   options=options)
+                                   options=options, selectedColor="\x1b[31m")
 
     if answer == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
