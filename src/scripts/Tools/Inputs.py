@@ -279,7 +279,7 @@ def prompts():
 
         return word
 
-    def multiSelectInput(title="", finalTitle="", options=[""], errorMessage=""):
+    def multiSelectInput(title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"):
         inputConsole = console(5)
         selectedOptions = []
         try:
@@ -295,15 +295,15 @@ def prompts():
                 optionSelected = optionsWithStates[index % optionsLen]
                 optionDown = optionsWithStates[(index + 1) % optionsLen]
 
-                color = "\x1b[32m" if optionAbove.state else "\x1b[2m"
+                color = selectedColor if optionAbove.state else "\x1b[2m"
                 inputConsole.setConsoleLine(
                     2, 4, f"{color}{optionAbove.getStateString()} {optionAbove.content}\x1b[0m")
 
-                color = "\x1b[32m\x1b[1m" if optionSelected.state else "\x1b[1m"
+                color = f"{selectedColor}\x1b[1m" if optionSelected.state else "\x1b[1m\x1b[37m"
                 inputConsole.setConsoleLine(
                     3, 4, f"{color}{optionSelected.getStateString()} {optionSelected.content}\x1b[0m")
 
-                color = "\x1b[32m" if optionDown.state else "\x1b[2m"
+                color = selectedColor if optionDown.state else "\x1b[2m"
                 inputConsole.setConsoleLine(
                     4, 4, f"{color}{optionDown.getStateString()} {optionDown.content}\x1b[0m")
 
