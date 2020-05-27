@@ -35,6 +35,7 @@ def getStatus():
         secondCode = change[1]
         content = change[3:]
         change_name = ''
+        second_change_name = ''
 
         if "R" in prefix:
             files = content.split(" -> ")
@@ -49,13 +50,21 @@ def getStatus():
 
         if firstCode.isalpha():
             change_name = STATUS_MATCHES["A"]
+            second_name = STATUS_MATCHES[secondCode]
+            if secondCode != " ":
+                second_change_name = second_name if second_name != '' else ''
         else:
             change_name = STATUS_MATCHES[secondCode] if firstCode == ' ' else STATUS_MATCHES[firstCode]
 
         if not change_name in status:
             status[change_name] = []
 
+        if not second_change_name in status and second_change_name != "":
+            status[second_change_name] = []
+
         status[change_name].append(content)
+        if second_change_name != "":
+            status[second_change_name].append(content)
 
     return status
 
