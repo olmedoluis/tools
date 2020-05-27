@@ -267,10 +267,10 @@ def prompts():
             state = getResponse(char)
 
             if state == "YES":
-                word = "yes"
+                word = True
                 break
             if state == "NO":
-                word = "no"
+                word = False
                 break
             if state == "FINISH":
                 break
