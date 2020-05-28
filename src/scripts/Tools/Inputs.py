@@ -89,6 +89,7 @@ def prompts():
     def getGetch():
         from os import name
         if name == 'nt':
+            import msvcrt
             return msvcrt.getch
 
         def getch():
