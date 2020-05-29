@@ -26,7 +26,7 @@ def getCommonDirectory(directories):
 
     from os.path import basename
     from os import getcwd
-    from Remove import removeColors
+    from Helpers import removeColors
 
     index = 0
     for example in directoriesSplited[0]:

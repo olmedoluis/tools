@@ -18,15 +18,6 @@ def run(command=[]):
     return output
 
 
-def removeColors(string):
-    if "\x1b" in string:
-        posibleColors = ["\x1b[33m", "\x1b[1m", "\x1b[0m"]
-        for color in posibleColors:
-            string = string.replace(color, "")
-
-    return string
-
-
 def remove(filePaths=[]):
     from pathlib import Path as isFile
 
@@ -61,6 +52,8 @@ def remove(filePaths=[]):
         return print(messages["unknown-error"])
     if len(answers) == 0:
         return print(messages["remove-nofileschoosen-error"])
+
+    from Helpers import removeColors
 
     choices = []
     for answer in answers:

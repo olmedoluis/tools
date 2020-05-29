@@ -63,7 +63,7 @@ def add(filePaths=[]):
     if len(answers) == 0:
         return print(messages["add-nofileschoosen-error"])
 
-    from Remove import removeColors
+    from Helpers import removeColors
 
     choices = []
     for answer in answers:
