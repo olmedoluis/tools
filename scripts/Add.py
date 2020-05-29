@@ -54,16 +54,22 @@ def add(filePaths=[]):
         return print(messages["add-nofiles-error"])
 
     print()
-    answer = prompts().multiSelect(title=messages["add-adition-title"],
-                                   finalTitle=messages["file-selection-finaltitle"],
-                                   options=options)
+    answers = prompts().multiSelect(title=messages["add-adition-title"],
+                                    finalTitle=messages["file-selection-finaltitle"],
+                                    options=options)
 
-    if answer == "UNKNOWN_ERROR":
+    if answers == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
-    if len(answer) == 0:
+    if len(answers) == 0:
         return print(messages["add-nofileschoosen-error"])
 
-    run(["git", "add"] + answer)
+    from Remove import removeColors
+
+    choices = []
+    for answer in answers:
+        choices.append(removeColors(answer))
+
+    run(["git", "add"] + choices)
     print(messages["add-success"])
 
 

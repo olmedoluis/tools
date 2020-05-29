@@ -18,6 +18,15 @@ def run(command=[]):
     return output
 
 
+def removeColors(string):
+    if "\x1b" in string:
+        posibleColors = ["\x1b[33m", "\x1b[1m", "\x1b[0m"]
+        for color in posibleColors:
+            string = string.replace(color, "")
+
+    return string
+
+
 def remove(filePaths=[]):
     from pathlib import Path as isFile
 
@@ -44,16 +53,20 @@ def remove(filePaths=[]):
         return print(messages["remove-nofiles-error"])
 
     print()
-    answer = prompts().multiSelect(title=messages["remove-removing-title"],
-                                   finalTitle=messages["file-selection-finaltitle"],
-                                   options=options, selectedColor="\x1b[31m")
+    answers = prompts().multiSelect(title=messages["remove-removing-title"],
+                                    finalTitle=messages["file-selection-finaltitle"],
+                                    options=options, selectedColor="\x1b[31m")
 
-    if answer == "UNKNOWN_ERROR":
+    if answers == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
-    if len(answer) == 0:
+    if len(answers) == 0:
         return print(messages["remove-nofileschoosen-error"])
 
-    run(["git", "reset", "HEAD"] + answer)
+    choices = []
+    for answer in answers:
+        choices.append(removeColors(answer))
+
+    run(["git", "reset", "HEAD"] + choices)
     print(messages["remove-success"])
 
 

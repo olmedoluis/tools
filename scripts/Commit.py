@@ -26,17 +26,18 @@ def getCommonDirectory(directories):
 
     from os.path import basename
     from os import getcwd
+    from Remove import removeColors
 
     index = 0
     for example in directoriesSplited[0]:
         for directory in directoriesSplited:
             if example == directory[index]:
                 continue
-            return directory[index - 1] if index > 0 else basename(getcwd())
+            return removeColors(directory[index - 1] if index > 0 else basename(getcwd()))
 
         index = index + 1
 
-    return basename(getcwd())
+    return removeColors(basename(getcwd()))
 
 
 def save():
