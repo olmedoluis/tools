@@ -41,6 +41,10 @@ def branchSelection():
         print(messages["error-samebranch"].format(branchSelected))
 
 
+def branchCreation():
+    print("hola")
+
+
 def setUp(outsideMessages):
     global messages
     messages = outsideMessages
@@ -49,5 +53,7 @@ def setUp(outsideMessages):
 def Router(router, subroute):
     setUp(router.messages)
 
-    if subroute == "DEFAULT":
+    if subroute == "BRANCH_CREATION":
+        branchCreation()
+    elif subroute == "DEFAULT":
         branchSelection()
