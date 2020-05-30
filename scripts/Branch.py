@@ -80,7 +80,7 @@ def branchCreation():
     print(messages["preview"].format(branch))
 
     isSure = prompts.confirm(
-        title=messages["confirmation"], errorMessage=scapeError)
+        title=messages["confirmation"])
 
     if isSure:
         run(errorRunValidator, ["git", "branch", branch])
@@ -89,7 +89,7 @@ def branchCreation():
         return print(messages["commit-cancel"])
 
     shouldSwitch = prompts.confirm(
-        title=messages["branch-shouldswitch"], errorMessage=scapeError)
+        title=messages["branch-shouldswitch"])
 
     if shouldSwitch:
         run(errorRunValidator, ["git", "checkout", branch])
