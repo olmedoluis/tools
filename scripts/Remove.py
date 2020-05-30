@@ -1,21 +1,13 @@
+from Helpers import run
 
-def run(command=[]):
-    from subprocess import Popen, PIPE
 
-    process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-
-    output, error = process.communicate()
-
-    if process.returncode != 0:
-        if error.find("not a git repository") != -1:
-            print(messages["notGitRepository"])
-        elif error.find("did not match any files") != 1:
-            print(messages["notafile-error"])
-        else:
-            print(messages["unknown-error"])
-        exit()
-
-    return output
+def errorRunValidator(error):
+    if error.find("not a git repository") != -1:
+        print(messages["notGitRepository"])
+    elif error.find("did not match any files") != 1:
+        print(messages["notafile-error"])
+    else:
+        print(messages["unknown-error"])
 
 
 def remove(filePaths=[]):
@@ -29,7 +21,7 @@ def remove(filePaths=[]):
         specificFiles.append(filePath)
 
     if len(specificFiles) > 0:
-        run(["git", "reset", "HEAD"] + specificFiles)
+        run(errorRunValidator, ["git", "reset", "HEAD"] + specificFiles)
         return print(messages["remove-success"])
 
     from Status import getStatus, setUp as setUpStatus
@@ -59,7 +51,7 @@ def remove(filePaths=[]):
     for answer in answers:
         choices.append(removeColors(answer))
 
-    run(["git", "reset", "HEAD"] + choices)
+    run(errorRunValidator, ["git", "reset", "HEAD"] + choices)
     print(messages["remove-success"])
 
 
@@ -79,7 +71,7 @@ def removeAll():
         break
 
     if hasFilesToAdd:
-        run(["git", "reset", "HEAD", "."])
+        run(errorRunValidator, ["git", "reset", "HEAD", "."])
         print(messages["remove-all-success"])
     else:
         print(messages["remove-all-nofiles"])
