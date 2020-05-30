@@ -66,7 +66,7 @@ def branchCreation():
                              "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
                             {"type": "Text", "title": messages["branch-id-title"],
                              "placeHolder": "", "errorMessage": scapeError},
-                            {"type": "Text", "title": messages["branch-about-title"]}])
+                            {"type": "Text", "title": messages["branch-about-title"], "errorMessage": scapeError}])
 
     if len(answers) != 3:
         return print(messages["error-empty"])
