@@ -69,8 +69,7 @@ def save():
     commit = "{}({}):{}".format(*answers)
     print(messages["preview"].format(commit))
 
-    isSure = prompts.confirm(
-        title=messages["confirmation"], errorMessage=scapeError)
+    isSure = prompts.confirm(title=messages["confirmation"])
 
     if isSure:
         run(errorRunValidator, ["git", "commit", "-m", commit])
