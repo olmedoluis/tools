@@ -8,6 +8,13 @@ def errorRunValidator(error):
         print(messages["unknown-error"])
 
 
+def getHasChanges():
+    from Status import getStatus, setUp as setUpStatus
+    setUpStatus(messages)
+
+    return len(getStatus().keys()) > 1
+
+
 def branchSelection():
     branchesOutput = run(errorRunValidator, ["git", "branch"])
     branchesSpaced = branchesOutput.rstrip().split("\n")
@@ -27,9 +34,7 @@ def branchSelection():
     branchSelected = prompts.select(title=messages["commit-type-title"],
                                     options=branches, selectedColor="\x1b[33m", errorMessage="errorxd")
 
-    from Status import getStatus, setUp as setUpStatus
-    setUpStatus(messages)
-    hasChanges = len(getStatus().keys()) > 1
+    hasChanges = getHasChanges()
 
     if hasChanges:
         return print(messages["error-haschanges"])
@@ -42,7 +47,22 @@ def branchSelection():
 
 
 def branchCreation():
-    print("hola")
+    hasChanges = getHasChanges()
+
+    if hasChanges:
+        return print(messages["error-haschanges"])
+
+    from Tools.Inputs import prompts
+    prompts = prompts()
+
+    options = ["feature", "refactor", "bugfix", "style"]
+    scapeError = "error"
+
+    answers = prompts.many([{"type": "Select", "title": messages["commit-type-title"],
+                             "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
+                            {"type": "Text", "title": messages["commit-scope-title"],
+                             "placeHolder": "", "errorMessage": scapeError},
+                            {"type": "Text", "title": messages["commit-about-title"]}])
 
 
 def setUp(outsideMessages):
