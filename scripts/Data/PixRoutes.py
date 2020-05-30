@@ -40,5 +40,10 @@ SUBROUTES = {
         }
     },
     "Commit": {},
-    "Branch": {}
+    "Branch": {
+        "BRANCH_CREATION": {
+            "keys": ["create", "new"],
+            "alias": ["cr"]
+        }
+    }
 }
