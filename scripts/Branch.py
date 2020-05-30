@@ -30,10 +30,10 @@ def branchSelection(branchSearch):
             if branch.find(branchSearch) != -1:
                 output.append(branch)
 
-        branchesSpaced = output
+        if len(branchesSpaced) == 0:
+            return print("there is no branch", branchesSpaced)
 
-    if len(branchesSpaced) == 0:
-        return print("there is no branch", branchesSpaced)
+        branchesSpaced = output
 
     branches = []
     actualBranch = ""
@@ -43,15 +43,18 @@ def branchSelection(branchSearch):
             actualBranch = branch.lstrip()
         branches.append(branch.lstrip())
 
-    from Tools.Inputs import prompts
-    prompts = prompts()
+    branchSelected = branches[0]
 
-    print()
-    branchSelected = prompts.select(title=messages["branch-selection-title"],
-                                    options=branches, selectedColor="\x1b[33m", errorMessage=messages["scape-error"])
+    if len(branches) > 1:
+        from Tools.Inputs import prompts
+        prompts = prompts()
 
-    if branchSelected == "":
-        return print(messages["error-empty"])
+        print()
+        branchSelected = prompts.select(title=messages["branch-selection-title"],
+                                        options=branches, selectedColor="\x1b[33m", errorMessage=messages["scape-error"])
+
+        if branchSelected == "":
+            return print(messages["error-empty"])
 
     if branchSelected != actualBranch:
         run(errorRunValidator, ["git", "checkout", branchSelected])
