@@ -53,28 +53,20 @@ def save():
 
     options = ["feat", "refactor", "fix", "style"]
     scapeError = messages["scape-error"]
+    commonDir = getCommonDirectory(status["added"])
 
     prompts = prompts()
-    kind = prompts.select(
-        title=messages["commit-type-title"], options=options, selectedColor="\x1b[33m", errorMessage=scapeError)
 
-    if kind == "":
+    answers = prompts.many([{"type": "Select", "title": messages["commit-type-title"],
+                             "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
+                            {"type": "Text", "title": messages["commit-scope-title"],
+                             "placeHolder": commonDir, "errorMessage": scapeError},
+                            {"type": "Text", "title": messages["commit-about-title"]}])
+
+    if len(answers) != 3:
         return print(messages["commit-empty"])
 
-    commonDir = getCommonDirectory(status["added"])
-    scope = prompts.text(
-        title=messages["commit-scope-title"], placeHolder=commonDir, errorMessage=scapeError)
-
-    if scope == "":
-        return print(messages["commit-empty"])
-
-    about = prompts.text(
-        title=messages["commit-about-title"], errorMessage=scapeError)
-
-    if about == "":
-        return print(messages["commit-empty"])
-
-    commit = "{}({}):{}".format(kind, scope, about)
+    commit = "{}({}):{}".format(*answers)
     print(messages["commit-preview"].format(commit))
 
     isSure = prompts.confirm(
