@@ -61,11 +61,41 @@ def branchCreation():
     options = ["feature", "refactor", "bugfix", "style"]
     scapeError = messages["scape-error"]
 
+    print()
     answers = prompts.many([{"type": "Select", "title": messages["branch-type-title"],
                              "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
                             {"type": "Text", "title": messages["branch-id-title"],
                              "placeHolder": "", "errorMessage": scapeError},
                             {"type": "Text", "title": messages["branch-about-title"]}])
+
+    if len(answers) != 3:
+        return print(messages["error-empty"])
+
+    kind, ticketId, about = answers
+    ticketId = ticketId.upper().replace(" ", "-")
+    about = about.lower().replace(" ", "-")
+
+    branch = f"{kind}/{ticketId}-{about}"
+
+    print(messages["preview"].format(branch))
+
+    isSure = prompts.confirm(
+        title=messages["confirmation"], errorMessage=scapeError)
+
+    if isSure:
+        run(errorRunValidator, ["git", "branch", branch])
+        print(messages["branch-success"].format(branch))
+    else:
+        return print(messages["commit-cancel"])
+
+    shouldSwitch = prompts.confirm(
+        title=messages["branch-shouldswitch"], errorMessage=scapeError)
+
+    if shouldSwitch:
+        run(errorRunValidator, ["git", "checkout", branch])
+        print(messages["branch-switchsuccess"].format(branch))
+    else:
+        print(messages["error-inputcancel"])
 
 
 def setUp(outsideMessages):
