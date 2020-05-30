@@ -25,15 +25,15 @@ def branchSelection(branchSearch):
     branchesSpaced = branchesOutput.rstrip().split("\n")
 
     if branchSearch != "":
-        output = []
+        branchMatch = []
         for branch in branchesSpaced:
             if branch.find(branchSearch) != -1:
-                output.append(branch)
+                branchMatch.append(branch)
 
-        if len(branchesSpaced) == 0:
+        if len(branchMatch) == 0:
             return print("there is no branch", branchesSpaced)
 
-        branchesSpaced = output
+        branchesSpaced = branchMatch
 
     branches = []
     actualBranch = ""
