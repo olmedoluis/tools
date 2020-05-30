@@ -1,19 +1,12 @@
 
-def run(command=[]):
-    from subprocess import Popen, PIPE
+from Helpers import run
 
-    process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
-    output, error = process.communicate()
-
-    if process.returncode != 0:
-        if error.find("not a git repository") != -1:
-            print(messages["notGitRepository"])
-        else:
-            print(messages["unknown-error"])
-        exit()
-
-    return output
+def errorRunValidator(error):
+    if error.find("not a git repository") != -1:
+        print(messages["notGitRepository"])
+    else:
+        print(messages["unknown-error"])
 
 
 def getCommonDirectory(directories):
@@ -26,17 +19,18 @@ def getCommonDirectory(directories):
 
     from os.path import basename
     from os import getcwd
+    from Helpers import removeColors
 
     index = 0
     for example in directoriesSplited[0]:
         for directory in directoriesSplited:
             if example == directory[index]:
                 continue
-            return directory[index - 1] if index > 0 else basename(getcwd())
+            return removeColors(directory[index - 1] if index > 0 else basename(getcwd()))
 
         index = index + 1
 
-    return basename(getcwd())
+    return removeColors(basename(getcwd()))
 
 
 def save():
@@ -59,35 +53,27 @@ def save():
 
     options = ["feat", "refactor", "fix", "style"]
     scapeError = messages["scape-error"]
+    commonDir = getCommonDirectory(status["added"])
 
     prompts = prompts()
-    kind = prompts.select(
-        title=messages["commit-type-title"], options=options, selectedColor="\x1b[33m", errorMessage=scapeError)
 
-    if kind == "":
+    answers = prompts.many([{"type": "Select", "title": messages["commit-type-title"],
+                             "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
+                            {"type": "Text", "title": messages["commit-scope-title"],
+                             "placeHolder": commonDir, "errorMessage": scapeError},
+                            {"type": "Text", "title": messages["commit-about-title"]}])
+
+    if len(answers) != 3:
         return print(messages["commit-empty"])
 
-    commonDir = getCommonDirectory(status["added"])
-    scope = prompts.text(
-        title=messages["commit-scope-title"], placeHolder=commonDir, errorMessage=scapeError)
-
-    if scope == "":
-        return print(messages["commit-empty"])
-
-    about = prompts.text(
-        title=messages["commit-about-title"], errorMessage=scapeError)
-
-    if about == "":
-        return print(messages["commit-empty"])
-
-    commit = "{}({}):{}".format(kind, scope, about)
+    commit = "{}({}):{}".format(*answers)
     print(messages["commit-preview"].format(commit))
 
     isSure = prompts.confirm(
         title=messages["commit-confirm"], errorMessage=scapeError)
 
     if isSure:
-        run(["git", "commit", "-m", commit])
+        run(errorRunValidator, ["git", "commit", "-m", commit])
         print(messages["commit-success"])
     else:
         print(messages["commit-cancel"])

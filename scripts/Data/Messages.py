@@ -27,6 +27,7 @@ def getTheme():
         "renamed": mod("bold") + font_low("red"),
         "error": mod("bold") + font_high("red"),
         "reset": mod("reset"),
+        "change": font_low("yellow")
     }
 
 
@@ -70,7 +71,7 @@ def getMessages():
         "remove-nofileschoosen-error": "\n {}\n".format(themeUp("{error}✖ No files has been choosen")),
         "remove-removing-title": "{}".format(themeUp("{normal}Select files to remove:")),
         "remove-success": "\n {}\n".format(themeUp("{success}⚑ Selected files has been removed")),
-        "renamed-modify": "{}".format(themeUp("$/{modified}$")),
+        "renamed-modify": "{}".format(themeUp("${change}$")),
         "renamed-title": "\n {}\n".format(themeUp("{normal}Renamed files:")),
         "renamed": "\t{}".format(themeUp("{renamed}✦ $")),
         "scape-error": "\n {}\n".format(themeUp("{error}✖ You have exit pix")),

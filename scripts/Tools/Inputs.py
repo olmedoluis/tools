@@ -89,6 +89,7 @@ def prompts():
     def getGetch():
         from os import name
         if name == 'nt':
+            import msvcrt
             return msvcrt.getch
 
         def getch():
@@ -361,6 +362,10 @@ def prompts():
             return selectedOptions
 
     class prompts_ui():
+        def __init__(self):
+            self.box = {"MultiSelect": multiSelectInput, "Text": textInput,
+                        "Select": selectInput, "Confirm": confirmInput}
+
         def text(self, **arg):
             return textInput(**arg)
 
@@ -372,5 +377,17 @@ def prompts():
 
         def multiSelect(self, **arg):
             return multiSelectInput(**arg)
+
+        def many(self, inputs):
+            output = []
+            for inputData in inputs:
+                currentInput = self.box[inputData["type"]]
+                inputData.pop("type")
+                out = currentInput(**inputData)
+                if out == "":
+                    break
+                output.append(out)
+
+            return output
 
     return prompts_ui()

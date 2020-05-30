@@ -1,22 +1,13 @@
+from Helpers import run
 
 
-def run(command=[]):
-    from subprocess import Popen, PIPE
-
-    process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-
-    output, error = process.communicate()
-
-    if process.returncode != 0:
-        if error.find("not a git repository") != -1:
-            print(messages["notGitRepository"])
-        elif error.find("did not match any files") != 1:
-            print(messages["notafile-error"])
-        else:
-            print(messages["unknown-error"])
-        exit()
-
-    return output
+def errorRunValidator(error):
+    if error.find("not a git repository") != -1:
+        print(messages["notGitRepository"])
+    elif error.find("did not match any files") != 1:
+        print(messages["notafile-error"])
+    else:
+        print(messages["unknown-error"])
 
 
 def add(filePaths=[]):
@@ -30,7 +21,7 @@ def add(filePaths=[]):
         specificFiles.append(filePath)
 
     if len(specificFiles) > 0:
-        run(["git", "add"] + specificFiles)
+        run(errorRunValidator, ["git", "add"] + specificFiles)
         return print(messages["add-success"])
 
     if len(filePaths) > 0:
@@ -54,16 +45,22 @@ def add(filePaths=[]):
         return print(messages["add-nofiles-error"])
 
     print()
-    answer = prompts().multiSelect(title=messages["add-adition-title"],
-                                   finalTitle=messages["file-selection-finaltitle"],
-                                   options=options)
+    answers = prompts().multiSelect(title=messages["add-adition-title"],
+                                    finalTitle=messages["file-selection-finaltitle"],
+                                    options=options)
 
-    if answer == "UNKNOWN_ERROR":
+    if answers == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
-    if len(answer) == 0:
+    if len(answers) == 0:
         return print(messages["add-nofileschoosen-error"])
 
-    run(["git", "add"] + answer)
+    from Helpers import removeColors
+
+    choices = []
+    for answer in answers:
+        choices.append(removeColors(answer))
+
+    run(errorRunValidator, ["git", "add"] + choices)
     print(messages["add-success"])
 
 
@@ -83,7 +80,7 @@ def addAll():
         break
 
     if hasFilesToAdd:
-        run(["git", "add", "."])
+        run(errorRunValidator, ["git", "add", "."])
         print(messages["add-all-success"])
     else:
         print(messages["add-all-nofiles"])

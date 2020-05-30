@@ -1,21 +1,13 @@
+from Helpers import run
 
-def run(command=[]):
-    from subprocess import Popen, PIPE
 
-    process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-
-    output, error = process.communicate()
-
-    if process.returncode != 0:
-        if error.find("not a git repository") != -1:
-            print(messages["notGitRepository"])
-        elif error.find("did not match any files") != 1:
-            print(messages["notafile-error"])
-        else:
-            print(messages["unknown-error"])
-        exit()
-
-    return output
+def errorRunValidator(error):
+    if error.find("not a git repository") != -1:
+        print(messages["notGitRepository"])
+    elif error.find("did not match any files") != 1:
+        print(messages["notafile-error"])
+    else:
+        print(messages["unknown-error"])
 
 
 def remove(filePaths=[]):
@@ -29,7 +21,7 @@ def remove(filePaths=[]):
         specificFiles.append(filePath)
 
     if len(specificFiles) > 0:
-        run(["git", "reset", "HEAD"] + specificFiles)
+        run(errorRunValidator, ["git", "reset", "HEAD"] + specificFiles)
         return print(messages["remove-success"])
 
     from Status import getStatus, setUp as setUpStatus
@@ -44,16 +36,22 @@ def remove(filePaths=[]):
         return print(messages["remove-nofiles-error"])
 
     print()
-    answer = prompts().multiSelect(title=messages["remove-removing-title"],
-                                   finalTitle=messages["file-selection-finaltitle"],
-                                   options=options, selectedColor="\x1b[31m")
+    answers = prompts().multiSelect(title=messages["remove-removing-title"],
+                                    finalTitle=messages["file-selection-finaltitle"],
+                                    options=options, selectedColor="\x1b[31m")
 
-    if answer == "UNKNOWN_ERROR":
+    if answers == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
-    if len(answer) == 0:
+    if len(answers) == 0:
         return print(messages["remove-nofileschoosen-error"])
 
-    run(["git", "reset", "HEAD"] + answer)
+    from Helpers import removeColors
+
+    choices = []
+    for answer in answers:
+        choices.append(removeColors(answer))
+
+    run(errorRunValidator, ["git", "reset", "HEAD"] + choices)
     print(messages["remove-success"])
 
 
@@ -73,7 +71,7 @@ def removeAll():
         break
 
     if hasFilesToAdd:
-        run(["git", "reset", "HEAD", "."])
+        run(errorRunValidator, ["git", "reset", "HEAD", "."])
         print(messages["remove-all-success"])
     else:
         print(messages["remove-all-nofiles"])
