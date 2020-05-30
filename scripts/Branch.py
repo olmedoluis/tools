@@ -24,6 +24,9 @@ def branchSelection(branchSearch):
     branchesOutput = run(errorRunValidator, ["git", "branch"])
     branchesSpaced = branchesOutput.rstrip().split("\n")
 
+    if branchesSpaced[0] == "":
+        return print("no hay branches")
+
     if branchSearch != "":
         branchMatch = []
         for branch in branchesSpaced:
