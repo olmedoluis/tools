@@ -15,7 +15,7 @@ def getHasChanges():
     return len(getStatus().keys()) > 1
 
 
-def branchSelection():
+def branchSelection(branchSearch):
     hasChanges = getHasChanges()
 
     if hasChanges:
@@ -23,6 +23,17 @@ def branchSelection():
 
     branchesOutput = run(errorRunValidator, ["git", "branch"])
     branchesSpaced = branchesOutput.rstrip().split("\n")
+
+    if branchSearch != "":
+        output = []
+        for branch in branchesSpaced:
+            if branch.find(branchSearch) != -1:
+                output.append(branch)
+
+        branchesSpaced = output
+
+    if len(branchesSpaced) == 0:
+        return print("there is no branch", branchesSpaced)
 
     branches = []
     actualBranch = ""
@@ -109,4 +120,4 @@ def Router(router, subroute):
     if subroute == "BRANCH_CREATION":
         branchCreation()
     elif subroute == "DEFAULT":
-        branchSelection()
+        branchSelection(router.getNextRoute())
