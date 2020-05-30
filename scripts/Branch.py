@@ -25,7 +25,7 @@ def branchSelection(branchSearch):
     branchesSpaced = branchesOutput.rstrip().split("\n")
 
     if branchesSpaced[0] == "":
-        return print("no hay branches")
+        return print(messages["error-nobranches"])
 
     if branchSearch != "":
         branchMatch = []
@@ -34,7 +34,7 @@ def branchSelection(branchSearch):
                 branchMatch.append(branch)
 
         if len(branchMatch) == 0:
-            return print("there is no branch", branchesSpaced)
+            return print(messages["error-nomatchbranch"].format(branchesSpaced))
 
         branchesSpaced = branchMatch
 
