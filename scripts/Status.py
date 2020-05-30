@@ -1,22 +1,13 @@
 #!/usr/bin/python3
 
+from Helpers import run
 
-from subprocess import Popen, PIPE
 
-
-def run(command=[]):
-    process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-
-    output, error = process.communicate()
-
-    if process.returncode != 0:
-        if error.find("not a git repository") != -1:
-            print(messages["notGitRepository"])
-        else:
-            print(messages["unknown-error"])
-        exit()
-
-    return output
+def errorRunValidator(error):
+    if error.find("not a git repository") != -1:
+        print(messages["notGitRepository"])
+    else:
+        print(messages["unknown-error"])
 
 
 def getStatus():
@@ -25,7 +16,7 @@ def getStatus():
                       "R": "renamed", "A": "added",
                       "D": "deleted"}
 
-    status_data = run(["git", "status", "-sb"])
+    status_data = run(errorRunValidator, ["git", "status", "-sb"])
     status_data = status_data.rstrip().split("\n")
 
     status = {}
