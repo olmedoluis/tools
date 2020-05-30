@@ -18,6 +18,10 @@ ROUTES = {
     "Commit": {
         "keys": ["commit", "save"],
         "alias": ["s", "c"]
+    },
+    "Branch": {
+        "keys": ["branch", "line"],
+        "alias": ["br"]
     }
 }
 
@@ -35,5 +39,11 @@ SUBROUTES = {
             "alias": ["."]
         }
     },
-    "Commit": {}
+    "Commit": {},
+    "Branch": {
+        "BRANCH_CREATION": {
+            "keys": ["create", "new"],
+            "alias": ["cr"]
+        }
+    }
 }

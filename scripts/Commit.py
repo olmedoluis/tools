@@ -64,13 +64,12 @@ def save():
                             {"type": "Text", "title": messages["commit-about-title"]}])
 
     if len(answers) != 3:
-        return print(messages["commit-empty"])
+        return print(messages["error-empty"])
 
     commit = "{}({}):{}".format(*answers)
-    print(messages["commit-preview"].format(commit))
+    print(messages["preview"].format(commit))
 
-    isSure = prompts.confirm(
-        title=messages["commit-confirm"], errorMessage=scapeError)
+    isSure = prompts.confirm(title=messages["confirmation"])
 
     if isSure:
         run(errorRunValidator, ["git", "commit", "-m", commit])

@@ -263,7 +263,7 @@ def prompts():
 
             return selectedOption
 
-    def confirmInput(title="", finalTitle="", errorMessage=""):
+    def confirmInput(title="", finalTitle=""):
         inputConsole = console(1)
         word = False
         try:
@@ -285,7 +285,6 @@ def prompts():
                 if state == "FINISH":
                     break
                 if state == "BREAK_CHAR":
-                    print(errorMessage)
                     exit()
 
             inputConsole.setConsoleLine(0, 1, f"{finalTitle} {word}")
