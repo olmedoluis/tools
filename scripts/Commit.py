@@ -1,19 +1,12 @@
 
-def run(command=[]):
-    from subprocess import Popen, PIPE
+from Helpers import run
 
-    process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
-    output, error = process.communicate()
-
-    if process.returncode != 0:
-        if error.find("not a git repository") != -1:
-            print(messages["notGitRepository"])
-        else:
-            print(messages["unknown-error"])
-        exit()
-
-    return output
+def errorRunValidator(error):
+    if error.find("not a git repository") != -1:
+        print(messages["notGitRepository"])
+    else:
+        print(messages["unknown-error"])
 
 
 def getCommonDirectory(directories):
@@ -88,7 +81,7 @@ def save():
         title=messages["commit-confirm"], errorMessage=scapeError)
 
     if isSure:
-        run(["git", "commit", "-m", commit])
+        run(errorRunValidator, ["git", "commit", "-m", commit])
         print(messages["commit-success"])
     else:
         print(messages["commit-cancel"])
