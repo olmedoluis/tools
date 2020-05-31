@@ -34,7 +34,7 @@ def branchSelection(branchSearch):
                 branchMatch.append(branch)
 
         if len(branchMatch) == 0:
-            return print(messages["error-nomatchbranch"].format(branchesSpaced))
+            return print(messages["error-nomatchbranch"].format(branchSearch))
 
         branchesSpaced = branchMatch
 
