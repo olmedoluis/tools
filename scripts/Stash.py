@@ -23,7 +23,14 @@ def addToStash():
     print()
     title = prompts.text(title="ponele titulo:")
 
+    if title == "":
+        return print(messages["error-empty"])
+
     run(errorRunValidator, ["git", "stash", "push", "-m", title])
+
+
+def stashSelection():
+    print("hola")
 
 
 def setUp(outsideMessages):
@@ -34,5 +41,7 @@ def setUp(outsideMessages):
 def Router(router, subroute):
     setUp(router.messages)
 
-    if subroute == "DEFAULT":
+    if subroute == "ADD_STASH":
         addToStash()
+    if subroute == "DEFAULT":
+        stashSelection()
