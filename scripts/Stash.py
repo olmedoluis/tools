@@ -10,8 +10,20 @@ def errorRunValidator(error):
         print(messages["unknown-error"])
 
 
-def stash():
-    print("hola")
+def addToStash():
+    from Status import getStatus
+
+    if not "added" in getStatus():
+        return print("only added files can be stashed")
+
+    from Tools.Inputs import prompts
+
+    prompts = prompts()
+
+    print()
+    title = prompts.text(title="ponele titulo:")
+
+    run(errorRunValidator, ["git", "stash", "push", "-m", title])
 
 
 def setUp(outsideMessages):
@@ -23,4 +35,4 @@ def Router(router, subroute):
     setUp(router.messages)
 
     if subroute == "DEFAULT":
-        stash()
+        addToStash()
