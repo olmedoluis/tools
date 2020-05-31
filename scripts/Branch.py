@@ -10,7 +10,6 @@ def errorRunValidator(error):
 
 def getHasChanges():
     from Status import getStatus, setUp as setUpStatus
-    setUpStatus(messages)
 
     return len(getStatus().keys()) > 1
 
