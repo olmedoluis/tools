@@ -22,6 +22,10 @@ ROUTES = {
     "Branch": {
         "keys": ["branch", "line"],
         "alias": ["br"]
+    },
+    "Stash": {
+        "keys": ["stash", "box"],
+        "alias": ["b"]
     }
 }
 
@@ -45,5 +49,6 @@ SUBROUTES = {
             "keys": ["create", "new"],
             "alias": ["cr"]
         }
-    }
+    },
+    "Stash": {},
 }
