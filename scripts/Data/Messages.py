@@ -68,6 +68,8 @@ def getMessages():
         "deleted-title": "\n {}\n".format(themeUp("{normal}Deleted files:")),
         "deleted": "\t{}".format(themeUp("{deleted}✝ $")),
         "error-empty": "\n {}\n".format(themeUp("{error}✖ You left a field empty")),
+        "error-nobranches": "\n {}\n".format(themeUp("{error}✖ You do not have any branches yet")),
+        "error-nomatchbranch": "\n {}\n".format(themeUp("{error}✖ There is no branch with {keyword}$")),
         "error-haschanges": "\n {}\n".format(themeUp("{error}✖ You still have uncommited changes")),
         "error-samebranch": "\n {}\n".format(themeUp("{error}✖ You already are on {keyword}$")),
         "file-selection-finaltitle": "{}".format(themeUp("{normal}Files selected:")),

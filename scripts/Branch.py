@@ -15,7 +15,7 @@ def getHasChanges():
     return len(getStatus().keys()) > 1
 
 
-def branchSelection():
+def branchSelection(branchSearch):
     hasChanges = getHasChanges()
 
     if hasChanges:
@@ -23,6 +23,20 @@ def branchSelection():
 
     branchesOutput = run(errorRunValidator, ["git", "branch"])
     branchesSpaced = branchesOutput.rstrip().split("\n")
+
+    if branchesSpaced[0] == "":
+        return print(messages["error-nobranches"])
+
+    if branchSearch != "":
+        branchMatch = []
+        for branch in branchesSpaced:
+            if branch.find(branchSearch) != -1:
+                branchMatch.append(branch)
+
+        if len(branchMatch) == 0:
+            return print(messages["error-nomatchbranch"].format(branchSearch))
+
+        branchesSpaced = branchMatch
 
     branches = []
     actualBranch = ""
@@ -32,15 +46,18 @@ def branchSelection():
             actualBranch = branch.lstrip()
         branches.append(branch.lstrip())
 
-    from Tools.Inputs import prompts
-    prompts = prompts()
+    branchSelected = branches[0]
 
-    print()
-    branchSelected = prompts.select(title=messages["branch-selection-title"],
-                                    options=branches, selectedColor="\x1b[33m", errorMessage=messages["scape-error"])
+    if len(branches) > 1:
+        from Tools.Inputs import prompts
+        prompts = prompts()
 
-    if branchSelected == "":
-        return print(messages["error-empty"])
+        print()
+        branchSelected = prompts.select(title=messages["branch-selection-title"],
+                                        options=branches, selectedColor="\x1b[33m", errorMessage=messages["scape-error"])
+
+        if branchSelected == "":
+            return print(messages["error-empty"])
 
     if branchSelected != actualBranch:
         run(errorRunValidator, ["git", "checkout", branchSelected])
@@ -109,4 +126,4 @@ def Router(router, subroute):
     if subroute == "BRANCH_CREATION":
         branchCreation()
     elif subroute == "DEFAULT":
-        branchSelection()
+        branchSelection(router.getNextRoute())
