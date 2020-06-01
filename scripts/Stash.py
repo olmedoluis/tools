@@ -30,7 +30,46 @@ def addToStash():
 
 
 def stashSelection():
-    print("hola")
+    from Status import getStatus
+
+    if len(getStatus()) > 1:
+        return print(messages["error-haschanges"])
+
+    stashesOutput = run(errorRunValidator, ["git", "stash", "list"])
+    stashesSpaced = stashesOutput.rstrip().split("\n")
+
+    if stashesSpaced[0] == "":
+        return print(messages["error-nobranches"])
+
+    stashList = []
+    for stashWithSpaces in stashesSpaced:
+        stash = stashWithSpaces.lstrip()
+
+        idStartIndex = stash.find("{") + 1
+        stashId = stash[idStartIndex: idStartIndex + 1]
+
+        branchStartIndex = stash.find("On") + 3
+        branchEndIndex = stash.find(" ", branchStartIndex) - 1
+        branch = stash[branchStartIndex:branchEndIndex]
+
+        content = stash[branchEndIndex + 2:]
+
+        stashList.append(
+            messages["stash-listitem"].format(stashId, content, branch))
+
+    from Tools.Inputs import prompts
+    prompts = prompts()
+
+    print()
+    stashSelected = prompts.select(title=messages["branch-selection-title"],
+                                   options=stashList, selectedColor="\x1b[36m", errorMessage=messages["scape-error"])
+
+    if stashSelected == "":
+        return print(messages["error-empty"])
+
+    stashId = stashSelected[0]
+    run(errorRunValidator, ["git", "stash", "pop", stashId])
+    print("You bringed back", stashSelected)
 
 
 def setUp(outsideMessages):
