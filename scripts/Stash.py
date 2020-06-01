@@ -14,19 +14,21 @@ def addToStash():
     from Status import getStatus
 
     if not "added" in getStatus():
-        return print("only added files can be stashed")
+        return print(messages["error-stash-addedfiles"])
 
     from Tools.Inputs import prompts
 
     prompts = prompts()
 
     print()
-    title = prompts.text(title="ponele titulo:")
+    title = prompts.text(
+        title=messages["stash-in-title"], errorMessage=messages["scape-error"])
 
     if title == "":
         return print(messages["error-empty"])
 
     run(errorRunValidator, ["git", "stash", "push", "-m", title])
+    print(messages["stash-in-success"])
 
 
 def stashSelection():
@@ -39,7 +41,7 @@ def stashSelection():
     stashesSpaced = stashesOutput.rstrip().split("\n")
 
     if stashesSpaced[0] == "":
-        return print(messages["error-nobranches"])
+        return print(messages["error-nostashes"])
 
     stashList = []
     for stashWithSpaces in stashesSpaced:
@@ -69,7 +71,7 @@ def stashSelection():
 
     stashId = stashSelected[0]
     run(errorRunValidator, ["git", "stash", "pop", stashId])
-    print("You bringed back", stashSelected)
+    print(messages["stash-back-success"].format(stashSelected))
 
 
 def setUp(outsideMessages):
