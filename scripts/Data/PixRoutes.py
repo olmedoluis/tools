@@ -50,5 +50,10 @@ SUBROUTES = {
             "alias": ["cr"]
         }
     },
-    "Stash": {},
+    "Stash": {
+        "ADD_STASH": {
+            "keys": ["add", "in"],
+            "alias": ["a", "i"]
+        }
+    },
 }
