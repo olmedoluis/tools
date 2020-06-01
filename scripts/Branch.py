@@ -8,11 +8,11 @@ def errorRunValidator(error):
         print(messages["unknown-error"])
 
 
-def getHasChanges():
+def getHasChanges(change=""):
     from Status import getStatus, setUp as setUpStatus
-    setUpStatus(messages)
+    status = getStatus()
 
-    return len(getStatus().keys()) > 1
+    return len(status.keys()) > 1 if change == "" else change in status
 
 
 def branchSelection(branchSearch):

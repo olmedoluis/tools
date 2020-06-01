@@ -3,6 +3,7 @@ import Add
 import Remove
 import Commit
 import Branch
+import Stash
 from Data.PixRoutes import SUBROUTES
 
 
@@ -24,6 +25,7 @@ def Router(route_name, pixTools):
         "Remove": Remove,
         "Commit": Commit,
         "Branch": Branch,
+        "Stash": Stash
     }
 
     next_route = pixTools.getNextRoute()

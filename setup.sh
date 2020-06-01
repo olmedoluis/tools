@@ -18,14 +18,14 @@ echo
 
 # Set up command shortcut for bash
 BASH=~/.bash_aliases
-if test -f "$BASH" && ! cat ~/.bash_aliases | grep "alias pxb=$PIXDIR" &>/dev/null; then
+if test -f "$BASH" && ! cat ~/.bash_aliases | grep "alias px=$PIXDIR" &>/dev/null; then
   echo " Setting up bash shortcut.."
   echo $PIXALIAS >>${BASH}
 fi
 
 # Set up command shortcut for ZSH
 ZSH=~/.zshrc
-if test -f "$ZSH" && ! cat ~/.zshrc | grep "alias pxb=$PIXDIR" &>/dev/null; then
+if test -f "$ZSH" && ! cat ~/.zshrc | grep "alias px=$PIXDIR" &>/dev/null; then
   echo " Setting up zsh shortcut.."
   echo $PIXALIAS >>${ZSH}
   source $ZSH &>/dev/null

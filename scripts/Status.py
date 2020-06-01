@@ -35,8 +35,9 @@ def getStatus():
 
             for index in range(0, len(oldFilePaths)):
                 if not oldFilePaths[index] == newFilePaths[index]:
-                    content = messages["renamed-modify"].format(
-                        '/'.join(oldFilePaths[0:index]), '/'.join(newFilePaths[index:]))
+                    slash = "" if len(newFilePaths[index:]) == 1 else "/"
+                    content = "{}\x1b[33m{}".format(
+                        '/'.join(oldFilePaths[0:index]) + slash, '/'.join(newFilePaths[index:]))
                     break
 
         if firstCode.isalpha():
