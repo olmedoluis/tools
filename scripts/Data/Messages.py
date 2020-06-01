@@ -27,7 +27,8 @@ def getTheme():
         "renamed": mod("bold") + font_low("red"),
         "error": mod("bold") + font_high("red"),
         "reset": mod("reset"),
-        "change": font_low("yellow")
+        "change": font_low("yellow"),
+        "dim": mod("dim")
     }
 
 
@@ -91,4 +92,5 @@ def getMessages():
         "unknownRoute": "\n {}\n".format(themeUp("{error}✖ Command not found: {success}${error}$")),
         "untracked-title": "\n {}\n".format(themeUp("{normal}Untracked files:")),
         "untracked": "\t{}".format(themeUp("{untracked}✱ $")),
+        "stash-listitem": "{}".format(themeUp("$ - $ {dim}$")),
     }
