@@ -2,30 +2,9 @@ import sys
 from Data.PixRoutes import ROUTES, SUBROUTES
 from Data.Messages import getMessages
 from Modules import AddRouter, StatusRouter, BranchRouter, CommitRouter, RemoveRouter, StashRouter
+from Modules.Helpers import checkPixShortcut, checkRoute
 
 messages = getMessages()
-
-def checkRoute(keyword, routes):
-    for entityId in routes:
-        entity = routes[entityId]
-        posibleRoutes = entity["keys"] + entity["alias"]
-
-        if keyword in posibleRoutes:
-            return entityId
-
-    return "DEFAULT"
-
-
-def checkPixShortcut(keyword):
-    for entityId in ROUTES:
-        entity = ROUTES[entityId]
-        posibleRoutes = entity["keys"] + entity["alias"]
-
-        if keyword in posibleRoutes:
-            return entityId
-
-    return False
-
 
 def Router(route_name, pixTools):
     PIX_STORE = {
@@ -44,7 +23,7 @@ def Router(route_name, pixTools):
 
 
 def run(pixTools):
-    route_name = checkPixShortcut(pixTools.actual_route)
+    route_name = checkPixShortcut(pixTools.actual_route, ROUTES)
 
     if route_name != False:
         Router(route_name, pixTools)

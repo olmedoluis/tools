@@ -19,3 +19,24 @@ def run(validator, command=[]):
         exit()
 
     return output
+
+def checkRoute(keyword, routes):
+    for entityId in routes:
+        entity = routes[entityId]
+        posibleRoutes = entity["keys"] + entity["alias"]
+
+        if keyword in posibleRoutes:
+            return entityId
+
+    return "DEFAULT"
+
+
+def checkPixShortcut(keyword, routes):
+    for entityId in routes:
+        entity = routes[entityId]
+        posibleRoutes = entity["keys"] + entity["alias"]
+
+        if keyword in posibleRoutes:
+            return entityId
+
+    return False
