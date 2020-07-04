@@ -3,6 +3,7 @@ from .Status import getStatus
 from pathlib import Path as isFile
 from Tools.Inputs import prompts
 
+
 def errorRunValidator(error):
     if error.find("not a git repository") != -1:
         print(messages["notGitRepository"])
@@ -32,9 +33,12 @@ def remove(filePaths=[]):
         return print(messages["remove-nofiles-error"])
 
     print()
-    answers = prompts().multiSelect(title=messages["remove-removing-title"],
-                                    finalTitle=messages["file-selection-finaltitle"],
-                                    options=options, selectedColor="\x1b[31m")
+    answers = prompts().multiSelect(
+        title=messages["remove-removing-title"],
+        finalTitle=messages["file-selection-finaltitle"],
+        options=options,
+        selectedColor="\x1b[31m",
+    )
 
     if answers == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
