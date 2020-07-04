@@ -9,7 +9,7 @@ while [ -h "$SOURCE" ]; do
 done
 CURRENTDIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
 
-PIXDIR="$CURRENTDIR/scripts/Pix.py"
+PIXDIR="$CURRENTDIR/Pix"
 PIXALIAS="alias pxb=$PIXDIR"
 
 echo
