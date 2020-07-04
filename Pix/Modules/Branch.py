@@ -1,6 +1,6 @@
 from .Helpers import run
 from .Status import getStatus
-from Tools.Inputs import prompts
+from .Inputs import prompts
 
 
 def errorRunValidator(error):
@@ -53,8 +53,12 @@ def branchSelection(branchSearch):
         inputs = prompts()
 
         print()
-        branchSelected = inputs.select(title=messages["branch-selection-title"],
-                                        options=branches, selectedColor="\x1b[33m", errorMessage=messages["scape-error"])
+        branchSelected = inputs.select(
+            title=messages["branch-selection-title"],
+            options=branches,
+            selectedColor="\x1b[33m",
+            errorMessage=messages["scape-error"],
+        )
 
         if branchSelected == "":
             return print(messages["error-empty"])
@@ -78,11 +82,28 @@ def branchCreation():
     scapeError = messages["scape-error"]
 
     print()
-    answers = inputs.many([{"type": "Select", "title": messages["branch-type-title"],
-                             "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
-                            {"type": "Text", "title": messages["branch-id-title"],
-                             "placeHolder": "", "errorMessage": scapeError},
-                            {"type": "Text", "title": messages["branch-about-title"], "errorMessage": scapeError}])
+    answers = inputs.many(
+        [
+            {
+                "type": "Select",
+                "title": messages["branch-type-title"],
+                "options": options,
+                "selectedColor": "\x1b[33m",
+                "errorMessage": scapeError,
+            },
+            {
+                "type": "Text",
+                "title": messages["branch-id-title"],
+                "placeHolder": "",
+                "errorMessage": scapeError,
+            },
+            {
+                "type": "Text",
+                "title": messages["branch-about-title"],
+                "errorMessage": scapeError,
+            },
+        ]
+    )
 
     if len(answers) != 3:
         return print(messages["error-empty"])
@@ -95,8 +116,7 @@ def branchCreation():
 
     print(messages["preview"].format(branch))
 
-    isSure = inputs.confirm(
-        title=messages["confirmation"])
+    isSure = inputs.confirm(title=messages["confirmation"])
 
     if isSure:
         run(errorRunValidator, ["git", "branch", branch])
@@ -104,8 +124,7 @@ def branchCreation():
     else:
         return print(messages["commit-cancel"])
 
-    shouldSwitch = inputs.confirm(
-        title=messages["branch-shouldswitch"])
+    shouldSwitch = inputs.confirm(title=messages["branch-shouldswitch"])
 
     if shouldSwitch:
         run(errorRunValidator, ["git", "checkout", branch])

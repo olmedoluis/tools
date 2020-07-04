@@ -1,6 +1,6 @@
 from .Helpers import run
 from .Status import getStatus
-from Tools.Inputs import prompts
+from .Inputs import prompts
 
 
 def errorRunValidator(error):
@@ -16,7 +16,8 @@ def addToStash():
 
     print()
     title = prompts().text(
-        title=messages["stash-in-title"], errorMessage=messages["scape-error"])
+        title=messages["stash-in-title"], errorMessage=messages["scape-error"]
+    )
 
     if title == "":
         return print(messages["error-empty"])
@@ -40,20 +41,23 @@ def stashSelection():
         stash = stashWithSpaces.lstrip()
 
         idStartIndex = stash.find("{") + 1
-        stashId = stash[idStartIndex: idStartIndex + 1]
+        stashId = stash[idStartIndex : idStartIndex + 1]
 
         branchStartIndex = stash.find("On") + 3
         branchEndIndex = stash.find(" ", branchStartIndex) - 1
         branch = stash[branchStartIndex:branchEndIndex]
 
-        content = stash[branchEndIndex + 2:]
+        content = stash[branchEndIndex + 2 :]
 
-        stashList.append(
-            messages["stash-listitem"].format(stashId, content, branch))
+        stashList.append(messages["stash-listitem"].format(stashId, content, branch))
 
     print()
-    stashSelected = prompts().select(title=messages["branch-selection-title"],
-                                   options=stashList, selectedColor="\x1b[36m", errorMessage=messages["scape-error"])
+    stashSelected = prompts().select(
+        title=messages["branch-selection-title"],
+        options=stashList,
+        selectedColor="\x1b[36m",
+        errorMessage=messages["scape-error"],
+    )
 
     if stashSelected == "":
         return print(messages["error-empty"])

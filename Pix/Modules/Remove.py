@@ -1,7 +1,7 @@
 from .Helpers import run, removeColors
 from .Status import getStatus
 from pathlib import Path as isFile
-from Tools.Inputs import prompts
+from .Inputs import prompts
 
 
 def errorRunValidator(error):

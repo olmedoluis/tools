@@ -20,6 +20,7 @@ def run(validator, command=[]):
 
     return output
 
+
 def checkRoute(keyword, routes):
     for entityId in routes:
         entity = routes[entityId]
