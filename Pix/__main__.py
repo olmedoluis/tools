@@ -1,7 +1,7 @@
 import sys
-from Data.PixRoutes import ROUTES, SUBROUTES
-from Data.Messages import getMessages
-from Modules import (
+from .Data.PixRoutes import ROUTES, SUBROUTES
+from .Data.Messages import getMessages
+from .Modules import (
     AddRouter,
     StatusRouter,
     BranchRouter,
@@ -9,7 +9,7 @@ from Modules import (
     RemoveRouter,
     StashRouter,
 )
-from Modules.Helpers import checkPixShortcut, checkRoute
+from .Modules.Helpers import checkPixShortcut, checkRoute
 
 messages = getMessages()
 
