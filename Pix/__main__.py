@@ -1,26 +1,30 @@
-#!/usr/bin/python3
-
 import sys
-from PixRouter import Router
-from Data.PixRoutes import ROUTES
+from Data.PixRoutes import ROUTES, SUBROUTES
 from Data.Messages import getMessages
+from Modules import AddRouter, StatusRouter, BranchRouter, CommitRouter, RemoveRouter, StashRouter
+from Modules.Helpers import checkPixShortcut, checkRoute
 
 messages = getMessages()
 
+def Router(route_name, pixTools):
+    PIX_STORE = {
+        "Status": StatusRouter,
+        "Add": AddRouter,
+        "Remove": RemoveRouter,
+        "Commit": CommitRouter,
+        "Branch": BranchRouter,
+        "Stash": StashRouter,
+    }
 
-def checkPixShortcut(keyword):
-    for entityId in ROUTES:
-        entity = ROUTES[entityId]
-        posibleRoutes = entity["keys"] + entity["alias"]
+    next_route = pixTools.getNextRoute()
+    subroute = checkRoute(next_route, SUBROUTES[route_name])
+    requiredRouter = PIX_STORE[route_name]
 
-        if keyword in posibleRoutes:
-            return entityId
-
-    return False
+    requiredRouter(pixTools, subroute)
 
 
 def run(pixTools):
-    route_name = checkPixShortcut(pixTools.actual_route)
+    route_name = checkPixShortcut(pixTools.actual_route, ROUTES)
 
     if route_name != False:
         Router(route_name, pixTools)
@@ -37,9 +41,6 @@ class PixTools():
         self.leftKeys = argv[1:]
         self.messages = messages
 
-    def runAgain(self, router):
-        run(router)
-
     def getGoodRoutes(self):
         good_routes = []
 
@@ -55,8 +56,8 @@ class PixTools():
         return "" if 0 == len(self.leftKeys) else self.leftKeys[0]
 
 
-if __name__ == "__main__":
-    arg = sys.argv[1:]
-    if(len(arg) != 0):
-        pixTools = PixTools(arg)
-        run(pixTools)
+arg = sys.argv[1:]
+
+if(len(arg) != 0):
+    pixTools = PixTools(arg)
+    run(pixTools)

@@ -1,6 +1,9 @@
 
-from Helpers import run
-
+from .Helpers import run, removeColors
+from .Status import getStatus
+from Tools.Inputs import prompts
+from os.path import basename
+from os import getcwd
 
 def errorRunValidator(error):
     if error.find("not a git repository") != -1:
@@ -17,10 +20,6 @@ def getCommonDirectory(directories):
     if len(directoriesSplited) == 1:
         return directoriesSplited[0][-1]
 
-    from os.path import basename
-    from os import getcwd
-    from Helpers import removeColors
-
     index = 0
     for example in directoriesSplited[0]:
         for directory in directoriesSplited:
@@ -34,9 +33,6 @@ def getCommonDirectory(directories):
 
 
 def save():
-    from Status import getStatus, setUp as setUpStatus
-
-    setUpStatus(messages)
     status = getStatus()
 
     if not "added" in status:
@@ -49,15 +45,14 @@ def save():
         print(messages["added"].format(addedFile))
     print()
 
-    from Tools.Inputs import prompts
 
     options = ["feat", "refactor", "fix", "style"]
     scapeError = messages["scape-error"]
     commonDir = getCommonDirectory(status["added"])
 
-    prompts = prompts()
+    inputs = prompts()
 
-    answers = prompts.many([{"type": "Select", "title": messages["commit-type-title"],
+    answers = inputs.many([{"type": "Select", "title": messages["commit-type-title"],
                              "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
                             {"type": "Text", "title": messages["commit-scope-title"],
                              "placeHolder": commonDir, "errorMessage": scapeError},
@@ -69,7 +64,7 @@ def save():
     commit = "{}({}):{}".format(*answers)
     print(messages["preview"].format(commit))
 
-    isSure = prompts.confirm(title=messages["confirmation"])
+    isSure = inputs.confirm(title=messages["confirmation"])
 
     if isSure:
         run(errorRunValidator, ["git", "commit", "-m", commit])
