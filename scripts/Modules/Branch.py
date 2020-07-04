@@ -1,4 +1,6 @@
-from Helpers import run
+from .Helpers import run
+from .Status import getStatus, setUp as setUpStatus
+from Tools.Inputs import prompts
 
 
 def errorRunValidator(error):
@@ -9,7 +11,6 @@ def errorRunValidator(error):
 
 
 def getHasChanges(change=""):
-    from Status import getStatus, setUp as setUpStatus
     status = getStatus()
 
     return len(status.keys()) > 1 if change == "" else change in status
@@ -49,11 +50,10 @@ def branchSelection(branchSearch):
     branchSelected = branches[0]
 
     if len(branches) > 1:
-        from Tools.Inputs import prompts
-        prompts = prompts()
+        inputs = prompts()
 
         print()
-        branchSelected = prompts.select(title=messages["branch-selection-title"],
+        branchSelected = inputs.select(title=messages["branch-selection-title"],
                                         options=branches, selectedColor="\x1b[33m", errorMessage=messages["scape-error"])
 
         if branchSelected == "":
@@ -72,14 +72,13 @@ def branchCreation():
     if hasChanges:
         return print(messages["error-haschanges"])
 
-    from Tools.Inputs import prompts
-    prompts = prompts()
+    inputs = prompts()
 
     options = ["feature", "refactor", "bugfix", "style"]
     scapeError = messages["scape-error"]
 
     print()
-    answers = prompts.many([{"type": "Select", "title": messages["branch-type-title"],
+    answers = inputs.many([{"type": "Select", "title": messages["branch-type-title"],
                              "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
                             {"type": "Text", "title": messages["branch-id-title"],
                              "placeHolder": "", "errorMessage": scapeError},
@@ -96,7 +95,7 @@ def branchCreation():
 
     print(messages["preview"].format(branch))
 
-    isSure = prompts.confirm(
+    isSure = inputs.confirm(
         title=messages["confirmation"])
 
     if isSure:
@@ -105,7 +104,7 @@ def branchCreation():
     else:
         return print(messages["commit-cancel"])
 
-    shouldSwitch = prompts.confirm(
+    shouldSwitch = inputs.confirm(
         title=messages["branch-shouldswitch"])
 
     if shouldSwitch:
