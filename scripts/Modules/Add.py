@@ -1,4 +1,7 @@
-from Helpers import run
+from .Helpers import run, removeColors
+from .Status import getStatus, setUp as setUpStatus
+from pathlib import Path as isFile
+from Tools.Inputs import prompts
 
 
 def errorRunValidator(error):
@@ -11,8 +14,6 @@ def errorRunValidator(error):
 
 
 def add(filePaths=[]):
-    from pathlib import Path as isFile
-
     specificFiles = []
     for filePath in filePaths:
         if not isFile(filePath):
@@ -27,8 +28,6 @@ def add(filePaths=[]):
     if len(filePaths) > 0:
         return print("file not found")
 
-    from Status import getStatus, setUp as setUpStatus
-    from Tools.Inputs import prompts
 
     setUpStatus(messages)
     status = getStatus()
@@ -45,16 +44,16 @@ def add(filePaths=[]):
         return print(messages["add-nofiles-error"])
 
     print()
-    answers = prompts().multiSelect(title=messages["add-adition-title"],
-                                    finalTitle=messages["file-selection-finaltitle"],
-                                    options=options)
+    answers = prompts().multiSelect(
+        title=messages["add-adition-title"],
+        finalTitle=messages["file-selection-finaltitle"],
+        options=options,
+    )
 
     if answers == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
     if len(answers) == 0:
         return print(messages["add-nofileschoosen-error"])
-
-    from Helpers import removeColors
 
     choices = []
     for answer in answers:
@@ -65,9 +64,6 @@ def add(filePaths=[]):
 
 
 def addAll():
-    from Status import getStatus, setUp as setUpStatus
-    from Tools.Inputs import prompts
-
     setUpStatus(messages)
     status = getStatus()
 

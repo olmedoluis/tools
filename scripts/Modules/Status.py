@@ -1,6 +1,4 @@
-#!/usr/bin/python3
-
-from Helpers import run
+from .Helpers import run
 
 
 def errorRunValidator(error):
@@ -11,10 +9,14 @@ def errorRunValidator(error):
 
 
 def getStatus():
-    STATUS_MATCHES = {"#": "branch", "M": "modified",
-                      "?": "untracked",
-                      "R": "renamed", "A": "added",
-                      "D": "deleted"}
+    STATUS_MATCHES = {
+        "#": "branch",
+        "M": "modified",
+        "?": "untracked",
+        "R": "renamed",
+        "A": "added",
+        "D": "deleted",
+    }
 
     status_data = run(errorRunValidator, ["git", "status", "-sb"])
     status_data = status_data.rstrip().split("\n")
@@ -25,8 +27,8 @@ def getStatus():
         firstCode = change[0]
         secondCode = change[1]
         content = change[3:]
-        change_name = ''
-        second_change_name = ''
+        change_name = ""
+        second_change_name = ""
 
         if "R" in prefix:
             files = content.split(" -> ")
@@ -37,16 +39,22 @@ def getStatus():
                 if not oldFilePaths[index] == newFilePaths[index]:
                     slash = "" if len(newFilePaths[index:]) == 1 else "/"
                     content = "{}\x1b[33m{}".format(
-                        '/'.join(oldFilePaths[0:index]) + slash, '/'.join(newFilePaths[index:]))
+                        "/".join(oldFilePaths[0:index]) + slash,
+                        "/".join(newFilePaths[index:]),
+                    )
                     break
 
         if firstCode.isalpha():
             change_name = STATUS_MATCHES["A"]
             if secondCode != " ":
                 second_name = STATUS_MATCHES[secondCode]
-                second_change_name = second_name if second_name != '' else ''
+                second_change_name = second_name if second_name != "" else ""
         else:
-            change_name = STATUS_MATCHES[secondCode] if firstCode == ' ' else STATUS_MATCHES[firstCode]
+            change_name = (
+                STATUS_MATCHES[secondCode]
+                if firstCode == " "
+                else STATUS_MATCHES[firstCode]
+            )
 
         if not change_name in status:
             status[change_name] = []
