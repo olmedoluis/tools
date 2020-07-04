@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import sys
 from Data.PixRoutes import ROUTES, SUBROUTES
 from Data.Messages import getMessages
