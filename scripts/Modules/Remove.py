@@ -1,5 +1,7 @@
-from Helpers import run
-
+from .Helpers import run, removeColors
+from .Status import getStatus, setUp as setUpStatus
+from pathlib import Path as isFile
+from Tools.Inputs import prompts
 
 def errorRunValidator(error):
     if error.find("not a git repository") != -1:
@@ -11,8 +13,6 @@ def errorRunValidator(error):
 
 
 def remove(filePaths=[]):
-    from pathlib import Path as isFile
-
     specificFiles = []
     for filePath in filePaths:
         if not isFile(filePath):
@@ -23,9 +23,6 @@ def remove(filePaths=[]):
     if len(specificFiles) > 0:
         run(errorRunValidator, ["git", "reset", "HEAD"] + specificFiles)
         return print(messages["remove-success"])
-
-    from Status import getStatus, setUp as setUpStatus
-    from Tools.Inputs import prompts
 
     setUpStatus(messages)
     status = getStatus()
@@ -45,8 +42,6 @@ def remove(filePaths=[]):
     if len(answers) == 0:
         return print(messages["remove-nofileschoosen-error"])
 
-    from Helpers import removeColors
-
     choices = []
     for answer in answers:
         choices.append(removeColors(answer))
@@ -56,9 +51,6 @@ def remove(filePaths=[]):
 
 
 def removeAll():
-    from Status import getStatus, setUp as setUpStatus
-    from Tools.Inputs import prompts
-
     setUpStatus(messages)
     status = getStatus()
 
