@@ -1,10 +1,18 @@
 import sys
 from Data.PixRoutes import ROUTES, SUBROUTES
 from Data.Messages import getMessages
-from Modules import AddRouter, StatusRouter, BranchRouter, CommitRouter, RemoveRouter, StashRouter
+from Modules import (
+    AddRouter,
+    StatusRouter,
+    BranchRouter,
+    CommitRouter,
+    RemoveRouter,
+    StashRouter,
+)
 from Modules.Helpers import checkPixShortcut, checkRoute
 
 messages = getMessages()
+
 
 def Router(route_name, pixTools):
     PIX_STORE = {
@@ -34,7 +42,7 @@ def run(pixTools):
         print(messages["unknownRoute"].format(good_routes, wrong_routes))
 
 
-class PixTools():
+class PixTools:
     def __init__(self, argv):
         self.user_routes = argv
         self.actual_route = argv[0]
@@ -56,8 +64,13 @@ class PixTools():
         return "" if 0 == len(self.leftKeys) else self.leftKeys[0]
 
 
-arg = sys.argv[1:]
+def main():
+    arg = sys.argv[1:]
 
-if(len(arg) != 0):
-    pixTools = PixTools(arg)
-    run(pixTools)
+    if len(arg) != 0:
+        pixTools = PixTools(arg)
+        run(pixTools)
+
+
+if __name__ == "__main__":
+    main()
