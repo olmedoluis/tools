@@ -1,6 +1,6 @@
-#!/usr/bin/python3
-
-from Helpers import run
+from .Helpers import run
+from .Status import getStatus
+from Tools.Inputs import prompts
 
 
 def errorRunValidator(error):
@@ -11,17 +11,11 @@ def errorRunValidator(error):
 
 
 def addToStash():
-    from Status import getStatus
-
     if not "added" in getStatus():
         return print(messages["error-stash-addedfiles"])
 
-    from Tools.Inputs import prompts
-
-    prompts = prompts()
-
     print()
-    title = prompts.text(
+    title = prompts().text(
         title=messages["stash-in-title"], errorMessage=messages["scape-error"])
 
     if title == "":
@@ -32,8 +26,6 @@ def addToStash():
 
 
 def stashSelection():
-    from Status import getStatus
-
     if len(getStatus()) > 1:
         return print(messages["error-haschanges"])
 
@@ -59,11 +51,8 @@ def stashSelection():
         stashList.append(
             messages["stash-listitem"].format(stashId, content, branch))
 
-    from Tools.Inputs import prompts
-    prompts = prompts()
-
     print()
-    stashSelected = prompts.select(title=messages["branch-selection-title"],
+    stashSelected = prompts().select(title=messages["branch-selection-title"],
                                    options=stashList, selectedColor="\x1b[36m", errorMessage=messages["scape-error"])
 
     if stashSelected == "":
