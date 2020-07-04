@@ -1,6 +1,6 @@
 
 from .Helpers import run, removeColors
-from .Status import getStatus, setUp as setUpStatus
+from .Status import getStatus
 from Tools.Inputs import prompts
 from os.path import basename
 from os import getcwd
@@ -33,8 +33,6 @@ def getCommonDirectory(directories):
 
 
 def save():
-
-    setUpStatus(messages)
     status = getStatus()
 
     if not "added" in status:

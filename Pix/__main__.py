@@ -18,8 +18,9 @@ def Router(route_name, pixTools):
 
     next_route = pixTools.getNextRoute()
     subroute = checkRoute(next_route, SUBROUTES[route_name])
+    requiredRouter = PIX_STORE[route_name]
 
-    PIX_STORE[route_name](pixTools, subroute)
+    requiredRouter(pixTools, subroute)
 
 
 def run(pixTools):

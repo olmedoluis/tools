@@ -1,5 +1,5 @@
 from .Helpers import run
-from .Status import getStatus, setUp as setUpStatus
+from .Status import getStatus
 from Tools.Inputs import prompts
 
 

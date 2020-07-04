@@ -1,5 +1,5 @@
 from .Helpers import run, removeColors
-from .Status import getStatus, setUp as setUpStatus
+from .Status import getStatus
 from pathlib import Path as isFile
 from Tools.Inputs import prompts
 
@@ -29,7 +29,6 @@ def add(filePaths=[]):
         return print("file not found")
 
 
-    setUpStatus(messages)
     status = getStatus()
 
     options = []
@@ -64,7 +63,6 @@ def add(filePaths=[]):
 
 
 def addAll():
-    setUpStatus(messages)
     status = getStatus()
 
     hasFilesToAdd = False

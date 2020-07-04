@@ -1,5 +1,5 @@
 from .Helpers import run, removeColors
-from .Status import getStatus, setUp as setUpStatus
+from .Status import getStatus
 from pathlib import Path as isFile
 from Tools.Inputs import prompts
 
@@ -24,7 +24,6 @@ def remove(filePaths=[]):
         run(errorRunValidator, ["git", "reset", "HEAD"] + specificFiles)
         return print(messages["remove-success"])
 
-    setUpStatus(messages)
     status = getStatus()
 
     options = status["added"] if "added" in status else []
@@ -51,7 +50,6 @@ def remove(filePaths=[]):
 
 
 def removeAll():
-    setUpStatus(messages)
     status = getStatus()
 
     hasFilesToAdd = False
