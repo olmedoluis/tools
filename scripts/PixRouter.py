@@ -1,9 +1,4 @@
-import Status
-import Add
-import Remove
-import Commit
-import Branch
-import Stash
+from Modules import AddRouter, StatusRouter, BranchRouter, CommitRouter, RemoveRouter, StashRouter
 from Data.PixRoutes import SUBROUTES
 
 
@@ -20,15 +15,15 @@ def checkRoute(keyword, routes):
 
 def Router(route_name, pixTools):
     PIX_STORE = {
-        "Status": Status,
-        "Add": Add,
-        "Remove": Remove,
-        "Commit": Commit,
-        "Branch": Branch,
-        "Stash": Stash
+        "Status": StatusRouter,
+        "Add": AddRouter,
+        "Remove": RemoveRouter,
+        "Commit": CommitRouter,
+        "Branch": BranchRouter,
+        "Stash": StashRouter,
     }
 
     next_route = pixTools.getNextRoute()
     subroute = checkRoute(next_route, SUBROUTES[route_name])
 
-    PIX_STORE[route_name].Router(pixTools, subroute)
+    PIX_STORE[route_name](pixTools, subroute)
