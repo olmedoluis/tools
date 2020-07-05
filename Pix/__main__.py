@@ -62,8 +62,8 @@ def main():
 
     next_route = pixTools.getNextRoute()
     subroute = checkRoute(next_route, SUBROUTES[route_name])
-    requiredRouter = PIX_STORE[route_name]
 
+    requiredRouter = PIX_STORE[route_name]
     requiredRouter(pixTools, subroute)
 
 
