@@ -57,6 +57,15 @@ def main():
     if len(arg) == 0:
         return
 
+    PIX_STORE = {
+        "Status": StatusRouter,
+        "Add": AddRouter,
+        "Remove": RemoveRouter,
+        "Commit": CommitRouter,
+        "Branch": BranchRouter,
+        "Stash": StashRouter,
+    }
+
     allRoutes = getConcatenatedRoutes(arg) if "n" in arg else [arg]
 
     for arguments in allRoutes:
@@ -68,15 +77,6 @@ def main():
             good_routes = f"pix {' '.join(pixTools.getGoodRoutes())}"
             wrong_routes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
             return print(messages["unknownRoute"].format(good_routes, wrong_routes))
-
-        PIX_STORE = {
-            "Status": StatusRouter,
-            "Add": AddRouter,
-            "Remove": RemoveRouter,
-            "Commit": CommitRouter,
-            "Branch": BranchRouter,
-            "Stash": StashRouter,
-        }
 
         next_route = pixTools.getNextRoute()
         subroute = checkRoute(next_route, SUBROUTES[route_name])
