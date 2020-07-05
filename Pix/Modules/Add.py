@@ -1,7 +1,7 @@
 from .Helpers import run, removeColors
 from .Status import getStatus
+from .Inputs import prompts
 from pathlib import Path as isFile
-from Tools.Inputs import prompts
 
 
 def errorRunValidator(error):
@@ -27,7 +27,6 @@ def add(filePaths=[]):
 
     if len(filePaths) > 0:
         return print("file not found")
-
 
     status = getStatus()
 

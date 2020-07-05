@@ -1,9 +1,9 @@
-
 from .Helpers import run, removeColors
 from .Status import getStatus
-from Tools.Inputs import prompts
+from .Inputs import prompts
 from os.path import basename
 from os import getcwd
+
 
 def errorRunValidator(error):
     if error.find("not a git repository") != -1:
@@ -25,7 +25,9 @@ def getCommonDirectory(directories):
         for directory in directoriesSplited:
             if example == directory[index]:
                 continue
-            return removeColors(directory[index - 1] if index > 0 else basename(getcwd()))
+            return removeColors(
+                directory[index - 1] if index > 0 else basename(getcwd())
+            )
 
         index = index + 1
 
@@ -45,18 +47,34 @@ def save():
         print(messages["added"].format(addedFile))
     print()
 
-
     options = ["feat", "refactor", "fix", "style"]
     scapeError = messages["scape-error"]
     commonDir = getCommonDirectory(status["added"])
 
     inputs = prompts()
 
-    answers = inputs.many([{"type": "Select", "title": messages["commit-type-title"],
-                             "options":options, "selectedColor":"\x1b[33m", "errorMessage":scapeError},
-                            {"type": "Text", "title": messages["commit-scope-title"],
-                             "placeHolder": commonDir, "errorMessage": scapeError},
-                            {"type": "Text", "title": messages["commit-about-title"], "errorMessage": scapeError}])
+    answers = inputs.many(
+        [
+            {
+                "type": "Select",
+                "title": messages["commit-type-title"],
+                "options": options,
+                "selectedColor": "\x1b[33m",
+                "errorMessage": scapeError,
+            },
+            {
+                "type": "Text",
+                "title": messages["commit-scope-title"],
+                "placeHolder": commonDir,
+                "errorMessage": scapeError,
+            },
+            {
+                "type": "Text",
+                "title": messages["commit-about-title"],
+                "errorMessage": scapeError,
+            },
+        ]
+    )
 
     if len(answers) != 3:
         return print(messages["error-empty"])
