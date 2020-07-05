@@ -1,5 +1,7 @@
 KEYS = {
-    "Status": {"keys": ["status", "work"]},
+    "Status": {
+        "keys": ["status", "work"]
+    },
     "Add": {
         "keys":["add"], 
         "child_keys": {
