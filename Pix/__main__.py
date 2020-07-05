@@ -1,5 +1,5 @@
 import sys
-from Aliases import ALIASES
+from Configuration import ALIASES, MESSAGES
 from .Data.PixRoutes import KEYS
 from .Modules import (
     AddRouter,
@@ -10,7 +10,6 @@ from .Modules import (
     StashRouter,
 )
 from .Modules.Helpers import checkPixShortcut, checkRoute
-from Messages import messages
 
 
 class PixTools:
@@ -18,7 +17,7 @@ class PixTools:
         self.user_routes = argv
         self.actual_route = argv[0]
         self.leftKeys = argv[1:]
-        self.messages = messages
+        self.messages = MESSAGES
 
     def getGoodRoutes(self):
         good_routes = []
@@ -67,7 +66,6 @@ def main():
 
     allRoutes = getConcatenatedRoutes(arg) if "n" in arg else [arg]
 
-
     for arguments in allRoutes:
         pixTools = PixTools(arguments)
 
@@ -76,11 +74,10 @@ def main():
         if route_name == False:
             good_routes = f"pix {' '.join(pixTools.getGoodRoutes())}"
             wrong_routes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
-            return print(messages["unknownRoute"].format(good_routes, wrong_routes))
+            return print(MESSAGES["unknownRoute"].format(good_routes, wrong_routes))
 
         next_route = pixTools.getNextRoute()
         subroute = checkRoute(next_route, KEYS[route_name], ALIASES[route_name])
-
 
         requiredRouter = PIX_STORE[route_name]
         requiredRouter(pixTools, subroute)

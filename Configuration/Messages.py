@@ -18,7 +18,7 @@ _theme = {
 def _themeUp(string):
     return string.format(**_theme).replace("$", "{}") + _theme["reset"]
 
-messages = {
+MESSAGES = {
     "add-adition-title": "{}".format(_themeUp("{normal}Select files to add:")),
     "add-all-nofiles": "\n {}\n".format(_themeUp("{error}✖ There is no file to add")),
     "add-all-success": "\n {}\n".format(_themeUp("{success}⚑ All files has been added")),
