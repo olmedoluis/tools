@@ -1,59 +1,32 @@
-#!/usr/bin/python3
-
-path = "/home/luis/Documents/Projects/pix-bash"
-
-ROUTES = {
+KEYS = {
     "Status": {
-        "keys": ["status", "work"],
-        "alias": ["w", "st"]
+        "keys": ["status", "work"]
     },
     "Add": {
-        "keys": ["add"],
-        "alias": ["a"]
+        "keys":["add"], 
+        "child_keys": {
+            "ADD_ALL": ["all"]
+        }
     },
     "Remove": {
-        "keys": ["remove"],
-        "alias": ["una", "rm"]
+        "keys": ["remove"], 
+        "child_keys": {
+            "REMOVE_ALL": ["all"]
+        }
     },
     "Commit": {
-        "keys": ["commit", "save"],
-        "alias": ["s", "c"]
+        "keys": ["commit"],
     },
     "Branch": {
-        "keys": ["branch", "line"],
-        "alias": ["br"]
-    },
-    "Stash": {
-        "keys": ["stash", "box"],
-        "alias": ["b"]
-    }
-}
-
-SUBROUTES = {
-    "Status": {},
-    "Add": {
-        "ADD_ALL": {
-            "keys": ["all"],
-            "alias": ["."]
-        }
-    },
-    "Remove": {
-        "REMOVE_ALL": {
-            "keys": ["all"],
-            "alias": ["."]
-        }
-    },
-    "Commit": {},
-    "Branch": {
-        "BRANCH_CREATION": {
-            "keys": ["create", "new"],
-            "alias": ["cr"]
+        "keys": ["branch"],
+        "child_keys": {
+            "BRANCH_CREATION": ["create", "new"]
         }
     },
     "Stash": {
-        "ADD_STASH": {
-            "keys": ["add", "in"],
-            "alias": ["a", "i"]
+        "keys": ["stash"],
+        "child_keys": {
+            "ADD_STASH": ["add", "in"]
         }
     },
 }

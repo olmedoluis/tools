@@ -1,6 +1,6 @@
 import sys
-from .Data.PixRoutes import ROUTES, SUBROUTES
-from .Data.Messages import getMessages
+from Configuration import ALIASES, MESSAGES
+from .Data.PixRoutes import KEYS
 from .Modules import (
     AddRouter,
     StatusRouter,
@@ -11,15 +11,13 @@ from .Modules import (
 )
 from .Modules.Helpers import checkPixShortcut, checkRoute
 
-messages = getMessages()
-
 
 class PixTools:
     def __init__(self, argv):
         self.user_routes = argv
         self.actual_route = argv[0]
         self.leftKeys = argv[1:]
-        self.messages = messages
+        self.messages = MESSAGES
 
     def getGoodRoutes(self):
         good_routes = []
@@ -71,15 +69,15 @@ def main():
     for arguments in allRoutes:
         pixTools = PixTools(arguments)
 
-        route_name = checkPixShortcut(pixTools.actual_route, ROUTES)
+        route_name = checkPixShortcut(pixTools.actual_route, KEYS, ALIASES)
 
         if route_name == False:
             good_routes = f"pix {' '.join(pixTools.getGoodRoutes())}"
             wrong_routes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
-            return print(messages["unknownRoute"].format(good_routes, wrong_routes))
+            return print(MESSAGES["unknownRoute"].format(good_routes, wrong_routes))
 
         next_route = pixTools.getNextRoute()
-        subroute = checkRoute(next_route, SUBROUTES[route_name])
+        subroute = checkRoute(next_route, KEYS[route_name], ALIASES[route_name])
 
         requiredRouter = PIX_STORE[route_name]
         requiredRouter(pixTools, subroute)
