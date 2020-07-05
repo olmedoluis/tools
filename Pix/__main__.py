@@ -1,6 +1,6 @@
 import sys
-from .Data.PixRoutes import ROUTES, SUBROUTES
-from Messages import messages
+from Aliases import ALIASES
+from .Data.PixRoutes import KEYS
 from .Modules import (
     AddRouter,
     StatusRouter,
@@ -10,6 +10,7 @@ from .Modules import (
     StashRouter,
 )
 from .Modules.Helpers import checkPixShortcut, checkRoute
+from Messages import messages
 
 
 class PixTools:
@@ -66,10 +67,11 @@ def main():
 
     allRoutes = getConcatenatedRoutes(arg) if "n" in arg else [arg]
 
+
     for arguments in allRoutes:
         pixTools = PixTools(arguments)
 
-        route_name = checkPixShortcut(pixTools.actual_route, ROUTES)
+        route_name = checkPixShortcut(pixTools.actual_route, KEYS, ALIASES)
 
         if route_name == False:
             good_routes = f"pix {' '.join(pixTools.getGoodRoutes())}"
@@ -77,7 +79,8 @@ def main():
             return print(messages["unknownRoute"].format(good_routes, wrong_routes))
 
         next_route = pixTools.getNextRoute()
-        subroute = checkRoute(next_route, SUBROUTES[route_name])
+        subroute = checkRoute(next_route, KEYS[route_name], ALIASES[route_name])
+
 
         requiredRouter = PIX_STORE[route_name]
         requiredRouter(pixTools, subroute)
