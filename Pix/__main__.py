@@ -1,6 +1,6 @@
 import sys
 from .Data.PixRoutes import ROUTES, SUBROUTES
-from .Data.Messages import getMessages
+from Messages import messages
 from .Modules import (
     AddRouter,
     StatusRouter,
@@ -10,8 +10,6 @@ from .Modules import (
     StashRouter,
 )
 from .Modules.Helpers import checkPixShortcut, checkRoute
-
-messages = getMessages()
 
 
 class PixTools:
