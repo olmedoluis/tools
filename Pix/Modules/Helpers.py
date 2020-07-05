@@ -21,9 +21,9 @@ def run(validator, command=[]):
     return output
 
 
-def checkRoute(keyword, routes, subroutes):
-    childKeys = routes["child_keys"] if "child_keys" in routes else []
-    childAliases = subroutes["child_aliases"] if "child_aliases" in subroutes else []
+def checkRoute(keyword, outsideKeys, outsideAliases):
+    childKeys = outsideKeys["child_keys"] if "child_keys" in outsideKeys else []
+    childAliases = outsideAliases["child_aliases"] if "child_aliases" in outsideAliases else []
 
     
     for entityId in childKeys:
@@ -35,10 +35,10 @@ def checkRoute(keyword, routes, subroutes):
     return "DEFAULT"
 
 
-def checkPixShortcut(keyword, routes, subroutes):
-    for entityId in routes:
-        keys = routes[entityId]["keys"]
-        aliases = subroutes[entityId]["aliases"]
+def checkPixShortcut(keyword, outsideKeys, outsideAliases):
+    for entityId in outsideKeys:
+        keys = outsideKeys[entityId]["keys"]
+        aliases = outsideAliases[entityId]["aliases"]
         posibleRoutes = keys + aliases
 
         if keyword in posibleRoutes:
