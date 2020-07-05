@@ -1,4 +1,4 @@
-from Pix.Data.Messages import _font_high, _font_low, _mod
+from Pix.Data.MessagesHelpers import _font_high, _font_low, _mod
 
 _theme = {
     "normal": _mod("bold") + _font_high("white"),
