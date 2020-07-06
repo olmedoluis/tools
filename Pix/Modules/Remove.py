@@ -4,27 +4,26 @@ from pathlib import Path as isFile
 from .Inputs import prompts
 
 
-def remove(filePaths=[]):
+def remove(filePaths=[], shouldVerify=True):
+    status = getStatus()
+    inputs = prompts()
+
     specificFiles = []
-    for filePath in filePaths:
-        if not isFile(filePath):
-            break
+    if len(filePaths) != 0 and shouldVerify:
+        specificFiles = searchInStatus(filePaths, status, includedFiles=["added"])
 
-        specificFiles.append(filePath)
-
-    if len(specificFiles) > 0:
+    if len(specificFiles) == 1:
         run(["git", "reset", "HEAD"] + specificFiles)
         return print(messages["remove-success"])
 
-    status = getStatus()
-
     options = status["added"] if "added" in status else []
+    options = specificFiles if len(specificFiles) != 0 else options
 
     if len(options) == 0:
         return print(messages["remove-nofiles-error"])
 
     print()
-    answers = prompts().multiSelect(
+    answers = inputs.multiSelect(
         title=messages["remove-removing-title"],
         finalTitle=messages["file-selection-finaltitle"],
         options=options,
@@ -53,7 +52,7 @@ def removeAll(fileSearch):
         return (
             print(messages["error-nomatchfile"])
             if len(matches) == 0
-            else remove(matches)
+            else remove(matches, false)
         )
 
     hasFilesToRemove = False
