@@ -57,7 +57,9 @@ def addAll(fileSearch):
         matches = searchInStatus(fileSearch, status, excludedFiles=["branch", "added"])
 
         return (
-            print(messages["error-nomatchfile"]) if len(matches) == 0 else add(matches)
+            print(messages["error-nomatchfile"])
+            if len(matches) == 0
+            else add(matches, false)
         )
 
     hasFilesToAdd = False
