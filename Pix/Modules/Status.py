@@ -5,7 +5,10 @@ def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
     matches = []
 
     for statusId in status:
-        if statusId in excludedFiles and not statusId in includedFiles:
+        isExcludedFile = statusId in excludedFiles
+        isIncludedFile = not statusId in includedFiles
+
+        if isExcludedFile if len(excludedFiles) != 0 else isIncludedFile:
             continue
 
         changes = status[statusId]
