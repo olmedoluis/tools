@@ -4,15 +4,6 @@ from pathlib import Path as isFile
 from .Inputs import prompts
 
 
-def errorRunValidator(error):
-    if error.find("not a git repository") != -1:
-        print(messages["notGitRepository"])
-    elif error.find("did not match any files") != 1:
-        print(messages["notafile-error"])
-    else:
-        print(messages["unknown-error"])
-
-
 def remove(filePaths=[]):
     specificFiles = []
     for filePath in filePaths:
@@ -22,7 +13,7 @@ def remove(filePaths=[]):
         specificFiles.append(filePath)
 
     if len(specificFiles) > 0:
-        run(errorRunValidator, ["git", "reset", "HEAD"] + specificFiles)
+        run(["git", "reset", "HEAD"] + specificFiles)
         return print(messages["remove-success"])
 
     status = getStatus()
@@ -49,7 +40,7 @@ def remove(filePaths=[]):
     for answer in answers:
         choices.append(removeColors(answer))
 
-    run(errorRunValidator, ["git", "reset", "HEAD"] + choices)
+    run(["git", "reset", "HEAD"] + choices)
     print(messages["remove-success"])
 
 
@@ -65,7 +56,7 @@ def removeAll():
         break
 
     if hasFilesToAdd:
-        run(errorRunValidator, ["git", "reset", "HEAD", "."])
+        run(["git", "reset", "HEAD", "."])
         print(messages["remove-all-success"])
     else:
         print(messages["remove-all-nofiles"])

@@ -5,13 +5,6 @@ from os.path import basename
 from os import getcwd
 
 
-def errorRunValidator(error):
-    if error.find("not a git repository") != -1:
-        print(messages["notGitRepository"])
-    else:
-        print(messages["unknown-error"])
-
-
 def getCommonDirectory(directories):
     directoriesSplited = []
     for directory in directories:
@@ -85,7 +78,7 @@ def save():
     isSure = inputs.confirm(title=messages["confirmation"])
 
     if isSure:
-        run(errorRunValidator, ["git", "commit", "-m", commit])
+        run(["git", "commit", "-m", commit])
         print(messages["commit-success"])
     else:
         print(messages["commit-cancel"])

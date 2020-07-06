@@ -1,13 +1,6 @@
 from .Helpers import run
 
 
-def errorRunValidator(error):
-    if error.find("not a git repository") != -1:
-        print(messages["notGitRepository"])
-    else:
-        print(messages["unknown-error"])
-
-
 def getStatus():
     STATUS_MATCHES = {
         "#": "branch",
@@ -18,7 +11,7 @@ def getStatus():
         "D": "deleted",
     }
 
-    status_data = run(errorRunValidator, ["git", "status", "-sb"])
+    status_data = run(["git", "status", "-sb"])
     status_data = status_data.rstrip().split("\n")
 
     status = {}

@@ -4,15 +4,6 @@ from .Inputs import prompts
 from pathlib import Path as isFile
 
 
-def errorRunValidator(error):
-    if error.find("not a git repository") != -1:
-        print(messages["notGitRepository"])
-    elif error.find("did not match any files") != 1:
-        print(messages["notafile-error"])
-    else:
-        print(messages["unknown-error"])
-
-
 def add(filePaths=[]):
     specificFiles = []
     for filePath in filePaths:
@@ -22,7 +13,7 @@ def add(filePaths=[]):
         specificFiles.append(filePath)
 
     if len(specificFiles) > 0:
-        run(errorRunValidator, ["git", "add"] + specificFiles)
+        run(["git", "add"] + specificFiles)
         return print(messages["add-success"])
 
     if len(filePaths) > 0:
@@ -57,7 +48,7 @@ def add(filePaths=[]):
     for answer in answers:
         choices.append(removeColors(answer))
 
-    run(errorRunValidator, ["git", "add"] + choices)
+    run(["git", "add"] + choices)
     print(messages["add-success"])
 
 
@@ -73,7 +64,7 @@ def addAll():
         break
 
     if hasFilesToAdd:
-        run(errorRunValidator, ["git", "add", "."])
+        run(["git", "add", "."])
         print(messages["add-all-success"])
     else:
         print(messages["add-all-nofiles"])
