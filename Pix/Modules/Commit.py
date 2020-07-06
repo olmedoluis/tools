@@ -1,11 +1,10 @@
 from .Helpers import run, removeColors
-from .Status import getStatus
-from .Inputs import prompts
-from os.path import basename
-from os import getcwd
 
 
 def getCommonDirectory(directories):
+    from os.path import basename
+    from os import getcwd
+
     directoriesSplited = []
     for directory in directories:
         directoriesSplited.append(directory.split("/"))
@@ -28,6 +27,9 @@ def getCommonDirectory(directories):
 
 
 def save():
+    from .Inputs import prompts
+    from .Status import getStatus
+
     status = getStatus()
 
     if not "added" in status:

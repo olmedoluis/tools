@@ -1,6 +1,26 @@
 from .Helpers import run
 
 
+def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
+    matches = []
+
+    for statusId in status:
+        isExcludedFile = statusId in excludedFiles
+        isIncludedFile = not statusId in includedFiles
+
+        if isExcludedFile if len(excludedFiles) != 0 else isIncludedFile:
+            continue
+
+        changes = status[statusId]
+
+        for change in changes:
+            for file in fileSearch:
+                if file.lower() in change.lower():
+                    matches.append(change)
+
+    return matches
+
+
 def getStatus():
     STATUS_MATCHES = {
         "#": "branch",
