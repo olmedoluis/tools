@@ -1,5 +1,5 @@
 from .Helpers import run, removeColors
-from .Status import getStatus
+from .Status import getStatus, searchInStatus
 from .Inputs import prompts
 from pathlib import Path as isFile
 
@@ -53,20 +53,11 @@ def addAll(fileSearch):
     status = getStatus()
 
     if len(fileSearch) > 0:
-        matches = []
+        matches = searchInStatus(fileSearch, status, excludedFiles=["branch", "added"])
 
-        for statusId in status:
-            if statusId == "branch" or statusId == "added":
-                continue
-
-            changes = status[statusId]
-
-            for change in changes:
-                for file in fileSearch:
-                    if file.lower() in change.lower():
-                        matches.append(change)
-
-        return print(messages["error-nomatchfile"]) if len(matches) == 0 else add(matches)
+        return (
+            print(messages["error-nomatchfile"]) if len(matches) == 0 else add(matches)
+        )
 
     hasFilesToAdd = False
     for statusId in status:

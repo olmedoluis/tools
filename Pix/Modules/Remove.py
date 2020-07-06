@@ -1,5 +1,5 @@
 from .Helpers import run, removeColors
-from .Status import getStatus
+from .Status import getStatus, searchInStatus
 from pathlib import Path as isFile
 from .Inputs import prompts
 
@@ -48,20 +48,13 @@ def removeAll(fileSearch):
     status = getStatus()
 
     if len(fileSearch) > 0:
-        matches = []
+        matches = searchInStatus(fileSearch, status, includedFiles=["added"])
 
-        for statusId in status:
-            if statusId != "added":
-                continue
-
-            changes = status[statusId]
-
-            for change in changes:
-                for file in fileSearch:
-                    if file.lower() in change.lower():
-                        matches.append(change)
-
-        return print(messages["error-nomatchfile"]) if len(matches) == 0 else remove(matches)
+        return (
+            print(messages["error-nomatchfile"])
+            if len(matches) == 0
+            else remove(matches)
+        )
 
     hasFilesToRemove = False
     for statusId in status:
