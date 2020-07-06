@@ -44,8 +44,24 @@ def remove(filePaths=[]):
     print(messages["remove-success"])
 
 
-def removeAll():
+def removeAll(fileSearch):
     status = getStatus()
+
+    if len(fileSearch) > 0:
+        matches = []
+
+        for statusId in status:
+            if statusId != "added":
+                continue
+
+            changes = status[statusId]
+
+            for change in changes:
+                for file in fileSearch:
+                    if file.lower() in change.lower():
+                        matches.append(change)
+
+        return print(messages["error-nomatchfile"]) if len(matches) == 0 else remove(matches)
 
     hasFilesToAdd = False
     for statusId in status:
@@ -71,6 +87,6 @@ def Router(router, subroute):
     setUp(router.messages)
 
     if subroute == "REMOVE_ALL":
-        removeAll()
+        removeAll(router.leftKeys[1:])
     if subroute == "DEFAULT":
         remove(router.leftKeys)
