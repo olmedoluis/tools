@@ -51,6 +51,7 @@ MESSAGES = {
     "error-inputcancel": "\n {}\n".format(_themeUp("{error}✖ You have cancelled the form")),
     "error-nobranches": "\n {}\n".format(_themeUp("{error}✖ You do not have any branches yet")),
     "error-nomatchbranch": "\n {}\n".format(_themeUp("{error}✖ There is no branch with {keyword}$")),
+    "error-nomatchfile": "\n {}\n".format(_themeUp("{error}✖ There is no file matches")),
     "error-nostashes": "\n {}\n".format(_themeUp("{error}✖ You do not have any stashed files yet")),
     "error-samebranch": "\n {}\n".format(_themeUp("{error}✖ You already are on {keyword}$")),
     "error-stash-addedfiles": "\n {}\n".format(_themeUp("{error}✖ You only can stash added files")),
