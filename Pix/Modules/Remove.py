@@ -63,15 +63,15 @@ def removeAll(fileSearch):
 
         return print(messages["error-nomatchfile"]) if len(matches) == 0 else remove(matches)
 
-    hasFilesToAdd = False
+    hasFilesToRemove = False
     for statusId in status:
         if statusId != "added":
             continue
 
-        hasFilesToAdd = True
+        hasFilesToRemove = True
         break
 
-    if hasFilesToAdd:
+    if hasFilesToRemove:
         run(["git", "reset", "HEAD", "."])
         print(messages["remove-all-success"])
     else:
