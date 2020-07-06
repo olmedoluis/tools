@@ -16,9 +16,6 @@ def add(filePaths=[]):
         run(["git", "add"] + specificFiles)
         return print(messages["add-success"])
 
-    if len(filePaths) > 0:
-        return print("file not found")
-
     status = getStatus()
 
     options = []
@@ -52,8 +49,24 @@ def add(filePaths=[]):
     print(messages["add-success"])
 
 
-def addAll():
+def addAll(fileSearch):
     status = getStatus()
+
+    if len(fileSearch) > 0:
+        matches = []
+
+        for statusId in status:
+            if statusId == "branch" or statusId == "added":
+                continue
+
+            changes = status[statusId]
+
+            for change in changes:
+                for file in fileSearch:
+                    if file.lower() in change.lower():
+                        matches.append(change)
+
+        return print(messages["error-nomatchfile"]) if len(matches) == 0 else add(matches)
 
     hasFilesToAdd = False
     for statusId in status:
@@ -79,6 +92,6 @@ def Router(router, subroute):
     setUp(router.messages)
 
     if subroute == "ADD_ALL":
-        addAll()
+        addAll(router.leftKeys[1:])
     if subroute == "DEFAULT":
         add(router.leftKeys)
