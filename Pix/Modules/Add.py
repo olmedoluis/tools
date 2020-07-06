@@ -66,7 +66,7 @@ def addAll(fileSearch):
                     if file.lower() in change.lower():
                         matches.append(change)
 
-        return print("no hay matches") if len(matches) == 0 else add(matches)
+        return print(messages["error-nomatchfile"]) if len(matches) == 0 else add(matches)
 
     hasFilesToAdd = False
     for statusId in status:
