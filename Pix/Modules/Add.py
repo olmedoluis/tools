@@ -1,7 +1,6 @@
 from .Helpers import run, removeColors
 from .Status import getStatus, searchInStatus
 from .Inputs import prompts
-from pathlib import Path as isFile
 
 
 def add(filePaths=[], shouldVerify=True):
