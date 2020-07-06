@@ -3,13 +3,6 @@ from .Status import getStatus
 from .Inputs import prompts
 
 
-def errorRunValidator(error):
-    if error.find("not a git repository") != -1:
-        print(messages["notGitRepository"])
-    else:
-        print(messages["unknown-error"])
-
-
 def getHasChanges(change=""):
     status = getStatus()
 
@@ -22,7 +15,7 @@ def branchSelection(branchSearch):
     if hasChanges:
         return print(messages["error-haschanges"])
 
-    branchesOutput = run(errorRunValidator, ["git", "branch"])
+    branchesOutput = run(["git", "branch"])
     branchesSpaced = branchesOutput.rstrip().split("\n")
 
     if branchesSpaced[0] == "":
@@ -64,7 +57,7 @@ def branchSelection(branchSearch):
             return print(messages["error-empty"])
 
     if branchSelected != actualBranch:
-        run(errorRunValidator, ["git", "checkout", branchSelected])
+        run(["git", "checkout", branchSelected])
         print(messages["branch-success"].format(branchSelected))
     else:
         print(messages["error-samebranch"].format(branchSelected))
@@ -119,7 +112,7 @@ def branchCreation():
     isSure = inputs.confirm(title=messages["confirmation"])
 
     if isSure:
-        run(errorRunValidator, ["git", "branch", branch])
+        run(["git", "branch", branch])
         print(messages["branch-success"].format(branch))
     else:
         return print(messages["commit-cancel"])
@@ -127,7 +120,7 @@ def branchCreation():
     shouldSwitch = inputs.confirm(title=messages["branch-shouldswitch"])
 
     if shouldSwitch:
-        run(errorRunValidator, ["git", "checkout", branch])
+        run(["git", "checkout", branch])
         print(messages["branch-switchsuccess"].format(branch))
     else:
         print(messages["error-inputcancel"])

@@ -3,13 +3,6 @@ from .Status import getStatus
 from .Inputs import prompts
 
 
-def errorRunValidator(error):
-    if error.find("not a git repository") != -1:
-        print(messages["notGitRepository"])
-    else:
-        print(messages["unknown-error"])
-
-
 def addToStash():
     if not "added" in getStatus():
         return print(messages["error-stash-addedfiles"])
@@ -22,7 +15,7 @@ def addToStash():
     if title == "":
         return print(messages["error-empty"])
 
-    run(errorRunValidator, ["git", "stash", "push", "-m", title])
+    run(["git", "stash", "push", "-m", title])
     print(messages["stash-in-success"])
 
 
@@ -30,7 +23,7 @@ def stashSelection():
     if len(getStatus()) > 1:
         return print(messages["error-haschanges"])
 
-    stashesOutput = run(errorRunValidator, ["git", "stash", "list"])
+    stashesOutput = run(["git", "stash", "list"])
     stashesSpaced = stashesOutput.rstrip().split("\n")
 
     if stashesSpaced[0] == "":
@@ -63,7 +56,7 @@ def stashSelection():
         return print(messages["error-empty"])
 
     stashId = stashSelected[0]
-    run(errorRunValidator, ["git", "stash", "pop", stashId])
+    run(["git", "stash", "pop", stashId])
     print(messages["stash-back-success"].format(stashSelected))
 
 

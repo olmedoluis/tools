@@ -7,7 +7,18 @@ def removeColors(string):
     return string
 
 
-def run(validator, command=[]):
+def _errorRunValidator(error):
+    from Configuration import MESSAGES
+
+    if error.find("not a git repository") != -1:
+        print(MESSAGES["notGitRepository"])
+    elif error.find("did not match any files") != 1:
+        print(MESSAGES["notafile-error"])
+    else:
+        print(MESSAGES["unknown-error"])
+
+
+def run(command=[]):
     from subprocess import Popen, PIPE
 
     process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
@@ -15,7 +26,7 @@ def run(validator, command=[]):
     output, error = process.communicate()
 
     if process.returncode != 0:
-        validator(error)
+        _errorRunValidator(error)
         exit()
 
     return output
@@ -23,9 +34,10 @@ def run(validator, command=[]):
 
 def checkRoute(keyword, outsideKeys, outsideAliases):
     childKeys = outsideKeys["child_keys"] if "child_keys" in outsideKeys else []
-    childAliases = outsideAliases["child_aliases"] if "child_aliases" in outsideAliases else []
+    childAliases = (
+        outsideAliases["child_aliases"] if "child_aliases" in outsideAliases else []
+    )
 
-    
     for entityId in childKeys:
         posibleRoutes = childKeys[entityId] + childAliases[entityId]
 
