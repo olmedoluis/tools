@@ -1,4 +1,4 @@
-import sys
+from sys import argv
 from Configuration import ALIASES, MESSAGES
 from .Data.PixRoutes import KEYS
 from .Modules import (
@@ -50,7 +50,7 @@ def getConcatenatedRoutes(routes):
 
 
 def main():
-    arg = sys.argv[1:]
+    arg = argv[1:]
 
     if len(arg) == 0:
         return

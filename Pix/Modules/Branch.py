@@ -1,9 +1,10 @@
 from .Helpers import run
-from .Status import getStatus
 from .Inputs import prompts
 
 
 def getHasChanges(change=""):
+    from .Status import getStatus
+
     status = getStatus()
 
     return len(status.keys()) > 1 if change == "" else change in status
