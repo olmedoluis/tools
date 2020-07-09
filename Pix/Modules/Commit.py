@@ -27,7 +27,7 @@ def getCommonDirectory(directories):
 
 
 def save():
-    from .Inputs import prompts
+    from .Prompts import many, confirm
     from .Status import getStatus
 
     status = getStatus()
@@ -46,9 +46,7 @@ def save():
     scapeError = messages["scape-error"]
     commonDir = getCommonDirectory(status["added"])
 
-    inputs = prompts()
-
-    answers = inputs.many(
+    answers = many(
         [
             {
                 "type": "Select",
@@ -77,7 +75,7 @@ def save():
     commit = "{}({}):{}".format(*answers)
     print(messages["preview"].format(commit))
 
-    isSure = inputs.confirm(title=messages["confirmation"])
+    isSure = confirm(title=messages["confirmation"])
 
     if isSure:
         run(["git", "commit", "-m", commit])

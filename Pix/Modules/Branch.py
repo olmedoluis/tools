@@ -1,5 +1,4 @@
 from .Helpers import run
-from .Inputs import prompts
 
 
 def getHasChanges(change=""):
@@ -11,6 +10,8 @@ def getHasChanges(change=""):
 
 
 def branchSelection(branchSearch):
+    from .Prompts import select
+
     hasChanges = getHasChanges()
 
     if hasChanges:
@@ -44,10 +45,8 @@ def branchSelection(branchSearch):
     branchSelected = branches[0]
 
     if len(branches) > 1:
-        inputs = prompts()
-
         print()
-        branchSelected = inputs.select(
+        branchSelected = select(
             title=messages["branch-selection-title"],
             options=branches,
             selectedColor="\x1b[33m",
@@ -65,18 +64,18 @@ def branchSelection(branchSearch):
 
 
 def branchCreation():
+    from .Prompts import many, confirm
+
     hasChanges = getHasChanges()
 
     if hasChanges:
         return print(messages["error-haschanges"])
 
-    inputs = prompts()
-
     options = ["feature", "refactor", "bugfix", "style"]
     scapeError = messages["scape-error"]
 
     print()
-    answers = inputs.many(
+    answers = many(
         [
             {
                 "type": "Select",
@@ -110,7 +109,7 @@ def branchCreation():
 
     print(messages["preview"].format(branch))
 
-    isSure = inputs.confirm(title=messages["confirmation"])
+    isSure = confirm(title=messages["confirmation"])
 
     if isSure:
         run(["git", "branch", branch])
@@ -118,7 +117,7 @@ def branchCreation():
     else:
         return print(messages["commit-cancel"])
 
-    shouldSwitch = inputs.confirm(title=messages["branch-shouldswitch"])
+    shouldSwitch = confirm(title=messages["branch-shouldswitch"])
 
     if shouldSwitch:
         run(["git", "checkout", branch])
