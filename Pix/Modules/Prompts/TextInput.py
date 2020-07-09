@@ -1,4 +1,4 @@
-def textInput(title="", content="", placeHolder="", finalTitle="", errorMessage=""):
+def text(title="", content="", placeHolder="", finalTitle="", errorMessage=""):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import merge
 
