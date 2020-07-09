@@ -7,14 +7,18 @@ def bookSelection(lines=[]):
 
     getch = getGetch()
     inputConsole = ConsoleControl(10)
+    maxLines = len(lines)
 
     offset = 0
 
     def updateConsole():
         for lineNumber in range(0, 10):
-            lineText = lines[lineNumber + offset].strip()
+            index = lineNumber + offset
+            lineText = lines[index].strip() if index < maxLines and index > 0 else ""
 
-            inputConsole.setConsoleLine(lineNumber, 1, lineText[0 : int(terminalWidth) - 1])
+            inputConsole.setConsoleLine(
+                lineNumber, 1, lineText[0 : int(terminalWidth) - 1]
+            )
 
         inputConsole.refresh()
 
