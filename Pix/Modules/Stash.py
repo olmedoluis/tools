@@ -1,16 +1,15 @@
 from .Helpers import run
 from .Status import getStatus
-from .Inputs import prompts
 
 
 def addToStash():
+    from .Prompts import text
+
     if not "added" in getStatus():
         return print(messages["error-stash-addedfiles"])
 
     print()
-    title = prompts().text(
-        title=messages["stash-in-title"], errorMessage=messages["scape-error"]
-    )
+    title = text(title=messages["stash-in-title"], errorMessage=messages["scape-error"])
 
     if title == "":
         return print(messages["error-empty"])
@@ -20,6 +19,8 @@ def addToStash():
 
 
 def stashSelection():
+    from .Prompts import select
+
     if len(getStatus()) > 1:
         return print(messages["error-haschanges"])
 
@@ -45,7 +46,7 @@ def stashSelection():
         stashList.append(messages["stash-listitem"].format(stashId, content, branch))
 
     print()
-    stashSelected = prompts().select(
+    stashSelected = select(
         title=messages["branch-selection-title"],
         options=stashList,
         selectedColor="\x1b[36m",
