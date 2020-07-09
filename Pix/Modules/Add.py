@@ -1,11 +1,11 @@
 from .Helpers import run, removeColors
 from .Status import getStatus, searchInStatus
-from .Inputs import prompts
 
 
 def add(filePaths=[], shouldVerify=True):
+    from .Prompts import multiSelect
+
     status = getStatus()
-    inputs = prompts()
 
     specificFiles = []
     if len(filePaths) != 0 and shouldVerify:
@@ -30,7 +30,7 @@ def add(filePaths=[], shouldVerify=True):
         return print(messages["add-nofiles-error"])
 
     print()
-    answers = inputs.multiSelect(
+    answers = multiSelect(
         title=messages["add-adition-title"],
         finalTitle=messages["file-selection-finaltitle"],
         options=options,
