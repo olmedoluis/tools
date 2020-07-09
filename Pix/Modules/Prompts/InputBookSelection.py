@@ -5,10 +5,14 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[]):
 
     _, terminalWidth = os.popen("stty size", "r").read().split()
 
+    reset = "\x1b[0m"
+    bold = "\x1b[1m"
+    dim = "\x1b[2m"
+
     getch = getGetch()
     inputConsole = ConsoleControl(9)
     textZoneArea = range(0, len(lines))
-    selectionableArea = range(-3, len(lines) - 3)
+    selectionableArea = range(-2, len(lines) - 4)
 
     offset = 0
 
@@ -17,8 +21,13 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[]):
             index = lineNumber + offset
             lineText = lines[index].strip() if index in textZoneArea else ""
             lineTextLimited = lineText[0 : int(terminalWidth) - 1]
+            lineTextColored = (
+                f"{reset}{bold}{lineTextLimited}"
+                if lineNumber == 4
+                else f"{reset}{dim}{lineTextLimited}"
+            )
 
-            inputConsole.setConsoleLine(lineNumber, 1, lineTextLimited)
+            inputConsole.setConsoleLine(lineNumber, 1, lineTextColored)
 
         inputConsole.refresh()
 
