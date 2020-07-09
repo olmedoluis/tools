@@ -1,32 +1,6 @@
-from .Console import ConsoleControl
+from .Console import ConsoleControl, getGetch
 
 def prompts():
-    def getGetch():
-        from os import name
-
-        if name == "nt":
-            import msvcrt
-
-            return msvcrt.getch
-
-        def getch():
-            import sys
-            import tty
-            import termios
-
-            try:
-                fd = sys.stdin.fileno()
-                old = termios.tcgetattr(fd)
-            except:
-                return chr(27)
-            try:
-                tty.setraw(fd)
-                return sys.stdin.read(1)
-            finally:
-                termios.tcsetattr(fd, termios.TCSADRAIN, old)
-
-        return getch
-
     getch = getGetch()
 
     def merge(word, char):
