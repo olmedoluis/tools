@@ -60,7 +60,7 @@ class ConsoleControl:
         _cursorUp(count)
         for line in self.display:
             _cleanLine()
-            print(line.replace("$C", "❚"))
+            print(line)
 
     def deleteLastLines(self, lines):
         lastNumberOfLines = len(self.display)
