@@ -7,11 +7,11 @@ def remove(filePaths=[], shouldVerify=True):
 
     status = getStatus()
 
-    specificFiles = []
+    specificFiles = filePaths if filePaths else []
     if len(filePaths) != 0 and shouldVerify:
         specificFiles = searchInStatus(filePaths, status, includedFiles=["added"])
 
-    if len(specificFiles) == 1:
+    if len(specificFiles) == 1 or not shouldVerify:
         run(["git", "reset", "HEAD"] + specificFiles)
         return print(messages["remove-success"])
 
@@ -51,7 +51,7 @@ def removeAll(fileSearch):
         return (
             print(messages["error-nomatchfile"])
             if len(matches) == 0
-            else remove(matches, false)
+            else remove(matches, False)
         )
 
     hasFilesToRemove = False
