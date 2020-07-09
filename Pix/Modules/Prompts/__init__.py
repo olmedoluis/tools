@@ -2,6 +2,7 @@ from .InputText import text
 from .InputSelect import select
 from .InputConfirm import confirm
 from .InputMultiSelect import multiSelect
+from .InputBookSelection import bookSelection
 
 
 def many(choosenInputsData):
@@ -10,6 +11,7 @@ def many(choosenInputsData):
         "Select": select,
         "Confirm": confirm,
         "MultiSelect": multiSelect,
+        "BookSelection": bookSelection,
     }
     responses = []
 
