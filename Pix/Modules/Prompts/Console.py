@@ -33,38 +33,33 @@ def show_cursor():
 
 
 code = "\x1b["
-log = stdout.write
 
 
-def cursorUp(times):
-    log(f"{code}{times}A")
+def _cursorUp(times):
+    stdout.write(f"{code}{times}A")
 
 
-def cleanLine():
-    log(f"{code}2K")
+def _cleanLine():
+    stdout.write(f"{code}2K")
 
 
-class term:
+class ConsoleControl:
     def __init__(self, lines):
         self.display = (" " * (lines - 1)).split(" ")
 
+        hide_cursor()
+
         for emptyValue in self.display:
             print(emptyValue)
-
-    def getCode(self, string):
-        return f"\x1b[{string}"
-
-    def show(self, data):
-        self.display = data
 
     def setConsoleLine(self, row=0, column=0, content=""):
         self.display[row] = " " * column + content
 
     def refresh(self):
         count = len(self.display)
-        cursorUp(count)
+        _cursorUp(count)
         for line in self.display:
-            cleanLine()
+            _cleanLine()
             print(line.replace("$C", "❚"))
 
     def deleteLastLines(self, lines):
@@ -72,12 +67,9 @@ class term:
         newNumberOfLines = lastNumberOfLines - lines
         self.display = (" " * (newNumberOfLines)).split(" ")
         for i in range(0, lines):
-            cleanLine()
-            cursorUp(1)
+            _cleanLine()
+            _cursorUp(1)
 
     def finish(self):
         show_cursor()
 
-
-hide_cursor()
-return term(height)
