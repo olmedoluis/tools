@@ -1,3 +1,3 @@
 from .Inputs import prompts
-from .TextInput import text
-from .SelectInput import select
+from .InputText import text
+from .InputSelect import select
