@@ -1,4 +1,4 @@
-def bookSelection(lines=[], seleccionableLinesIncludes=[]):
+def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m"}):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
     import os
@@ -12,9 +12,18 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[]):
     getch = getGetch()
     inputConsole = ConsoleControl(9)
     textZoneArea = range(0, len(lines))
-    selectionableArea = range(-2, len(lines) - 4)
+    selectionableArea = range(-4, len(lines) - 4)
 
-    offset = 0
+    linesToSelect = []
+    for index in textZoneArea:
+        for selectionableInclusion in seleccionableLinesIncludes:
+            if selectionableInclusion in lines[index]:
+                linesToSelect.append(index - 4)
+
+    offset = linesToSelect[0]
+    selectionableIndexesArea = range(-4, len(lines) - 4)
+    indexLimits = range(0, len(linesToSelect))
+    index = 0
 
     def updateConsole():
         for lineNumber in range(0, 9):
@@ -38,11 +47,15 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[]):
         state = getMovement(char)
 
         if state == "DOWN":
-            newOffset = offset + 1
-            offset = newOffset if newOffset in selectionableArea else offset
+            newIndex = index + 1
+            if newIndex in indexLimits:
+                offset = linesToSelect[newIndex]
+                index = newIndex
         elif state == "UP":
-            newOffset = offset - 1
-            offset = newOffset if newOffset in selectionableArea else offset
+            newIndex = index - 1
+            if newIndex in indexLimits:
+                offset = linesToSelect[newIndex]
+                index = newIndex
         elif state == "FINISH" or state == "RIGHT":
             break
         elif state == "BREAK_CHAR":
