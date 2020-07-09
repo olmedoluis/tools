@@ -1,5 +1,4 @@
 from .Helpers import run
-from .Inputs import prompts
 
 
 def getHasChanges(change=""):
