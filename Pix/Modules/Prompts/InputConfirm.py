@@ -1,4 +1,4 @@
-def confirmInput(title="", finalTitle=""):
+def confirm(title="", finalTitle=""):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getResponse
 
