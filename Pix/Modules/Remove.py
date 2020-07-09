@@ -1,11 +1,11 @@
 from .Helpers import run, removeColors
 from .Status import getStatus, searchInStatus
-from .Inputs import prompts
 
 
 def remove(filePaths=[], shouldVerify=True):
+    from .Prompts import multiSelect
+
     status = getStatus()
-    inputs = prompts()
 
     specificFiles = []
     if len(filePaths) != 0 and shouldVerify:
@@ -22,7 +22,7 @@ def remove(filePaths=[], shouldVerify=True):
         return print(messages["remove-nofiles-error"])
 
     print()
-    answers = inputs.multiSelect(
+    answers = multiSelect(
         title=messages["remove-removing-title"],
         finalTitle=messages["file-selection-finaltitle"],
         options=options,
