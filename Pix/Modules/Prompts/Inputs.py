@@ -1,4 +1,4 @@
-from .Console import console
+from .Console import ConsoleControl
 
 def prompts():
     def getGetch():
@@ -106,7 +106,7 @@ def prompts():
         return output
 
     def textInput(title="", content="", placeHolder="", finalTitle="", errorMessage=""):
-        inputConsole = console(1)
+        inputConsole = ConsoleControl(1)
         word = content
         finalTitle = finalTitle if finalTitle != "" else title
 
@@ -135,7 +135,7 @@ def prompts():
     def selectInput(
         title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"
     ):
-        inputConsole = console(5)
+        inputConsole = ConsoleControl(5)
         selectedOption = ""
         try:
             finalTitle = finalTitle if finalTitle != "" else title
@@ -187,7 +187,7 @@ def prompts():
             return selectedOption
 
     def confirmInput(title="", finalTitle=""):
-        inputConsole = console(1)
+        inputConsole = ConsoleControl(1)
         word = False
         try:
             finalTitle = finalTitle if finalTitle != "" else title
@@ -221,7 +221,7 @@ def prompts():
     def multiSelectInput(
         title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"
     ):
-        inputConsole = console(5)
+        inputConsole = ConsoleControl(5)
         selectedOptions = []
         try:
             finalTitle = finalTitle if finalTitle != "" else title
