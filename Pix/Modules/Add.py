@@ -7,15 +7,15 @@ def add(filePaths=[], shouldVerify=True):
 
     status = getStatus()
 
-    specificFiles = []
+    specificFiles = filePaths if filePaths else []
     if len(filePaths) != 0 and shouldVerify:
         specificFiles = searchInStatus(
             filePaths, status, excludedFiles=["branch", "added"]
         )
 
-    if len(specificFiles) == 1:
+    if len(specificFiles) == 1 or not shouldVerify:
         run(["git", "add"] + specificFiles)
-        return print(messages["remove-success"])
+        return print(messages["add-success"])
 
     options = specificFiles
     if len(specificFiles) == 0:
@@ -58,7 +58,7 @@ def addAll(fileSearch):
         return (
             print(messages["error-nomatchfile"])
             if len(matches) == 0
-            else add(matches, false)
+            else add(matches, shouldVerify=False)
         )
 
     hasFilesToAdd = False
