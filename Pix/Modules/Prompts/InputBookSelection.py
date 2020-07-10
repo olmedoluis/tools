@@ -1,9 +1,9 @@
-def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m"}):
+def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m"}, errorMessage=""):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
-    import os
+    from os import popen
 
-    _, terminalWidth = os.popen("stty size", "r").read().split()
+    _, terminalWidth = popen("stty size", "r").read().split()
 
     reset = "\x1b[0m"
     bold = "\x1b[1m"
@@ -81,11 +81,12 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
-            # print(errorMessage)
-            # inputConsole.deleteLastLines(3)
-            print(linesSelected)
+            inputConsole.deleteLastLines(9)
+            inputConsole.finish()
+            print(errorMessage)
             exit()
-
+    
+    inputConsole.deleteLastLines(9)
     inputConsole.finish()
 
     return linesSelected
