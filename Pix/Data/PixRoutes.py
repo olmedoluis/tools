@@ -29,4 +29,7 @@ KEYS = {
             "ADD_STASH": ["add", "in"]
         }
     },
+    "Patch": {
+        "keys": ["patch", "exam"]
+    },
 }
