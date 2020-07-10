@@ -8,6 +8,8 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m
     reset = "\x1b[0m"
     bold = "\x1b[1m"
     dim = "\x1b[2m"
+    addedColor = "\x1b[32m"
+    deletedColor = "\x1b[31m"
 
     getch = getGetch()
     inputConsole = ConsoleControl(9)
@@ -30,10 +32,15 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m
             index = lineNumber + offset
             lineText = lines[index].strip() if index in textZoneArea else ""
             lineTextLimited = lineText[0 : int(terminalWidth) - 1]
+            selectionColor = ""
+            if index in linesSelected:
+                option1, option2 = seleccionableLinesIncludes
+                selectionColor = addedColor if lineText[0] == option1 else deletedColor
+
             lineTextColored = (
-                f"{reset}{bold}{lineTextLimited}"
+                f"{reset}{bold}{selectionColor}{lineTextLimited}"
                 if lineNumber == 4
-                else f"{reset}{dim}{lineTextLimited}"
+                else f"{reset}{dim}{selectionColor}{lineTextLimited}"
             )
 
             inputConsole.setConsoleLine(lineNumber, 1, lineTextColored)
