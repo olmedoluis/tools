@@ -21,7 +21,6 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m
                 linesToSelect.append(index - 4)
 
     offset = linesToSelect[0]
-    selectionableIndexesArea = range(-4, len(lines) - 4)
     indexLimits = range(0, len(linesToSelect))
     index = 0
 
