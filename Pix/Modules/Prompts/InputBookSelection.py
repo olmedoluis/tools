@@ -23,6 +23,7 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m
     offset = linesToSelect[0]
     indexLimits = range(0, len(linesToSelect))
     index = 0
+    linesSelected = []
 
     def updateConsole():
         for lineNumber in range(0, 9):
@@ -38,6 +39,15 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m
             inputConsole.setConsoleLine(lineNumber, 1, lineTextColored)
 
         inputConsole.refresh()
+
+    def saveLineText(shouldSave, text):
+        symbol = text[0]
+        lineNumber = offset + 4
+        if lineNumber in linesSelected and not shouldSave:
+            index = linesSelected.index(lineNumber)
+            return linesSelected.pop(index)
+        elif not lineNumber in linesSelected and shouldSave:
+            linesSelected.append(lineNumber)
 
     while True:
         updateConsole()
@@ -55,14 +65,21 @@ def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m
             if newIndex in indexLimits:
                 offset = linesToSelect[newIndex]
                 index = newIndex
-        elif state == "FINISH" or state == "RIGHT":
+        elif state == "RIGHT":
+            lineText = lines[offset + 4]
+            saveLineText(True, lineText)
+        elif state == "LEFT":
+            lineText = lines[offset + 4]
+            saveLineText(False, lineText)
+        elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
             # print(errorMessage)
             # inputConsole.deleteLastLines(3)
+            print(linesSelected)
             exit()
 
     inputConsole.finish()
 
-    return ""
+    return linesSelected
 
