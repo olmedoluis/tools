@@ -1,4 +1,4 @@
-def bookSelection(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m"}, errorMessage=""):
+def patchSelect(lines=[], seleccionableLinesIncludes=[], colors={"": "\x1b[32m"}, errorMessage=""):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
     from os import popen
