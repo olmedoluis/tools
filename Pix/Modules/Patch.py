@@ -1,7 +1,30 @@
+from pprint import pprint
+
+
 def addToFile(text, filePath):
     f = open(filePath, "w+")
     f.write(text)
     f.close()
+
+
+def parseDifferences(differencesRaw):
+    lines = differencesRaw.split("\n")
+
+    metaData = lines[:4]
+    patches = []
+
+    index = 4
+    lastIndex = 4
+    for line in lines[5:]:
+        if "@@ " == line[:3] and " @@" in line[3:]:
+            patches.append(lines[lastIndex : index - 1] + [""])
+            lastIndex = index + 1
+
+        index = index + 1
+
+    patches.append(lines[lastIndex:])
+
+    return metaData, patches
 
 
 def patchAll():
@@ -12,10 +35,19 @@ def patchAll():
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
 
-    differences = run(["git", "diff"])
-    wea = bookSelection(lines=differences, seleccionableLinesIncludes=["+", "-"])
-    
-    return print(differences)
+    differencesRaw = run(["git", "diff-files", "-p", "Pix/Modules/Helpers.py"])
+    metaData, patches = parseDifferences(differencesRaw)
+
+    addToFile("\n".join(parsedDifferences), filePath)
+    print(parsedDifferences)
+    return
+
+    differences = run(["git", "diff", "--unified=1000", "Pix/Modules/Helpers.py"])
+    wea = bookSelection(
+        lines=differences.split("\n"), seleccionableLinesIncludes=["+", "-"]
+    )
+
+    return
     addToFile(differences, filePath)
     run(
         [
@@ -41,3 +73,4 @@ def Router(router, subroute):
 
     if subroute == "DEFAULT":
         patchAll()
+
