@@ -1,4 +1,6 @@
-def patchSelect(lines=[], seleccionableLinesIncludes=[], fileName="", errorMessage=""):
+def patchSelect(
+    lines=[], seleccionableLinesIncludes=[], fileName="", errorMessage="", patches=[]
+):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
     from os import popen
@@ -17,15 +19,22 @@ def patchSelect(lines=[], seleccionableLinesIncludes=[], fileName="", errorMessa
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
-    textZoneArea = range(0, len(lines))
 
     offset = 0
-    patchesSelected = []
+    patchIndexesSelected = []
+    patchIndexSelected = 0
+    patchShowing = patches[0][1:]
+    textZoneArea = range(0, len(patchShowing))
+
+    # options[index % optionsLen]
 
     def updateConsole():
+        patchShowing = patches[patchIndexSelected][1:]
+        textZoneArea = range(0, len(patchShowing))
+
         for lineNumber in range(0, selectionAreaHeight):
             index = lineNumber + offset
-            lineText = lines[index].strip() if index in textZoneArea else ""
+            lineText = patchShowing[index].strip() if index in textZoneArea else ""
             lineTextLimited = lineText[0:terminalWidth]
             if len(lineText) and lineText[0] in colors:
                 lineTextLimited = colors[lineText[0]] + lineTextLimited + reset
@@ -36,10 +45,6 @@ def patchSelect(lines=[], seleccionableLinesIncludes=[], fileName="", errorMessa
 
         inputConsole.refresh()
 
-    def saveLineText(shouldSave, text):
-        return
-        patchesSelected.append(lineNumber)
-
     while True:
         updateConsole()
 
@@ -48,16 +53,18 @@ def patchSelect(lines=[], seleccionableLinesIncludes=[], fileName="", errorMessa
 
         if state == "DOWN":
             newOffset = offset + 1
-            offset = newOffset if newOffset in textZoneArea and len(lines) > selectionAreaHeight else offset
+            offset = (
+                newOffset
+                if newOffset in textZoneArea and len(lines) > selectionAreaHeight
+                else offset
+            )
         elif state == "UP":
             newOffset = offset - 1
             offset = newOffset if newOffset in textZoneArea else offset
         elif state == "RIGHT":
-            lineText = lines[offset + 4]
-            saveLineText(True, lineText)
+            patchIndexSelected = (patchIndexSelected + 1) % len(patches)
         elif state == "LEFT":
-            lineText = lines[offset + 4]
-            saveLineText(False, lineText)
+            patchIndexSelected = (patchIndexSelected - 1) % len(patches)
         elif state == "EXTENDED_RIGHT":
             border = f"\x1b[32m{bold}|{reset}"
         elif state == "EXTENDED_LEFT":
