@@ -1,5 +1,5 @@
 def patchSelect(
-    lines=[], seleccionableLinesIncludes=[], fileName="", errorMessage="", patches=[]
+    seleccionableLinesIncludes=[], fileName="", errorMessage="", patches=[]
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
@@ -29,10 +29,7 @@ def patchSelect(
     patchShowing = patches[0][1:]
     textZoneArea = range(0, len(patchShowing))
 
-    # options[index % optionsLen]
-
     def updateConsole():
-        patchShowing = patches[patchIndexSelected][1:]
         textZoneArea = range(0, len(patchShowing))
         border = (
             borders["selected"]
@@ -63,7 +60,9 @@ def patchSelect(
             newOffset = offset + 1
             offset = (
                 newOffset
-                if newOffset in textZoneArea and len(lines) > selectionAreaHeight
+                if newOffset in textZoneArea
+                and (len(patchShowing) > selectionAreaHeight)
+                and (newOffset < (len(patchShowing) * 0.5))
                 else offset
             )
         elif state == "UP":
@@ -71,8 +70,12 @@ def patchSelect(
             offset = newOffset if newOffset in textZoneArea else offset
         elif state == "RIGHT":
             patchIndexSelected = (patchIndexSelected + 1) % len(patches)
+            patchShowing = patches[patchIndexSelected][1:]
+            offset = 0
         elif state == "LEFT":
             patchIndexSelected = (patchIndexSelected - 1) % len(patches)
+            patchShowing = patches[patchIndexSelected][1:]
+            offset = 0
         elif state == "EXTENDED_RIGHT" and not (
             patchIndexSelected in patchIndexesSelected
         ):
