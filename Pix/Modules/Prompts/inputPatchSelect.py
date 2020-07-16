@@ -13,7 +13,7 @@ def patchSelect(lines=[], seleccionableLinesIncludes=[], fileName="", errorMessa
     bold = "\x1b[1m"
     dim = "\x1b[2m"
     colors = {"+": f"{bold}\x1b[32m", "-": f"{bold}\x1b[31m"}
-    border = f"\x1b[36m|{reset}"
+    border = f"\x1b[36m{bold}|{reset}"
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
@@ -58,6 +58,10 @@ def patchSelect(lines=[], seleccionableLinesIncludes=[], fileName="", errorMessa
         elif state == "LEFT":
             lineText = lines[offset + 4]
             saveLineText(False, lineText)
+        elif state == "EXTENDED_RIGHT":
+            border = f"\x1b[32m{bold}|{reset}"
+        elif state == "EXTENDED_LEFT":
+            border = f"\x1b[36m{bold}|{reset}"
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":

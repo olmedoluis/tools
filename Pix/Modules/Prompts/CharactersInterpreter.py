@@ -18,6 +18,10 @@ def getMovement(char):
         return "LEFT"
     elif charLower == "d":
         return "RIGHT"
+    elif charLower == "e":
+        return "EXTENDED_RIGHT"
+    elif charLower == "q":
+        return "EXTENDED_LEFT"
     elif charLower == "w":
         return "UP"
     elif charLower == "s":
