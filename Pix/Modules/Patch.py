@@ -40,7 +40,6 @@ def patchAll():
 
     selectedPatches = patchSelect(
         patches=patches,
-        lines=patches[0][1:],
         seleccionableLinesIncludes=["+", "-"],
         fileName="Pix/Modules/Helpers.py",
     )
