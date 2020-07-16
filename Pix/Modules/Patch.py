@@ -17,7 +17,7 @@ def parseDifferences(differencesRaw):
     lastIndex = 4
     for line in lines[5:]:
         if "@@ " == line[:3] and " @@" in line[3:]:
-            patches.append(lines[lastIndex : index - 1] + [""])
+            patches.append(lines[lastIndex : index + 1] + [""])
             lastIndex = index + 1
 
         index = index + 1
@@ -30,7 +30,7 @@ def parseDifferences(differencesRaw):
 def patchAll():
     from .Helpers import run
     from pathlib import Path
-    from .Prompts import bookSelection
+    from .Prompts import patchSelect
 
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
@@ -38,17 +38,18 @@ def patchAll():
     differencesRaw = run(["git", "diff-files", "-p", "Pix/Modules/Helpers.py"])
     metaData, patches = parseDifferences(differencesRaw)
 
-    addToFile("\n".join(parsedDifferences), filePath)
-    print(parsedDifferences)
-    return
-
-    differences = run(["git", "diff", "--unified=1000", "Pix/Modules/Helpers.py"])
-    wea = bookSelection(
-        lines=differences.split("\n"), seleccionableLinesIncludes=["+", "-"]
+    selectedPatches = patchSelect(
+        patches=patches,
+        lines=patches[0][1:],
+        seleccionableLinesIncludes=["+", "-"],
+        fileName="Pix/Modules/Helpers.py",
     )
 
-    return
-    addToFile(differences, filePath)
+    patchGenerated = metaData
+    for patch in selectedPatches:
+        patchGenerated = patchGenerated + patch
+
+    addToFile("\n".join(patchGenerated), filePath)
     run(
         [
             "git",
