@@ -15,7 +15,10 @@ def patchSelect(
     bold = "\x1b[1m"
     dim = "\x1b[2m"
     colors = {"+": f"{bold}\x1b[32m", "-": f"{bold}\x1b[31m"}
-    border = f"\x1b[36m{bold}|{reset}"
+    borders = {
+        "selected": f"\x1b[32m{bold}|{reset}",
+        "notSelected": f"\x1b[31m{bold}|{reset}",
+    }
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
@@ -31,6 +34,11 @@ def patchSelect(
     def updateConsole():
         patchShowing = patches[patchIndexSelected][1:]
         textZoneArea = range(0, len(patchShowing))
+        border = (
+            borders["selected"]
+            if patchIndexSelected in patchIndexesSelected
+            else borders["notSelected"]
+        )
 
         for lineNumber in range(0, selectionAreaHeight):
             index = lineNumber + offset
@@ -65,10 +73,12 @@ def patchSelect(
             patchIndexSelected = (patchIndexSelected + 1) % len(patches)
         elif state == "LEFT":
             patchIndexSelected = (patchIndexSelected - 1) % len(patches)
-        elif state == "EXTENDED_RIGHT":
-            border = f"\x1b[32m{bold}|{reset}"
-        elif state == "EXTENDED_LEFT":
-            border = f"\x1b[36m{bold}|{reset}"
+        elif state == "EXTENDED_RIGHT" and not (
+            patchIndexSelected in patchIndexesSelected
+        ):
+            patchIndexesSelected.append(patchIndexSelected)
+        elif state == "EXTENDED_LEFT" and patchIndexSelected in patchIndexesSelected:
+            patchIndexesSelected.remove(patchIndexSelected)
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
@@ -77,8 +87,12 @@ def patchSelect(
             print(errorMessage)
             exit()
 
-    inputConsole.deleteLastLines(selectionAreaHeight)
+    inputConsole.deleteLastLines(selectionAreaHeight + 4)
     inputConsole.finish()
 
-    return patchesSelected
+    patchesOutput = []
+    for index in patchIndexesSelected:
+        patchesOutput.append(patches[index])
+
+    return patchesOutput
 
