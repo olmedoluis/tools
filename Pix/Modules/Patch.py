@@ -7,24 +7,47 @@ def addToFile(text, filePath):
     f.close()
 
 
-def parseDifferences(differencesRaw):
+def parseDifferences(differencesRaw, files):
+    class patch:
+        def __init__(self, fileName, metaData):
+            self.fileName = fileName
+            self.metaData = metaData
+            self.patches = []
+
     lines = differencesRaw.split("\n")
+    differences = []
 
-    metaData = lines[:4]
-    patches = []
-
-    index = 4
-    lastIndex = 4
-    for line in lines[5:]:
-        if "@@ " == line[:3] and " @@" in line[3:]:
-            patches.append(lines[lastIndex : index + 1] + [""])
+    index = 0
+    lastIndex = 0
+    for line in lines[1:]:
+        if "diff --git a" == line[:12]:
+            differences.append(lines[lastIndex : index + 1])
             lastIndex = index + 1
 
         index = index + 1
 
-    patches.append(lines[lastIndex:])
+    differences.append(lines[lastIndex:])
 
-    return metaData, patches
+    outputPatches = []
+    indexFile = 0
+    for lines in differences:
+        metaData = lines[:4]
+        newPatch = patch(fileName=files[indexFile], metaData=metaData)
+
+        index = 4
+        lastIndex = 4
+        for line in lines[5:]:
+            if "@@ " == line[:3] and " @@" in line[3:]:
+                newPatch.patches.append(lines[lastIndex : index + 1] + [""])
+                lastIndex = index + 1
+
+            index = index + 1
+
+        newPatch.patches.append(lines[lastIndex:])
+        outputPatches.append(newPatch)
+        indexFile = indexFile + 1
+
+    return outputPatches
 
 
 def patchAll():
