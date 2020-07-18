@@ -52,7 +52,7 @@ def parseDifferences(differencesRaw, files):
         lastIndex = 4
         for line in lines[5:]:
             if "@@ " == line[:3] and " @@" in line[3:]:
-                newPatch.patches.append(lines[lastIndex : index + 1] + [""])
+                newPatch.patches.append(lines[lastIndex : index + 1])
                 lastIndex = index + 1
 
             index = index + 1
