@@ -85,7 +85,9 @@ def patchAll():
     differencesRaw = run(["git", "diff-files", "-p"] + files)
     patches = parseDifferences(differencesRaw, files)
 
-    selectedPatches = patchSelect(files=patches)
+    selectedPatches = patchSelect(
+        files=patches, errorMessage=messages["error-nofileschoosen"]
+    )
 
     patchGenerated = parsePatches(selectedPatches)
 
