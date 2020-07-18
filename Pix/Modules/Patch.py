@@ -77,7 +77,7 @@ def patchAll():
             files = files + status[statusId]
 
     if not len(files):
-        return print("no hay data paapu")
+        return print(messages["error-patch-nofiles"])
 
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
