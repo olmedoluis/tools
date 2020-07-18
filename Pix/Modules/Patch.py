@@ -13,10 +13,10 @@ def parsePatches(patches):
 
             for indexSelected in patch.patchesSelected:
                 parsedPatches = parsedPatches + patch.patches[indexSelected]
-    
+
     if not len(parsedPatches):
         parsedPatches = [""]
-    
+
     return parsedPatches if parsedPatches[-1] == "" else parsedPatches + [""]
 
 
@@ -93,20 +93,20 @@ def patch(files):
 
 def patchAll(fileSearch):
     from .Status import getStatus, searchInStatus
-    status = getStatus()
 
+    status = getStatus()
     if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, includedFiles=["added"])
+        matches = searchInStatus(fileSearch, status, includedFiles=["modified"])
 
         return (
             print(messages["error-nomatchfile"])
             if len(matches) == 0
-            else remove(matches, False)
+            else patch(matches)
         )
 
     files = []
     for statusId in status:
-        if statusId != "added" and statusId != "branch":
+        if statusId != "added" and statusId != "branch" and statusId != "untracked":
             files = files + status[statusId]
 
     if not len(files):
@@ -124,5 +124,5 @@ def Router(router, subroute):
     setUp(router.messages)
 
     if subroute == "DEFAULT":
-        patchAll(router.leftKeys[1:])
+        patchAll(router.leftKeys)
 
