@@ -53,6 +53,7 @@ MESSAGES = {
     "error-nomatchbranch": "\n {}\n".format(_themeUp("{error}✖ There is no branch with {keyword}$")),
     "error-nomatchfile": "\n {}\n".format(_themeUp("{error}✖ There is no file matches")),
     "error-nostashes": "\n {}\n".format(_themeUp("{error}✖ You do not have any stashed files yet")),
+    "error-patch-nofiles": "\n {}\n".format(_themeUp("{error}✖ There is no files to patch")),
     "error-samebranch": "\n {}\n".format(_themeUp("{error}✖ You already are on {keyword}$")),
     "error-stash-addedfiles": "\n {}\n".format(_themeUp("{error}✖ You only can stash added files")),
     "file-selection-finaltitle": "{}".format(_themeUp("{normal}Files selected:")),
