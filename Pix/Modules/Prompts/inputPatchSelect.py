@@ -23,7 +23,7 @@ def patchSelect(errorMessage="", files=[]):
         offset=0, termSizeX=terminalWidth, termSizeY=selectionAreaHeight, files=files,
     )
 
-    patchControl.setPatchesOfFile()
+    patchControl.setPatchesOfFile(1)
     patchControl.setPatchShowing(0)
 
     def updateConsole():
@@ -60,7 +60,7 @@ def patchSelect(errorMessage="", files=[]):
         updateConsole()
 
         char = getch()
-        state = getMovement(char)
+        state = getMovement(char, True)
 
         if state == "DOWN":
             patchControl.increaseOffset()
@@ -74,6 +74,12 @@ def patchSelect(errorMessage="", files=[]):
             patchControl.addIndexSelectedToPatch()
         elif state == "EXTENDED_LEFT":
             patchControl.removeIndexSelectedToPatch()
+        elif state == "YES":
+            patchControl.addIndexSelectedToPatch()
+            patchControl.changePage(1)
+        elif state == "NO":
+            patchControl.removeIndexSelectedToPatch()
+            patchControl.changePage(-1)
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
@@ -101,9 +107,10 @@ class PatchControl:
         self.fileNameIndex = 0
         self.files = files
 
-    def setPatchesOfFile(self):
+    def setPatchesOfFile(self, times):
         self.patches = self.files[self.fileNameIndex].patches
-        self.patchIndexSelected = self.patchIndexSelected % len(self.patches)
+        # self.patchIndexSelected = self.patchIndexSelected % len(self.patches)
+        self.patchIndexSelected = 0 if times > 0 else len(self.patches) - 1
 
     def setPatchShowing(self, index):
         self.patchShowing = self.patches[index][1:]
@@ -129,7 +136,7 @@ class PatchControl:
 
         if not (newIndex in range(len(self.patches))) and len(self.files) > 1:
             self.fileNameIndex = (self.fileNameIndex + times) % len(self.files)
-            self.setPatchesOfFile()
+            self.setPatchesOfFile(times)
 
         self.setPatchShowing(self.patchIndexSelected)
         self.offset = 0
