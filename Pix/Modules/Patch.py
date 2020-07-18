@@ -17,7 +17,7 @@ def parsePatches(patches):
             for indexSelected in patch.patchesSelected:
                 parsedPatches = parsedPatches + patch.patches[indexSelected]
 
-    return parsedPatches
+    return parsedPatches if parsedPatches[-1] == "" else parsedPatches + [""]
 
 
 def parseDifferences(differencesRaw, files):
