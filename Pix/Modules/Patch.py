@@ -91,16 +91,7 @@ def patchAll():
 
     addToFile("\n".join(patchGenerated), filePath)
 
-    run(
-        [
-            "git",
-            "apply",
-            "--ignore-space-change",
-            "--ignore-whitespace",
-            "--cached",
-            filePath,
-        ]
-    )
+    run(["git", "apply", "--cached", filePath])
 
     run(["rm", filePath])
 
