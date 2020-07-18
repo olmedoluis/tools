@@ -15,6 +15,7 @@ def patchSelect(errorMessage="", files=[]):
         "+": f"\x1b[32m{bold}|{reset}",
         "-": f"\x1b[37m{bold}|{reset}",
     }
+    icons = {"+": "☢", "-": "✖"}
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
@@ -35,6 +36,12 @@ def patchSelect(errorMessage="", files=[]):
 
             if lineTextLimited:
                 firstChar = lineTextLimited[0]
+
+                lineTextLimited = (
+                    icons[firstChar] + lineTextLimited[1:]
+                    if firstChar in icons
+                    else lineTextLimited
+                )
 
                 lineTextLimited = (
                     colors[firstChar] + lineTextLimited + reset
