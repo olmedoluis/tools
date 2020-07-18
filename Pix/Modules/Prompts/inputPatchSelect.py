@@ -1,4 +1,4 @@
-def patchSelect(seleccionableLinesIncludes=[], fileNames=[], errorMessage="", files=[]):
+def patchSelect(errorMessage="", files=[]):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
     from os import popen
@@ -19,11 +19,7 @@ def patchSelect(seleccionableLinesIncludes=[], fileNames=[], errorMessage="", fi
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
     patchControl = PatchControl(
-        offset=0,
-        termSizeX=terminalWidth,
-        termSizeY=selectionAreaHeight,
-        fileNames=fileNames,
-        files=files,
+        offset=0, termSizeX=terminalWidth, termSizeY=selectionAreaHeight, files=files,
     )
 
     patchControl.setPatchesOfFile()
@@ -88,7 +84,7 @@ def patchSelect(seleccionableLinesIncludes=[], fileNames=[], errorMessage="", fi
 
 
 class PatchControl:
-    def __init__(self, offset, termSizeX, termSizeY, fileNames, files):
+    def __init__(self, offset, termSizeX, termSizeY, files):
         self.patches = []
         self.offset = offset
         self.termSizeX = termSizeX
@@ -97,7 +93,6 @@ class PatchControl:
         self.patchIndexesSelected = []
         self.patchShowing = []
         self.textZoneArea = range(0)
-        self.fileNames = fileNames
         self.fileNameIndex = 0
         self.files = files
 
