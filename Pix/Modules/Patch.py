@@ -89,6 +89,9 @@ def patchAll():
 
     patchGenerated = parsePatches(selectedPatches)
 
+    if not len(patchGenerated):
+        return print(messages["error-empty"])
+
     addToFile("\n".join(patchGenerated), filePath)
 
     run(["git", "apply", "--cached", filePath])
