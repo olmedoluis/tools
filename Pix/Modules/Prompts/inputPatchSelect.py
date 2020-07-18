@@ -10,10 +10,10 @@ def patchSelect(errorMessage="", files=[]):
     reset = "\x1b[0m"
     bold = "\x1b[1m"
     dim = "\x1b[2m"
-    colors = {"+": f"{bold}\x1b[32m", "-": f"{bold}\x1b[31m"}
+    colors = {"+": f"{bold}\x1b[33m", "-": f"{bold}\x1b[31m"}
     borders = {
         "+": f"\x1b[32m{bold}|{reset}",
-        "-": f"\x1b[31m{bold}|{reset}",
+        "-": f"\x1b[37m{bold}|{reset}",
     }
 
     getch = getGetch()
@@ -35,6 +35,7 @@ def patchSelect(errorMessage="", files=[]):
 
             if lineTextLimited:
                 firstChar = lineTextLimited[0]
+
                 lineTextLimited = (
                     colors[firstChar] + lineTextLimited + reset
                     if firstChar in colors
