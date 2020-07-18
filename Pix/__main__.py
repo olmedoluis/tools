@@ -8,6 +8,7 @@ from .Modules import (
     CommitRouter,
     RemoveRouter,
     StashRouter,
+    PatchRouter,
 )
 from .Modules.Helpers import checkPixShortcut, checkRoute
 
@@ -62,6 +63,7 @@ def main():
         "Commit": CommitRouter,
         "Branch": BranchRouter,
         "Stash": StashRouter,
+        "Patch": PatchRouter,
     }
 
     allRoutes = getConcatenatedRoutes(arg) if "n" in arg else [arg]

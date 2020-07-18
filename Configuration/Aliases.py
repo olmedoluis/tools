@@ -29,4 +29,7 @@ ALIASES = {
             "ADD_STASH": ["a", "i"]
         }
     },
+    "Patch": {
+        "aliases": ["e"]
+    },
 }
