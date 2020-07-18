@@ -1,15 +1,13 @@
 def patchSelect(
-    seleccionableLinesIncludes=[], fileName="", errorMessage="", patches=[]
+    seleccionableLinesIncludes=[], fileNames=[], errorMessage="", patches=[]
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
     from os import popen
 
-    print("\n On " + fileName + "\n")
-
     terminalHeight, terminalWidth = popen("stty size", "r").read().split()
     terminalWidth = int(terminalWidth) - 1
-    selectionAreaHeight = int(terminalHeight) - 4
+    selectionAreaHeight = int(terminalHeight) - 1
 
     reset = "\x1b[0m"
     bold = "\x1b[1m"
@@ -27,14 +25,16 @@ def patchSelect(
         termSizeX=terminalWidth,
         termSizeY=selectionAreaHeight,
         patches=patches,
+        fileNames=fileNames,
     )
 
     patchControl.setPatchShowing(0)
 
     def updateConsole():
         border = borders["+"] if patchControl.getIsPatchSelected() else borders["-"]
+        inputConsole.setConsoleLine(1, 1, "On " + patchControl.getCurrentFileName())
 
-        for lineNumber in range(0, selectionAreaHeight):
+        for lineNumber in range(3, selectionAreaHeight):
             lineTextLimited = patchControl.getStyledPatchLine(lineNumber)
             textToShow = ""
 
@@ -45,6 +45,7 @@ def patchSelect(
                     if firstChar in colors
                     else dim + lineTextLimited + reset
                 )
+
                 textToShow = f"   {lineTextLimited}"
 
             inputConsole.setConsoleLine(lineNumber, 1, f"{border}{textToShow}")
@@ -88,7 +89,7 @@ def patchSelect(
 
 
 class PatchControl:
-    def __init__(self, patches, offset, termSizeX, termSizeY):
+    def __init__(self, patches, offset, termSizeX, termSizeY, fileNames):
         self.patches = patches
         self.offset = offset
         self.termSizeX = termSizeX
@@ -97,6 +98,8 @@ class PatchControl:
         self.patchIndexesSelected = []
         self.patchShowing = []
         self.textZoneArea = range(0)
+        self.fileNames = fileNames
+        self.fileNameIndex = 0
 
     def setPatchShowing(self, index):
         self.patchShowing = self.patches[index][1:]
@@ -139,3 +142,6 @@ class PatchControl:
 
     def getIsPatchSelected(self):
         return self.patchIndexSelected in self.patchIndexesSelected
+
+    def getCurrentFileName(self):
+        return self.fileNames[self.fileNameIndex]
