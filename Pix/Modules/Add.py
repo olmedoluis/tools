@@ -39,7 +39,7 @@ def add(filePaths=[], shouldVerify=True):
     if answers == "UNKNOWN_ERROR":
         return print(messages["unknown-error"])
     if len(answers) == 0:
-        return print(messages["add-nofileschoosen-error"])
+        return print(messages["error-nofileschoosen"])
 
     choices = []
     for answer in answers:
