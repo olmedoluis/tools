@@ -23,7 +23,7 @@ def parsePatches(patches):
 def parseDifferences(differencesRaw, files):
     class patch:
         def __init__(self, fileName, metaData):
-            self.fileName = fileName
+            self.fileName = messages["file-title"].format(fileName)
             self.metaData = metaData
             self.patches = []
             self.patchesSelected = []
