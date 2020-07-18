@@ -84,11 +84,7 @@ def patchSelect(errorMessage="", files=[]):
     inputConsole.deleteLastLines(selectionAreaHeight + 4)
     inputConsole.finish()
 
-    patchesOutput = []
-    for index in patchIndexesSelected:
-        patchesOutput.append(patches[index])
-
-    return patchesOutput
+    return patchControl.files
 
 
 class PatchControl:
