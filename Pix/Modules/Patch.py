@@ -7,6 +7,19 @@ def addToFile(text, filePath):
     f.close()
 
 
+def parsePatches(patches):
+    parsedPatches = []
+
+    for patch in patches:
+        if len(patch.patchesSelected):
+            parsedPatches = parsedPatches + patch.metaData
+
+            for indexSelected in patch.patchesSelected:
+                parsedPatches = parsedPatches + patch.patches[indexSelected]
+
+    return parsedPatches
+
+
 def parseDifferences(differencesRaw, files):
     class patch:
         def __init__(self, fileName, metaData):
@@ -44,7 +57,7 @@ def parseDifferences(differencesRaw, files):
 
             index = index + 1
 
-        newPatch.patches.append(lines[lastIndex:])
+        newPatch.patches.append(lines[lastIndex:] + [""])
         outputPatches.append(newPatch)
         indexFile = indexFile + 1
 
@@ -53,27 +66,22 @@ def parseDifferences(differencesRaw, files):
 
 def patchAll():
     from .Helpers import run
-    from pathlib import Path
     from .Prompts import patchSelect
+    from pathlib import Path
 
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
+    files = ["Pix/Modules/Helpers.py", "Pix/Modules/Status.py", "Pix/Modules/Add.py"]
 
-    differencesRaw = run(
-        ["git", "diff-files", "-p", "Pix/Modules/Helpers.py", "Pix/Modules/Status.py"]
-    )
-    patches = parseDifferences(
-        differencesRaw, ["Pix/Modules/Helpers.py", "Pix/Modules/Status.py"]
-    )
+    differencesRaw = run(["git", "diff-files", "-p"] + files)
+    patches = parseDifferences(differencesRaw, files)
 
     selectedPatches = patchSelect(files=patches)
 
-    return pprint(selectedPatches)
-    patchGenerated = metaData
-    for patch in selectedPatches:
-        patchGenerated = patchGenerated + patch
+    patchGenerated = parsePatches(selectedPatches)
 
     addToFile("\n".join(patchGenerated), filePath)
+
     run(
         [
             "git",
