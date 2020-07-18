@@ -45,10 +45,10 @@ def patchSelect(errorMessage="", files=[]):
                 )
 
                 lineTextLimited = (
-                    colors[firstChar] + lineTextLimited + reset
+                    colors[firstChar] + lineTextLimited
                     if firstChar in colors
-                    else dim + lineTextLimited + reset
-                )
+                    else dim + lineTextLimited
+                ) + reset
 
                 textToShow = f"   {lineTextLimited}"
 
@@ -151,7 +151,7 @@ class PatchControl:
         if not (index in self.textZoneArea):
             return False
 
-        lineText = self.patchShowing[index].strip()
+        lineText = self.patchShowing[index]
         return lineText[0 : self.termSizeX]
 
     def getIsPatchSelected(self):
