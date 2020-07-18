@@ -1,6 +1,3 @@
-from pprint import pprint
-
-
 def addToFile(text, filePath):
     f = open(filePath, "w+")
     f.write(text)
