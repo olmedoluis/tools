@@ -16,37 +16,38 @@ def patchSelect(
     dim = "\x1b[2m"
     colors = {"+": f"{bold}\x1b[32m", "-": f"{bold}\x1b[31m"}
     borders = {
-        "selected": f"\x1b[32m{bold}|{reset}",
-        "notSelected": f"\x1b[31m{bold}|{reset}",
+        "+": f"\x1b[32m{bold}|{reset}",
+        "-": f"\x1b[31m{bold}|{reset}",
     }
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
+    patchControl = PatchControl(
+        offset=0,
+        termSizeX=terminalWidth,
+        termSizeY=selectionAreaHeight,
+        patches=patches,
+    )
 
-    offset = 0
-    patchIndexesSelected = []
-    patchIndexSelected = 0
-    patchShowing = patches[0][1:]
-    textZoneArea = range(0, len(patchShowing))
+    patchControl.setPatchShowing(0)
 
     def updateConsole():
-        textZoneArea = range(0, len(patchShowing))
-        border = (
-            borders["selected"]
-            if patchIndexSelected in patchIndexesSelected
-            else borders["notSelected"]
-        )
+        border = borders["+"] if patchControl.getIsPatchSelected() else borders["-"]
 
         for lineNumber in range(0, selectionAreaHeight):
-            index = lineNumber + offset
-            lineText = patchShowing[index].strip() if index in textZoneArea else ""
-            lineTextLimited = lineText[0:terminalWidth]
-            if len(lineText) and lineText[0] in colors:
-                lineTextLimited = colors[lineText[0]] + lineTextLimited + reset
-            else:
-                lineTextLimited = dim + lineTextLimited + reset
+            lineTextLimited = patchControl.getStyledPatchLine(lineNumber)
+            textToShow = ""
 
-            inputConsole.setConsoleLine(lineNumber, 1, f"{border}   {lineTextLimited}")
+            if lineTextLimited:
+                firstChar = lineTextLimited[0]
+                lineTextLimited = (
+                    colors[firstChar] + lineTextLimited + reset
+                    if firstChar in colors
+                    else dim + lineTextLimited + reset
+                )
+                textToShow = f"   {lineTextLimited}"
+
+            inputConsole.setConsoleLine(lineNumber, 1, f"{border}{textToShow}")
 
         inputConsole.refresh()
 
@@ -57,31 +58,17 @@ def patchSelect(
         state = getMovement(char)
 
         if state == "DOWN":
-            newOffset = offset + 1
-            offset = (
-                newOffset
-                if newOffset in textZoneArea
-                and (len(patchShowing) > selectionAreaHeight)
-                and (newOffset < (len(patchShowing) * 0.5))
-                else offset
-            )
+            patchControl.increaseOffset()
         elif state == "UP":
-            newOffset = offset - 1
-            offset = newOffset if newOffset in textZoneArea else offset
+            patchControl.decreaseOffset()
         elif state == "RIGHT":
-            patchIndexSelected = (patchIndexSelected + 1) % len(patches)
-            patchShowing = patches[patchIndexSelected][1:]
-            offset = 0
+            patchControl.changePage(1)
         elif state == "LEFT":
-            patchIndexSelected = (patchIndexSelected - 1) % len(patches)
-            patchShowing = patches[patchIndexSelected][1:]
-            offset = 0
-        elif state == "EXTENDED_RIGHT" and not (
-            patchIndexSelected in patchIndexesSelected
-        ):
-            patchIndexesSelected.append(patchIndexSelected)
-        elif state == "EXTENDED_LEFT" and patchIndexSelected in patchIndexesSelected:
-            patchIndexesSelected.remove(patchIndexSelected)
+            patchControl.changePage(-1)
+        elif state == "EXTENDED_RIGHT":
+            patchControl.addIndexSelectedToPatch()
+        elif state == "EXTENDED_LEFT":
+            patchControl.removeIndexSelectedToPatch()
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
@@ -99,3 +86,56 @@ def patchSelect(
 
     return patchesOutput
 
+
+class PatchControl:
+    def __init__(self, patches, offset, termSizeX, termSizeY):
+        self.patches = patches
+        self.offset = offset
+        self.termSizeX = termSizeX
+        self.termSizeY = termSizeY
+        self.patchIndexSelected = 0
+        self.patchIndexesSelected = []
+        self.patchShowing = []
+        self.textZoneArea = range(0)
+
+    def setPatchShowing(self, index):
+        self.patchShowing = self.patches[index][1:]
+        self.textZoneArea = range(0, len(self.patchShowing))
+
+    def decreaseOffset(self):
+        newOffset = self.offset - 1
+        self.offset = newOffset if newOffset in self.textZoneArea else self.offset
+
+    def increaseOffset(self):
+        newOffset = self.offset + 1
+        offset = (
+            newOffset
+            if newOffset in self.textZoneArea
+            and (len(self.patchShowing) > self.termSizeY)
+            and (newOffset < (len(self.patchShowing) * 0.5))
+            else self.offset
+        )
+
+    def changePage(self, times):
+        self.patchIndexSelected = (self.patchIndexSelected + times) % len(self.patches)
+        self.setPatchShowing(self.patchIndexSelected)
+        self.offset = 0
+
+    def addIndexSelectedToPatch(self):
+        if not self.getIsPatchSelected():
+            self.patchIndexesSelected.append(self.patchIndexSelected)
+
+    def removeIndexSelectedToPatch(self):
+        if self.getIsPatchSelected():
+            self.patchIndexesSelected.remove(self.patchIndexSelected)
+
+    def getStyledPatchLine(self, lineNumber):
+        index = lineNumber + self.offset
+        if not (index in self.textZoneArea):
+            return False
+
+        lineText = self.patchShowing[index].strip()
+        return lineText[0 : self.termSizeX]
+
+    def getIsPatchSelected(self):
+        return self.patchIndexSelected in self.patchIndexesSelected
