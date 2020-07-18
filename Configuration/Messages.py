@@ -56,6 +56,7 @@ MESSAGES = {
     "error-samebranch": "\n {}\n".format(_themeUp("{error}✖ You already are on {keyword}$")),
     "error-stash-addedfiles": "\n {}\n".format(_themeUp("{error}✖ You only can stash added files")),
     "file-selection-finaltitle": "{}".format(_themeUp("{normal}Files selected:")),
+    "file-title": " {}".format(_themeUp("{normal}On {keyword}$")),
     "modified-title": "\n {}\n".format(_themeUp("{normal}Modified files:")),
     "modified": "\t{}".format(_themeUp("{modified}☢ $")),
     "notafile-error": "\n {}\n".format(_themeUp("{error}✖ One of the files you input is not a file")),
