@@ -13,7 +13,10 @@ def parsePatches(patches):
 
             for indexSelected in patch.patchesSelected:
                 parsedPatches = parsedPatches + patch.patches[indexSelected]
-
+    
+    if not len(parsedPatches):
+        parsedPatches = [""]
+    
     return parsedPatches if parsedPatches[-1] == "" else parsedPatches + [""]
 
 
