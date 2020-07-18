@@ -1,6 +1,4 @@
-def patchSelect(
-    seleccionableLinesIncludes=[], fileNames=[], errorMessage="", patches=[]
-):
+def patchSelect(seleccionableLinesIncludes=[], fileNames=[], errorMessage="", files=[]):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
     from os import popen
@@ -24,10 +22,11 @@ def patchSelect(
         offset=0,
         termSizeX=terminalWidth,
         termSizeY=selectionAreaHeight,
-        patches=patches,
         fileNames=fileNames,
+        files=files,
     )
 
+    patchControl.setPatchesOfFile()
     patchControl.setPatchShowing(0)
 
     def updateConsole():
@@ -89,8 +88,8 @@ def patchSelect(
 
 
 class PatchControl:
-    def __init__(self, patches, offset, termSizeX, termSizeY, fileNames):
-        self.patches = patches
+    def __init__(self, offset, termSizeX, termSizeY, fileNames, files):
+        self.patches = []
         self.offset = offset
         self.termSizeX = termSizeX
         self.termSizeY = termSizeY
@@ -100,6 +99,11 @@ class PatchControl:
         self.textZoneArea = range(0)
         self.fileNames = fileNames
         self.fileNameIndex = 0
+        self.files = files
+
+    def setPatchesOfFile(self):
+        self.patches = self.files[self.fileNameIndex].patches
+        self.patchIndexSelected = self.patchIndexSelected % len(self.patches)
 
     def setPatchShowing(self, index):
         self.patchShowing = self.patches[index][1:]
@@ -111,7 +115,7 @@ class PatchControl:
 
     def increaseOffset(self):
         newOffset = self.offset + 1
-        offset = (
+        self.offset = (
             newOffset
             if newOffset in self.textZoneArea
             and (len(self.patchShowing) > self.termSizeY)
@@ -120,17 +124,27 @@ class PatchControl:
         )
 
     def changePage(self, times):
-        self.patchIndexSelected = (self.patchIndexSelected + times) % len(self.patches)
+        newIndex = self.patchIndexSelected + times
+        self.patchIndexSelected = newIndex % len(self.patches)
+
+        if not (newIndex in range(len(self.patches))) and len(self.files) > 1:
+            self.fileNameIndex = (self.fileNameIndex + times) % len(self.files)
+            self.setPatchesOfFile()
+
         self.setPatchShowing(self.patchIndexSelected)
         self.offset = 0
 
     def addIndexSelectedToPatch(self):
         if not self.getIsPatchSelected():
-            self.patchIndexesSelected.append(self.patchIndexSelected)
+            self.files[self.fileNameIndex].patchesSelected.append(
+                self.patchIndexSelected
+            )
 
     def removeIndexSelectedToPatch(self):
         if self.getIsPatchSelected():
-            self.patchIndexesSelected.remove(self.patchIndexSelected)
+            self.files[self.fileNameIndex].patchesSelected.remove(
+                self.patchIndexSelected
+            )
 
     def getStyledPatchLine(self, lineNumber):
         index = lineNumber + self.offset
@@ -141,7 +155,7 @@ class PatchControl:
         return lineText[0 : self.termSizeX]
 
     def getIsPatchSelected(self):
-        return self.patchIndexSelected in self.patchIndexesSelected
+        return self.patchIndexSelected in self.files[self.fileNameIndex].patchesSelected
 
     def getCurrentFileName(self):
-        return self.fileNames[self.fileNameIndex]
+        return self.files[self.fileNameIndex].fileName
