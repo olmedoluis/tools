@@ -13,6 +13,7 @@ def parseDifferences(differencesRaw, files):
             self.fileName = fileName
             self.metaData = metaData
             self.patches = []
+            self.patchesSelected = []
 
     lines = differencesRaw.split("\n")
     differences = []
@@ -58,15 +59,16 @@ def patchAll():
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
 
-    differencesRaw = run(["git", "diff-files", "-p", "Pix/Modules/Helpers.py"])
-    metaData, patches = parseDifferences(differencesRaw)
-
-    selectedPatches = patchSelect(
-        patches=patches,
-        seleccionableLinesIncludes=["+", "-"],
-        fileName="Pix/Modules/Helpers.py",
+    differencesRaw = run(
+        ["git", "diff-files", "-p", "Pix/Modules/Helpers.py", "Pix/Modules/Status.py"]
+    )
+    patches = parseDifferences(
+        differencesRaw, ["Pix/Modules/Helpers.py", "Pix/Modules/Status.py"]
     )
 
+    selectedPatches = patchSelect(files=patches)
+
+    return pprint(selectedPatches)
     patchGenerated = metaData
     for patch in selectedPatches:
         patchGenerated = patchGenerated + patch
