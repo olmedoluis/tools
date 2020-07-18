@@ -67,11 +67,20 @@ def parseDifferences(differencesRaw, files):
 def patchAll():
     from .Helpers import run
     from .Prompts import patchSelect
+    from .Status import getStatus
     from pathlib import Path
+
+    status = getStatus()
+    files = []
+    for statusId in status:
+        if statusId != "added" and statusId != "branch":
+            files = files + status[statusId]
+
+    if not len(files):
+        return print("no hay data paapu")
 
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
-    files = ["Pix/Modules/Helpers.py", "Pix/Modules/Status.py", "Pix/Modules/Add.py"]
 
     differencesRaw = run(["git", "diff-files", "-p"] + files)
     patches = parseDifferences(differencesRaw, files)
