@@ -61,20 +61,10 @@ def parseDifferences(differencesRaw, files):
     return outputPatches
 
 
-def patchAll():
+def patch(files):
     from .Helpers import run
     from .Prompts import patchSelect
-    from .Status import getStatus
     from pathlib import Path
-
-    status = getStatus()
-    files = []
-    for statusId in status:
-        if statusId != "added" and statusId != "branch":
-            files = files + status[statusId]
-
-    if not len(files):
-        return print(messages["error-patch-nofiles"])
 
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
@@ -98,6 +88,30 @@ def patchAll():
     run(["rm", filePath])
 
 
+def patchAll(fileSearch):
+    from .Status import getStatus, searchInStatus
+    status = getStatus()
+
+    if len(fileSearch) > 0:
+        matches = searchInStatus(fileSearch, status, includedFiles=["added"])
+
+        return (
+            print(messages["error-nomatchfile"])
+            if len(matches) == 0
+            else remove(matches, False)
+        )
+
+    files = []
+    for statusId in status:
+        if statusId != "added" and statusId != "branch":
+            files = files + status[statusId]
+
+    if not len(files):
+        return print(messages["error-patch-nofiles"])
+
+    patch(files)
+
+
 def setUp(outsideMessages):
     global messages
     messages = outsideMessages
@@ -107,5 +121,5 @@ def Router(router, subroute):
     setUp(router.messages)
 
     if subroute == "DEFAULT":
-        patchAll()
+        patchAll(router.leftKeys[1:])
 
