@@ -12,8 +12,8 @@ def patchSelect(errorMessage="", files=[]):
     dim = "\x1b[2m"
     colors = {"+": f"{bold}\x1b[33m", "-": f"{bold}\x1b[31m"}
     borders = {
-        "+": f"\x1b[32m{bold}|{reset}",
-        "-": f"\x1b[37m{bold}|{reset}",
+        "+": f"\x1b[32m{bold}❚{reset}",
+        "-": f"\x1b[37m{bold}❚{reset}",
     }
     icons = {"+": "☢", "-": "✖"}
 
