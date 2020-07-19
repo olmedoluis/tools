@@ -1,3 +1,5 @@
+from .Helpers import run, MessageControl
+
 def addToFile(text, filePath):
     f = open(filePath, "w+")
     f.write(text)
@@ -68,7 +70,6 @@ def parseDifferences(differencesRaw, files, getMessage):
 
 
 def patch(files):
-    from .Helpers import run, MessageControl
     from .Prompts import patchSelect
     from pathlib import Path
 
@@ -99,6 +100,7 @@ def patch(files):
 
 def patchAll(fileSearch):
     from .Status import getStatus, searchInStatus
+    m = MessageControl()
 
     status = getStatus()
     if len(fileSearch) > 0:
