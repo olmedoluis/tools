@@ -88,7 +88,7 @@ def patch(files):
 
     patchGenerated = parsePatches(selectedPatches)
 
-    if not len(patchGenerated):
+    if len(patchGenerated) == 1:
         return m.log("error-empty")
 
     addToFile("\n".join(patchGenerated), filePath)
