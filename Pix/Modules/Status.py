@@ -1,4 +1,4 @@
-from .Helpers import run
+from .Helpers import run, MessageControl
 
 
 def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
@@ -83,33 +83,27 @@ def getStatus():
 
 
 def showStatus():
+    m = MessageControl()
     status = getStatus()
 
     print()
     if "branch" in status:
         branch_name = status.pop("branch")[0]
-        print(messages["branch"].format(branch_name))
+        m.log("branch", {"pm_branch": branch_name})
 
     if len(status) == 0:
-        print(messages["clean"])
+        m.log("clean")
 
     for change_name in status:
         changes = status[change_name]
 
-        print(messages[f"{change_name}-title"])
+        m.log(f"{change_name}-title")
         for change in changes:
-            print(messages[change_name].format(change))
+            m.log(change_name, {"pm_change": change})
 
     print()
 
 
-def setUp(outsideMessages):
-    global messages
-    messages = outsideMessages
-
-
 def Router(router, subroute):
-    setUp(router.messages)
-
     if subroute == "DEFAULT":
         showStatus()

@@ -10,7 +10,7 @@ from .Modules import (
     StashRouter,
     PatchRouter,
 )
-from .Modules.Helpers import checkPixShortcut, checkRoute
+from .Modules.Helpers import checkPixShortcut, checkRoute, MessageControl
 
 
 class PixTools:
@@ -21,15 +21,15 @@ class PixTools:
         self.messages = MESSAGES
 
     def getGoodRoutes(self):
-        good_routes = []
+        goodRoutes = []
 
         for route in self.user_routes:
             if route != self.actual_route:
-                good_routes.append(route)
+                goodRoutes.append(route)
             else:
                 break
 
-        return good_routes
+        return goodRoutes
 
     def getNextRoute(self):
         return "" if 0 == len(self.leftKeys) else self.leftKeys[0]
@@ -71,17 +71,22 @@ def main():
     for arguments in allRoutes:
         pixTools = PixTools(arguments)
 
-        route_name = checkPixShortcut(pixTools.actual_route, KEYS, ALIASES)
+        routeName = checkPixShortcut(pixTools.actual_route, KEYS, ALIASES)
 
-        if route_name == False:
-            good_routes = f"pix {' '.join(pixTools.getGoodRoutes())}"
-            wrong_routes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
-            return print(MESSAGES["unknownRoute"].format(good_routes, wrong_routes))
+        if routeName == False:
+            goodRoutes = f"pix {' '.join(pixTools.getGoodRoutes())}"
+            wrongRoutes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
+            m = MessageControl()
+
+            return m.log(
+                "unknownRoute",
+                {"pm_goodRoutes": goodRoutes, "pm_wrongRoutes": wrongRoutes},
+            )
 
         next_route = pixTools.getNextRoute()
-        subroute = checkRoute(next_route, KEYS[route_name], ALIASES[route_name])
+        subroute = checkRoute(next_route, KEYS[routeName], ALIASES[routeName])
 
-        requiredRouter = PIX_STORE[route_name]
+        requiredRouter = PIX_STORE[routeName]
         requiredRouter(pixTools, subroute)
 
 
