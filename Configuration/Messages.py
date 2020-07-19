@@ -62,6 +62,7 @@ MESSAGES = {
     "modified": "\t{}".format(_themeUp("{modified}☢ $")),
     "notafile-error": "\n {}\n".format(_themeUp("{error}✖ One of the files you input is not a file")),
     "notGitRepository": "\n {}\n".format(_themeUp("{error}✖ This is not a supported repository")),
+    "patch-success": "\n {}\n".format(_themeUp("{success}⚑ You have added the selected parts of the files")),
     "preview": "\n\t{}\n".format(_themeUp("{normal}Preview: {keyword}$")),
     "remove-all-nofiles": "\n {}\n".format(_themeUp("{error}✖ There is no file to remove")),
     "remove-all-success": "\n {}\n".format(_themeUp("{success}⚑ All files has been removed")),

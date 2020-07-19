@@ -29,9 +29,9 @@ def patchSelect(errorMessage="", files=[]):
     def updateConsole():
         border = borders["+"] if patchControl.getIsPatchSelected() else borders["-"]
         inputConsole.setConsoleLine(1, 2, patchControl.getFileIndexShown())
-        inputConsole.setConsoleLine(2, 1, patchControl.getCurrentFileName())
+        inputConsole.setConsoleLine(3, 1, patchControl.getCurrentFileName())
 
-        for lineNumber in range(4, selectionAreaHeight):
+        for lineNumber in range(5, selectionAreaHeight):
             lineTextLimited = patchControl.getStyledPatchLine(lineNumber)
             textToShow = ""
 
@@ -176,23 +176,23 @@ class PatchControl:
             output = (
                 output
                 + (
-                    f"\x1b[1m\x1b[32m{colorCode}∙"
+                    f"\x1b[1m\x1b[32m{colorCode} ❤"
                     if index in self.files[self.fileNameIndex].patchesSelected
-                    else f"\x1b[1m\x1b[37m{colorCode}∘"
+                    else f"\x1b[1m\x1b[37m{colorCode} •"
                 )
                 + "\x1b[0m"
             )
 
-        return output
+        return output + " "
 
     def getFileIndexShown(self):
         output = ""
 
         for index in range(0, len(self.files)):
             output = output + (
-                "\x1b[1m\x1b[35m∎\x1b[0m" + self.getPatchIndexShown()
+                "\x1b[1m\x1b[35m|\x1b[0m" + self.getPatchIndexShown()
                 if index == self.fileNameIndex
-                else "\x1b[1m\x1b[37m∎\x1b[0m"
+                else "\x1b[1m\x1b[37m|\x1b[0m"
             )
 
         return output
