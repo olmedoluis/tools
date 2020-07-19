@@ -57,3 +57,24 @@ def checkPixShortcut(keyword, outsideKeys, outsideAliases):
             return entityId
 
     return False
+
+
+class MessageControl:
+    def __init__(self):
+        from pathlib import Path
+        from json import loads
+        from Pix.Data.Theme import THEME
+
+        self.THEME = THEME
+
+        filePath = Path(__file__).parent.absolute()
+        filePath = str(filePath)[:-11] + "/Configuration/Messages.json"
+
+        with open(filePath, "r") as file:
+            self.messages = loads(file.read())["messages"]
+
+    def getMessage(self, messageId, params={}):
+        return str(self.messages[messageId]).format(**self.THEME, **params)
+
+    def log(self, messageId, params={}):
+        return print(self.getMessage(messageId, params))
