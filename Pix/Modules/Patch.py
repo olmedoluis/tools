@@ -1,5 +1,6 @@
 from .Helpers import run, MessageControl
 
+
 def addToFile(text, filePath):
     f = open(filePath, "w+")
     f.write(text)
@@ -92,6 +93,9 @@ def patch(files):
 
     addToFile("\n".join(patchGenerated), filePath)
 
+    with open(filePath, "w+") as file:
+        file.write("\n".join(patchGenerated))
+
     run(["git", "apply", "--cached", filePath])
 
     run(["rm", filePath])
@@ -100,6 +104,7 @@ def patch(files):
 
 def patchAll(fileSearch):
     from .Status import getStatus, searchInStatus
+
     m = MessageControl()
 
     status = getStatus()
