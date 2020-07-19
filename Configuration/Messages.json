@@ -38,7 +38,7 @@
     "error-samebranch": "\n {th_error}✖ You already are on {th_keyword}{pm_branch}\n",
     "error-stash-addedfiles": "\n {th_error}✖ You only can stash added files\n",
     "file-selection-finaltitle": "{th_normal}Files selected:",
-    "file-title": " {th_normal}On {th_keyword}{param}",
+    "file-title": " {th_normal}On {th_keyword}{pm_file}",
     "modified-title": "\n {th_normal}Modified files:\n",
     "modified": "\t{th_modified}☢ {pm_change}",
     "notafile-error": "\n {th_error}✖ One of the files you input is not a file\n",
