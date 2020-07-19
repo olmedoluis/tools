@@ -159,7 +159,7 @@ class PatchControl:
             return False
 
         lineText = self.patchShowing[index]
-        return lineText[0 : self.termSizeX]
+        return lineText[0 : self.termSizeX - 5]
 
     def getIsPatchSelected(self):
         return self.patchIndexSelected in self.files[self.fileNameIndex].patchesSelected
