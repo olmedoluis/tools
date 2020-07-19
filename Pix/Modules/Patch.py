@@ -106,10 +106,7 @@ def patchAll(fileSearch):
 
         return m.log("error-nomatchfile") if len(matches) == 0 else patch(matches)
 
-    files = []
-    for statusId in status:
-        if statusId != "added" and statusId != "branch" and statusId != "untracked":
-            files = files + status[statusId]
+    files = status["modified"] if "modified" in status else []
 
     if not len(files):
         return m.log("error-patch-nofiles")
