@@ -89,6 +89,7 @@ def patch(files):
     run(["git", "apply", "--cached", filePath])
 
     run(["rm", filePath])
+    print(messages["patch-success"])
 
 
 def patchAll(fileSearch):
