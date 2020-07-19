@@ -1,34 +1,40 @@
-from .Helpers import run
+from .Helpers import run, MessageControl
 from .Status import getStatus
 
 
 def addToStash():
     from .Prompts import text
 
+    m = MessageControl()
+
     if not "added" in getStatus():
-        return print(messages["error-stash-addedfiles"])
+        return m.log("error-stash-addedfiles")
 
     print()
-    title = text(title=messages["stash-in-title"], errorMessage=messages["scape-error"])
+    title = text(
+        title=m.getMessage("stash-in-title"), errorMessage=m.getMessage("scape-error")
+    )
 
     if title == "":
-        return print(messages["error-empty"])
+        return m.log("error-empty")
 
     run(["git", "stash", "push", "-m", title])
-    print(messages["stash-in-success"])
+    m.log("stash-in-success")
 
 
 def stashSelection():
     from .Prompts import select
 
+    m = MessageControl()
+
     if len(getStatus()) > 1:
-        return print(messages["error-haschanges"])
+        return m.log("error-haschanges")
 
     stashesOutput = run(["git", "stash", "list"])
     stashesSpaced = stashesOutput.rstrip().split("\n")
 
     if stashesSpaced[0] == "":
-        return print(messages["error-nostashes"])
+        return m.log("error-nostashes")
 
     stashList = []
     for stashWithSpaces in stashesSpaced:
@@ -41,34 +47,32 @@ def stashSelection():
         branchEndIndex = stash.find(" ", branchStartIndex) - 1
         branch = stash[branchStartIndex:branchEndIndex]
 
-        content = stash[branchEndIndex + 2 :]
+        name = stash[branchEndIndex + 2 :]
 
-        stashList.append(messages["stash-listitem"].format(stashId, content, branch))
+        stashList.append(
+            m.getMessage(
+                "stash-listitem",
+                {"pm_stashid": stashId, "pm_stashname": name, "pm_stashbranch": branch},
+            )
+        )
 
     print()
     stashSelected = select(
-        title=messages["branch-selection-title"],
+        title=m.getMessage("branch-selection-title"),
         options=stashList,
         selectedColor="\x1b[36m",
-        errorMessage=messages["scape-error"],
+        errorMessage=m.getMessage("scape-error"),
     )
 
     if stashSelected == "":
-        return print(messages["error-empty"])
+        return m.log("error-empty")
 
     stashId = stashSelected[0]
     run(["git", "stash", "pop", stashId])
-    print(messages["stash-back-success"].format(stashSelected))
-
-
-def setUp(outsideMessages):
-    global messages
-    messages = outsideMessages
+    m.log("stash-back-success", {"pm_stash": stashSelected})
 
 
 def Router(router, subroute):
-    setUp(router.messages)
-
     if subroute == "ADD_STASH":
         addToStash()
     if subroute == "DEFAULT":
