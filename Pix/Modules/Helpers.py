@@ -8,14 +8,14 @@ def removeColors(string):
 
 
 def _errorRunValidator(error):
-    from Configuration import MESSAGES
+    m = MessageControl()
 
     if error.find("not a git repository") != -1:
-        print(MESSAGES["notGitRepository"])
+        m.log("notGitRepository")
     elif error.find("did not match any files") != 1:
-        print(MESSAGES["notafile-error"])
+        m.log("notafile-error")
     else:
-        print(MESSAGES["unknown-error"])
+        m.log("unknown-error")
 
 
 def run(command=[]):
