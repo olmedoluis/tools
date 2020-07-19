@@ -1,5 +1,5 @@
 from sys import argv
-from Configuration import ALIASES, MESSAGES
+from Configuration import ALIASES
 from .Data.PixRoutes import KEYS
 from .Modules import (
     AddRouter,
@@ -18,7 +18,6 @@ class PixTools:
         self.user_routes = argv
         self.actual_route = argv[0]
         self.leftKeys = argv[1:]
-        self.messages = MESSAGES
 
     def getGoodRoutes(self):
         goodRoutes = []
