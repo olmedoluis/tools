@@ -5,7 +5,7 @@ def getOptionsWithStates(options):
             self.content = content
 
         def getStateString(self):
-            return "❤" if self.state else "⚬"
+            return "❤" if self.state else "•"
 
         def setState(self, newState):
             self.state = newState

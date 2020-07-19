@@ -1,4 +1,4 @@
-from .Helpers import run
+from .Helpers import run, MessageControl
 
 
 def getHasChanges(change=""):
@@ -12,16 +12,17 @@ def getHasChanges(change=""):
 def branchSelection(branchSearch):
     from .Prompts import select
 
+    m = MessageControl()
     hasChanges = getHasChanges()
 
     if hasChanges:
-        return print(messages["error-haschanges"])
+        return m.log("error-haschanges")
 
     branchesOutput = run(["git", "branch"])
     branchesSpaced = branchesOutput.rstrip().split("\n")
 
     if branchesSpaced[0] == "":
-        return print(messages["error-nobranches"])
+        return m.log("error-nobranches")
 
     if branchSearch != "":
         branchMatch = []
@@ -30,7 +31,7 @@ def branchSelection(branchSearch):
                 branchMatch.append(branch)
 
         if len(branchMatch) == 0:
-            return print(messages["error-nomatchbranch"].format(branchSearch))
+            return m.log("error-nomatchbranch", {"pm_branch": branchSearch})
 
         branchesSpaced = branchMatch
 
@@ -47,59 +48,60 @@ def branchSelection(branchSearch):
     if len(branches) > 1:
         print()
         branchSelected = select(
-            title=messages["branch-selection-title"],
+            title=m.getMessage("branch-selection-title"),
             options=branches,
             selectedColor="\x1b[33m",
-            errorMessage=messages["scape-error"],
+            errorMessage=m.getMessage("scape-error"),
         )
 
         if branchSelected == "":
-            return print(messages["error-empty"])
+            return m.log("error-empty")
 
     if branchSelected != actualBranch:
         run(["git", "checkout", branchSelected])
-        print(messages["branch-success"].format(branchSelected))
+        m.log("branch-success", {"pm_branch": branchSelected})
     else:
-        print(messages["error-samebranch"].format(branchSelected))
+        m.log("error-samebranch", {"pm_branch": branchSelected})
 
 
 def branchCreation():
     from .Prompts import many, confirm
 
+    m = MessageControl()
     hasChanges = getHasChanges()
 
     if hasChanges:
-        return print(messages["error-haschanges"])
+        return m.log("error-haschanges")
 
     options = ["feature", "refactor", "bugfix", "style"]
-    scapeError = messages["scape-error"]
+    scapeError = m.getMessage("scape-error")
 
     print()
     answers = many(
         [
             {
                 "type": "Select",
-                "title": messages["branch-type-title"],
+                "title": m.getMessage("branch-type-title"),
                 "options": options,
                 "selectedColor": "\x1b[33m",
                 "errorMessage": scapeError,
             },
             {
                 "type": "Text",
-                "title": messages["branch-id-title"],
+                "title": m.getMessage("branch-id-title"),
                 "placeHolder": "",
                 "errorMessage": scapeError,
             },
             {
                 "type": "Text",
-                "title": messages["branch-about-title"],
+                "title": m.getMessage("branch-about-title"),
                 "errorMessage": scapeError,
             },
         ]
     )
 
     if len(answers) != 3:
-        return print(messages["error-empty"])
+        return m.log("error-empty")
 
     kind, ticketId, about = answers
     ticketId = ticketId.upper().replace(" ", "-")
@@ -107,33 +109,26 @@ def branchCreation():
 
     branch = f"{kind}/{ticketId}-{about}"
 
-    print(messages["preview"].format(branch))
+    m.log("preview", {"pm_preview": branch})
 
-    isSure = confirm(title=messages["confirmation"])
+    isSure = confirm(title=m.getMessage("confirmation"))
 
     if isSure:
         run(["git", "branch", branch])
-        print(messages["branch-success"].format(branch))
+        m.log("branch-success", {"pm_branch": branch})
     else:
-        return print(messages["commit-cancel"])
+        return m.log("commit-cancel")
 
-    shouldSwitch = confirm(title=messages["branch-shouldswitch"])
+    shouldSwitch = confirm(title=m.getMessage("branch-shouldswitch"))
 
     if shouldSwitch:
         run(["git", "checkout", branch])
-        print(messages["branch-switchsuccess"].format(branch))
+        m.log("branch-switchsuccess", {"pm_branch": branch})
     else:
-        print(messages["error-inputcancel"])
-
-
-def setUp(outsideMessages):
-    global messages
-    messages = outsideMessages
+        m.log("error-inputcancel")
 
 
 def Router(router, subroute):
-    setUp(router.messages)
-
     if subroute == "BRANCH_CREATION":
         branchCreation()
     elif subroute == "DEFAULT":

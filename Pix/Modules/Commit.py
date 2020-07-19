@@ -1,4 +1,4 @@
-from .Helpers import run, removeColors
+from .Helpers import run, removeColors, MessageControl
 
 
 def getCommonDirectory(directories):
@@ -30,67 +30,61 @@ def save():
     from .Prompts import many, confirm
     from .Status import getStatus
 
+    m = MessageControl()
     status = getStatus()
 
     if not "added" in status:
-        return print(messages["commit-nofiles"])
+        return m.log("commit-nofiles")
 
     addedFiles = status["added"]
 
-    print(messages["added-title"])
+    m.log("added-title")
     for addedFile in addedFiles:
-        print(messages["added"].format(addedFile))
-    print()
+        m.log("added", {"pm_change": addedFile})
 
     options = ["feat", "refactor", "fix", "style"]
-    scapeError = messages["scape-error"]
-    commonDir = getCommonDirectory(status["added"])
+    scapeError = m.getMessage("scape-error")
+    commonDir = getCommonDirectory(addedFiles)
 
+    print()
     answers = many(
         [
             {
                 "type": "Select",
-                "title": messages["commit-type-title"],
+                "title": m.getMessage("commit-type-title"),
                 "options": options,
                 "selectedColor": "\x1b[33m",
                 "errorMessage": scapeError,
             },
             {
                 "type": "Text",
-                "title": messages["commit-scope-title"],
+                "title": m.getMessage("commit-scope-title"),
                 "placeHolder": commonDir,
                 "errorMessage": scapeError,
             },
             {
                 "type": "Text",
-                "title": messages["commit-about-title"],
+                "title": m.getMessage("commit-about-title"),
                 "errorMessage": scapeError,
             },
         ]
     )
 
     if len(answers) != 3:
-        return print(messages["error-empty"])
+        return m.log("error-empty")
 
     commit = "{}({}):{}".format(*answers)
-    print(messages["preview"].format(commit))
+    m.log("preview", {"pm_preview": commit})
 
-    isSure = confirm(title=messages["confirmation"])
+    isSure = confirm(title=m.getMessage("confirmation"))
 
     if isSure:
         run(["git", "commit", "-m", commit])
-        print(messages["commit-success"])
+        m.log("commit-success")
     else:
-        print(messages["commit-cancel"])
-
-
-def setUp(outsideMessages):
-    global messages
-    messages = outsideMessages
+        m.log("commit-cancel")
 
 
 def Router(router, subroute):
-    setUp(router.messages)
-
     if subroute == "DEFAULT":
         save()

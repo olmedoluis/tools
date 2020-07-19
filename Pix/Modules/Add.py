@@ -1,10 +1,11 @@
-from .Helpers import run, removeColors
+from .Helpers import run, removeColors, MessageControl
 from .Status import getStatus, searchInStatus
 
 
 def add(filePaths=[], shouldVerify=True):
     from .Prompts import multiSelect
 
+    m = MessageControl()
     status = getStatus()
 
     specificFiles = filePaths if filePaths else []
@@ -15,7 +16,7 @@ def add(filePaths=[], shouldVerify=True):
 
     if len(specificFiles) == 1 or not shouldVerify:
         run(["git", "add"] + specificFiles)
-        return print(messages["add-success"])
+        return m.log("add-success")
 
     options = specificFiles
     if len(specificFiles) == 0:
@@ -27,36 +28,37 @@ def add(filePaths=[], shouldVerify=True):
             options = options + statusContent
 
     if len(options) == 0:
-        return print(messages["add-nofiles-error"])
+        return m.log("add-nofiles-error")
 
     print()
     answers = multiSelect(
-        title=messages["add-adition-title"],
-        finalTitle=messages["file-selection-finaltitle"],
+        title=m.getMessage("add-adition-title"),
+        finalTitle=m.getMessage("file-selection-finaltitle"),
         options=options,
     )
 
     if answers == "UNKNOWN_ERROR":
-        return print(messages["unknown-error"])
+        return m.log("unknown-error")
     if len(answers) == 0:
-        return print(messages["error-nofileschoosen"])
+        return m.log("error-nofileschoosen")
 
     choices = []
     for answer in answers:
         choices.append(removeColors(answer))
 
     run(["git", "add"] + choices)
-    print(messages["add-success"])
+    m.log("add-success")
 
 
 def addAll(fileSearch):
+    m = MessageControl()
     status = getStatus()
 
     if len(fileSearch) > 0:
         matches = searchInStatus(fileSearch, status, excludedFiles=["branch", "added"])
 
         return (
-            print(messages["error-nomatchfile"])
+            m.log("error-nomatchfile")
             if len(matches) == 0
             else add(matches, shouldVerify=False)
         )
@@ -71,19 +73,12 @@ def addAll(fileSearch):
 
     if hasFilesToAdd:
         run(["git", "add", "."])
-        print(messages["add-all-success"])
+        m.log("add-all-success")
     else:
-        print(messages["add-all-nofiles"])
-
-
-def setUp(outsideMessages):
-    global messages
-    messages = outsideMessages
+        m.log("add-all-nofiles")
 
 
 def Router(router, subroute):
-    setUp(router.messages)
-
     if subroute == "ADD_ALL":
         addAll(router.leftKeys[1:])
     if subroute == "DEFAULT":

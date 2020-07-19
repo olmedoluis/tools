@@ -154,12 +154,12 @@ class PatchControl:
             )
 
     def getStyledPatchLine(self, lineNumber):
-        index = lineNumber + self.offset - 4
+        index = lineNumber + self.offset - 5
         if not (index in self.textZoneArea):
             return False
 
         lineText = self.patchShowing[index]
-        return lineText[0 : self.termSizeX]
+        return lineText[0 : self.termSizeX - 5]
 
     def getIsPatchSelected(self):
         return self.patchIndexSelected in self.files[self.fileNameIndex].patchesSelected
