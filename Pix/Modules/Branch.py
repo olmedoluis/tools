@@ -71,7 +71,7 @@ def branchCreation():
     hasChanges = getHasChanges()
 
     if hasChanges:
-        return print(messages["error-haschanges"])
+        return m.log("error-haschanges")
 
     options = ["feature", "refactor", "bugfix", "style"]
     scapeError = m.getMessage("scape-error")
@@ -111,7 +111,7 @@ def branchCreation():
 
     m.log("preview", {"pm_preview": branch})
 
-    isSure = confirm(title=messages["confirmation"])
+    isSure = confirm(title=m.getMessage("confirmation"))
 
     if isSure:
         run(["git", "branch", branch])
@@ -119,7 +119,7 @@ def branchCreation():
     else:
         return m.log("commit-cancel")
 
-    shouldSwitch = confirm(title=messages["branch-shouldswitch"])
+    shouldSwitch = confirm(title=m.getMessage("branch-shouldswitch"))
 
     if shouldSwitch:
         run(["git", "checkout", branch])
