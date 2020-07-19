@@ -20,10 +20,10 @@ def parsePatches(patches):
     return parsedPatches if parsedPatches[-1] == "" else parsedPatches + [""]
 
 
-def parseDifferences(differencesRaw, files):
-    class patch:
+def parseDifferences(differencesRaw, files, getMessage):
+    class Patch:
         def __init__(self, fileName, metaData):
-            self.fileName = messages["file-title"].format(fileName)
+            self.fileName = fileName
             self.metaData = metaData
             self.patches = []
             self.patchesSelected = []
@@ -46,7 +46,10 @@ def parseDifferences(differencesRaw, files):
     indexFile = 0
     for lines in differences:
         metaData = lines[:4]
-        newPatch = patch(fileName=files[indexFile], metaData=metaData)
+        newPatch = Patch(
+            fileName=getMessage("file-title", {"pm_file": files[indexFile]}),
+            metaData=metaData,
+        )
 
         index = 4
         lastIndex = 4
@@ -65,31 +68,33 @@ def parseDifferences(differencesRaw, files):
 
 
 def patch(files):
-    from .Helpers import run
+    from .Helpers import run, MessageControl
     from .Prompts import patchSelect
     from pathlib import Path
+
+    m = MessageControl()
 
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
 
     differencesRaw = run(["git", "diff-files", "-p"] + files)
-    patches = parseDifferences(differencesRaw, files)
+    patches = parseDifferences(differencesRaw, files, m.getMessage)
 
     selectedPatches = patchSelect(
-        files=patches, errorMessage=messages["error-nofileschoosen"]
+        files=patches, errorMessage=m.getMessage("error-nofileschoosen")
     )
 
     patchGenerated = parsePatches(selectedPatches)
 
     if not len(patchGenerated):
-        return print(messages["error-empty"])
+        return m.log("error-empty")
 
     addToFile("\n".join(patchGenerated), filePath)
 
     run(["git", "apply", "--cached", filePath])
 
     run(["rm", filePath])
-    print(messages["patch-success"])
+    m.log("patch-success")
 
 
 def patchAll(fileSearch):
@@ -99,11 +104,7 @@ def patchAll(fileSearch):
     if len(fileSearch) > 0:
         matches = searchInStatus(fileSearch, status, includedFiles=["modified"])
 
-        return (
-            print(messages["error-nomatchfile"])
-            if len(matches) == 0
-            else patch(matches)
-        )
+        return m.log("error-nomatchfile") if len(matches) == 0 else patch(matches)
 
     files = []
     for statusId in status:
@@ -111,19 +112,12 @@ def patchAll(fileSearch):
             files = files + status[statusId]
 
     if not len(files):
-        return print(messages["error-patch-nofiles"])
+        return m.log("error-patch-nofiles")
 
     patch(files)
 
 
-def setUp(outsideMessages):
-    global messages
-    messages = outsideMessages
-
-
 def Router(router, subroute):
-    setUp(router.messages)
-
     if subroute == "DEFAULT":
         patchAll(router.leftKeys)
 
