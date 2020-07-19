@@ -12,7 +12,7 @@ def _errorRunValidator(error):
 
     if error.find("not a git repository") != -1:
         m.log("notGitRepository")
-    elif error.find("did not match any files") != 1:
+    elif error.find("did not match any files") != -1:
         m.log("notafile-error")
     else:
         m.log("unknown-error")
