@@ -21,6 +21,7 @@ THEME = {
     "th_deleted": f"{BOLD}{RED_HIGH}",
     "th_untracked": f"{BOLD}{BLUE_HIGH}",
     "th_renamed": f"{BOLD}{RED_LOW}",
+    "th_conflicted": f"{BOLD}{WHITE_HIGH}",
     "th_error": f"{BOLD}{RED_HIGH}",
     "th_change": YELLOW_LOW,
     "th_dim": DIM,
