@@ -48,6 +48,7 @@ def getStatus():
     STATUS_MATCHES = {
         "##": "branch",
         "??": "untracked",
+        "UU": "conflicted",
         "M": "modified",
         "R": "renamed",
         "A": "added",
