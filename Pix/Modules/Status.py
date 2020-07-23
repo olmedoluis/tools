@@ -25,9 +25,9 @@ def parseChange(status, changeId, changeName, path):
     draggedChange = status[changeName] if changeName in status else []
 
     if changeId == "R":
-        files = path.split(" -> ")
-        oldFilePaths = files[0].split("/")
-        newFilePaths = files[1].split("/")
+        oldFilePaths, newFilePaths = path.split(" -> ")
+        oldFilePaths = oldFilePaths.split("/")
+        newFilePaths = newFilePaths.split("/")
 
         for index in range(len(oldFilePaths)):
             if not oldFilePaths[index] == newFilePaths[index]:
