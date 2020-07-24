@@ -24,6 +24,8 @@
     "commit-success": "\n {th_success}⚑ You have commited added files\n",
     "commit-type-title": "{th_normal}What type of commit is this?",
     "confirmation": "{th_normal}Are you sure? y/n",
+    "conflicted-title": "\n {th_normal}Conflicted files:\n",
+    "conflicted": "\t{th_conflicted}⚯ {pm_change}",
     "deleted-title": "\n {th_normal}Deleted files:\n",
     "deleted": "\t{th_deleted}✝ {pm_change}",
     "error-empty": "\n {th_error}✖ You left a field empty\n",
