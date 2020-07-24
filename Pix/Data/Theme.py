@@ -1,4 +1,4 @@
-RESET = "\x1b[0m" + "\u001b[0m"
+RESET = "\u001b[0m"
 CODE = "\u001b[38;5;"
 
 THEME = {
