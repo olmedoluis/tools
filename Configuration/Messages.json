@@ -53,7 +53,6 @@
     "remove-nofileschoosen-error": "\n {th_error}✖ No files has been choosen\n",
     "remove-removing-title": "{th_normal}Select files to remove:",
     "remove-success": "\n {th_success}⚑ Selected files has been removed\n",
-    "renamed-modify": "{param}{th_change}{param}",
     "renamed-title": "\n {th_normal}Renamed files:\n",
     "renamed": "\t{th_renamed}✦ {pm_change}",
     "scape-error": "\n {th_error}✖ You have exit pix\n",
