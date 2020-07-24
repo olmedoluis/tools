@@ -48,23 +48,18 @@ def patchSelect(errorMessage="", files=[], messages=defaultMessages):
         inputConsole.setConsoleLine(3, 1, patchControl.getCurrentFileName())
 
         for lineNumber in range(5, selectionAreaHeight):
-            lineTextLimited = patchControl.getStyledPatchLine(lineNumber)
-            textToShow = ""
+            textToShow = patchControl.getStyledPatchLine(lineNumber)
             key = "Dim"
 
-            if lineTextLimited:
-                firstChar = lineTextLimited[0]
+            if textToShow != "":
+                firstChar = textToShow[0]
                 key = KEYWORDS[firstChar] if firstChar in KEYWORDS else "Dim"
 
-                textToShow = (
-                    lineTextLimited[1:] if firstChar in KEYWORDS else lineTextLimited
-                )
+                textToShow = textToShow[1:] if firstChar in KEYWORDS else textToShow
 
             message = messages[f"lineBody{key}"].format(in_text=textToShow)
 
-            inputConsole.setConsoleLine(
-                lineNumber, 1, f"{lineStart}" + message
-            )
+            inputConsole.setConsoleLine(lineNumber, 1, f"{lineStart}{message}")
 
         inputConsole.refresh()
 
@@ -168,7 +163,7 @@ class PatchControl:
     def getStyledPatchLine(self, lineNumber):
         index = lineNumber + self.offset - 5
         if not (index in self.textZoneArea):
-            return False
+            return ""
 
         lineText = self.patchShowing[index]
         return lineText[0 : self.termSizeX - 5]
