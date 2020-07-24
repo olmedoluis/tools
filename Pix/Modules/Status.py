@@ -49,6 +49,7 @@ def getStatus():
         "##": "branch",
         "??": "untracked",
         "UU": "conflicted",
+        "U": "conflicted",
         "M": "modified",
         "R": "renamed",
         "A": "added",
