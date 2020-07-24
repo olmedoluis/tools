@@ -1,4 +1,5 @@
 from .Helpers import run, MessageControl
+from Pix.Data.Theme import THEME
 
 
 def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
@@ -33,7 +34,7 @@ def parseChange(status, changeId, changeName, path):
             if not oldFilePaths[index] == newFilePaths[index]:
                 path = (
                     oldFilePaths[:index]
-                    + [f"\x1b[33m" + newFilePaths[index]]
+                    + [THEME["th_modified"] + newFilePaths[index]]
                     + newFilePaths[index + 1 :]
                 )
                 path = "/".join(path)
