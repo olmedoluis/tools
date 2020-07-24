@@ -21,63 +21,57 @@ def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
     return matches
 
 
+def parseChange(status, changeId, changeName, path):
+    draggedChange = status[changeName] if changeName in status else []
+
+    if changeId == "R":
+        oldFilePaths, newFilePaths = path.split(" -> ")
+        oldFilePaths = oldFilePaths.split("/")
+        newFilePaths = newFilePaths.split("/")
+
+        for index in range(len(oldFilePaths)):
+            if not oldFilePaths[index] == newFilePaths[index]:
+                path = (
+                    oldFilePaths[:index]
+                    + [f"\x1b[33m" + newFilePaths[index]]
+                    + newFilePaths[index + 1 :]
+                )
+                path = "/".join(path)
+                break
+
+    status[changeName] = [*draggedChange, path]
+
+    return status
+
+
 def getStatus():
     STATUS_MATCHES = {
-        "#": "branch",
+        "##": "branch",
+        "??": "untracked",
         "M": "modified",
-        "?": "untracked",
         "R": "renamed",
         "A": "added",
         "D": "deleted",
     }
 
-    status_data = run(["git", "status", "-sb"])
-    status_data = status_data.rstrip().split("\n")
+    statusData = run(["git", "status", "-sb"])
+    statusData = statusData.rstrip().split("\n")
 
     status = {}
-    for change in status_data:
-        prefix = change[:2]
-        firstCode = change[0]
-        secondCode = change[1]
-        content = change[3:]
-        change_name = ""
-        second_change_name = ""
+    for changeRaw in statusData:
+        change = changeRaw[3:]
+        changeId = changeRaw[:2]
+        firstLetter, secondLetter = changeId
 
-        if "R" in prefix:
-            files = content.split(" -> ")
-            oldFilePaths = files[0].split("/")
-            newFilePaths = files[1].split("/")
+        if changeId in STATUS_MATCHES:
+            parseChange(status, changeId, STATUS_MATCHES[changeId], change)
+            continue
 
-            for index in range(0, len(oldFilePaths)):
-                if not oldFilePaths[index] == newFilePaths[index]:
-                    slash = "" if len(newFilePaths[index:]) == 1 else "/"
-                    content = "{}\x1b[33m{}".format(
-                        "/".join(oldFilePaths[0:index]) + slash,
-                        "/".join(newFilePaths[index:]),
-                    )
-                    break
+        if firstLetter != " ":
+            parseChange(status, firstLetter, STATUS_MATCHES["A"], change)
 
-        if firstCode.isalpha():
-            change_name = STATUS_MATCHES["A"]
-            if secondCode != " ":
-                second_name = STATUS_MATCHES[secondCode]
-                second_change_name = second_name if second_name != "" else ""
-        else:
-            change_name = (
-                STATUS_MATCHES[secondCode]
-                if firstCode == " "
-                else STATUS_MATCHES[firstCode]
-            )
-
-        if not change_name in status:
-            status[change_name] = []
-
-        if not second_change_name in status and second_change_name != "":
-            status[second_change_name] = []
-
-        status[change_name].append(content)
-        if second_change_name != "":
-            status[second_change_name].append(content)
+        if secondLetter != " ":
+            parseChange(status, secondLetter, STATUS_MATCHES[secondLetter], change)
 
     return status
 

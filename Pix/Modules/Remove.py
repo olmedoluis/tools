@@ -13,7 +13,7 @@ def remove(filePaths=[], shouldVerify=True):
         specificFiles = searchInStatus(filePaths, status, includedFiles=["added"])
 
     if len(specificFiles) == 1 or not shouldVerify:
-        run(["git", "reset", "HEAD"] + specificFiles)
+        run(["git", "reset"] + specificFiles)
         return m.log("remove-success")
 
     options = status["added"] if "added" in status else []
@@ -39,7 +39,7 @@ def remove(filePaths=[], shouldVerify=True):
     for answer in answers:
         choices.append(removeColors(answer))
 
-    run(["git", "reset", "HEAD"] + choices)
+    run(["git", "reset"] + choices)
     m.log("remove-success")
 
 
@@ -63,7 +63,7 @@ def removeAll(fileSearch):
         break
 
     if hasFilesToRemove:
-        run(["git", "reset", "HEAD", "."])
+        run(["git", "reset", "."])
         m.log("remove-all-success")
     else:
         m.log("remove-all-nofiles")
