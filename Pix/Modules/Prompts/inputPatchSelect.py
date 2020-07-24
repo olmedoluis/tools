@@ -1,4 +1,17 @@
-def patchSelect(errorMessage="", files=[]):
+from Pix.Data.Theme import THEME, RESET
+
+KEYWORDS = {"in_text": "{in_text}"}
+
+defaultMessages = {
+    "lineStartSel": "{th_added}❚{th_reset}".format(**THEME, **KEYWORDS),
+    "lineStart": "{th_normal}❚{th_reset}".format(**THEME, **KEYWORDS),
+    "lineBodyMod": "   {th_modified}☢{in_text}{th_reset}".format(**THEME, **KEYWORDS),
+    "lineBodyDel": "   {th_deleted}✖{in_text}{th_reset}".format(**THEME, **KEYWORDS),
+    "lineBodyDim": "   {th_dim}{in_text}{th_reset}".format(**THEME, **KEYWORDS),
+}
+
+
+def patchSelect(errorMessage="", files=[], messages=defaultMessages):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
     from os import popen
@@ -7,15 +20,13 @@ def patchSelect(errorMessage="", files=[]):
     terminalWidth = int(terminalWidth) - 1
     selectionAreaHeight = int(terminalHeight) - 1
 
-    reset = "\x1b[0m"
-    bold = "\x1b[1m"
-    dim = "\x1b[2m"
-    colors = {"+": f"{bold}\x1b[33m", "-": f"{bold}\x1b[31m"}
+    dim = THEME["th_dim"]
+    colors = {"+": THEME["th_modified"], "-": THEME["th_deleted"]}
     borders = {
-        "+": f"\x1b[32m{bold}❚{reset}",
-        "-": f"\x1b[37m{bold}❚{reset}",
+        "+": THEME["th_added"] + f"❚{RESET}",
+        "-": THEME["th_normal"] + f"❚{RESET}",
     }
-    icons = {"+": "☢", "-": "✖"}
+    KEYWORDS = {"+": "Mod", "-": "Del"}
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
@@ -27,32 +38,33 @@ def patchSelect(errorMessage="", files=[]):
     patchControl.setPatchShowing(0)
 
     def updateConsole():
-        border = borders["+"] if patchControl.getIsPatchSelected() else borders["-"]
+        lineStart = (
+            messages["lineStartSel"]
+            if patchControl.getIsPatchSelected()
+            else messages["lineStart"]
+        )
+
         inputConsole.setConsoleLine(1, 2, patchControl.getFileIndexShown())
         inputConsole.setConsoleLine(3, 1, patchControl.getCurrentFileName())
 
         for lineNumber in range(5, selectionAreaHeight):
             lineTextLimited = patchControl.getStyledPatchLine(lineNumber)
             textToShow = ""
+            key = "Dim"
 
             if lineTextLimited:
                 firstChar = lineTextLimited[0]
+                key = KEYWORDS[firstChar] if firstChar in KEYWORDS else "Dim"
 
-                lineTextLimited = (
-                    icons[firstChar] + lineTextLimited[1:]
-                    if firstChar in icons
-                    else lineTextLimited
+                textToShow = (
+                    lineTextLimited[1:] if firstChar in KEYWORDS else lineTextLimited
                 )
 
-                lineTextLimited = (
-                    colors[firstChar] + lineTextLimited
-                    if firstChar in colors
-                    else dim + lineTextLimited
-                ) + reset
+            message = messages[f"lineBody{key}"].format(in_text=textToShow)
 
-                textToShow = f"   {lineTextLimited}"
-
-            inputConsole.setConsoleLine(lineNumber, 1, f"{border}{textToShow}")
+            inputConsole.setConsoleLine(
+                lineNumber, 1, f"{lineStart}" + message
+            )
 
         inputConsole.refresh()
 
