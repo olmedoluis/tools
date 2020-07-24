@@ -1,5 +1,5 @@
-RESET = "\x1b[0m"
-BOLD = "\x1b[1m"
+RESET = "\x1b[0m" + "\u001b[0m"
+BOLD = "\u001b[1m"
 DIM = "\x1b[2m"
 
 RED_LOW = "\x1b[31m"
@@ -10,19 +10,26 @@ GREEN_HIGH = "\x1b[92m"
 BLUE_HIGH = "\x1b[94m"
 MAGENTA_HIGH = "\x1b[95m"
 WHITE_HIGH = "\x1b[97m"
-
+CODE = u"\u001b[38;5;"
 
 THEME = {
-    "th_normal": f"{BOLD}{WHITE_HIGH}",
-    "th_success": f"{BOLD}{GREEN_HIGH}",
-    "th_keyword": f"{BOLD}{MAGENTA_HIGH}",
-    "th_added": f"{BOLD}{GREEN_HIGH}",
-    "th_modified": f"{BOLD}{YELLOW_LOW}",
-    "th_deleted": f"{BOLD}{RED_HIGH}",
-    "th_untracked": f"{BOLD}{BLUE_HIGH}",
-    "th_renamed": f"{BOLD}{RED_LOW}",
-    "th_conflicted": f"{BOLD}{WHITE_HIGH}",
-    "th_error": f"{BOLD}{RED_HIGH}",
-    "th_change": YELLOW_LOW,
-    "th_dim": DIM,
+    "th_normal": f"{CODE}15;1m",
+    "th_success": f"{CODE}47;1m",
+    "th_keyword": f"{CODE}171;1m",
+    "th_added": f"{CODE}48;1m",
+    "th_modified": f"{CODE}221;1m",
+    "th_deleted": f"{CODE}203;1m",
+    "th_untracked": f"{CODE}69;1m",
+    "th_renamed": f"{CODE}203;1m",
+    "th_conflicted": f"{CODE}209;1m",
+    "th_error": f"{CODE}9;1m",
+    "th_dim": u"\u001b[2m"
 }
+
+
+# import sys
+#     for i in range(0, 16):
+#         for j in range(0, 16):
+#             code = str(i * 16 + j)
+#             sys.stdout.write(u"\u001b[38;5;" + code + "m " + code.ljust(4))
+#         print (u"\u001b[0m")
