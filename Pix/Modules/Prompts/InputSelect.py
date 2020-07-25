@@ -3,9 +3,11 @@ def select(
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
+    from .Theme import INPUT_THEME, INPUT_ICONS
 
     inputConsole = ConsoleControl(5)
     getch = getGetch()
+    RESET = INPUT_THEME["reset"]
 
     selectedOption = ""
 
@@ -17,19 +19,19 @@ def select(
         inputConsole.setConsoleLine(0, 1, title)
 
         while True:
-            color = "\x1b[2m"
+            color = INPUT_THEME["slight"]
             inputConsole.setConsoleLine(
-                2, 6, f"{color}{options[(index - 1) % optionsLen]}\x1b[0m"
+                2, 6, f"{color}{options[(index - 1) % optionsLen]}{RESET}"
             )
 
-            color = selectedColor
+            color = INPUT_THEME["selection"]
             inputConsole.setConsoleLine(
-                3, 4, f"{color}\x1b[1m❤ {options[index % optionsLen]}\x1b[0m"
+                3, 4, f"{color}❤ {options[index % optionsLen]}{RESET}"
             )
 
-            color = "\x1b[2m"
+            color = INPUT_THEME["slight"]
             inputConsole.setConsoleLine(
-                4, 6, f"{color}{options[(index + 1) % optionsLen]}\x1b[0m"
+                4, 6, f"{color}{options[(index + 1) % optionsLen]}{RESET}"
             )
             inputConsole.refresh()
 
