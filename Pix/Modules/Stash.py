@@ -24,7 +24,7 @@ def addToStash():
 
 def stashSelection():
     from .Prompts import select
-    from Pix.Data.Theme import INPUT_THEME, ICONS
+    from Pix.Data.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
@@ -61,10 +61,9 @@ def stashSelection():
     stashSelected = select(
         title=m.getMessage("branch-selection-title"),
         options=stashList,
-        selectedColor="\x1b[36m",
         errorMessage=m.getMessage("scape-error"),
         colors=INPUT_THEME["STASH_SELECTION"],
-        icons={"selection": ICONS["ic_selection"]},
+        icons=INPUT_ICONS,
     )
 
     if stashSelected == "":
