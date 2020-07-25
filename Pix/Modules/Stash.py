@@ -12,7 +12,9 @@ def addToStash():
 
     print()
     title = text(
-        title=m.getMessage("stash-in-title"), errorMessage=m.getMessage("scape-error")
+        title=m.getMessage("stash-in-title"),
+        errorMessage=m.getMessage("scape-error"),
+        colors=INPUT_THEME["STASH_CREATION_NAME"],
     )
 
     if title == "":

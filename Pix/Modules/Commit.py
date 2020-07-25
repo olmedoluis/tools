@@ -63,11 +63,13 @@ def save():
                 "title": m.getMessage("commit-scope-title"),
                 "placeHolder": commonDir,
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["COMMIT_SCOPE"],
             },
             {
                 "type": "Text",
                 "title": m.getMessage("commit-about-title"),
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["COMMIT_ABOUT"],
             },
         ]
     )

@@ -96,11 +96,13 @@ def branchCreation():
                 "title": m.getMessage("branch-id-title"),
                 "placeHolder": "",
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["BRANCH_CREATION_ID"],
             },
             {
                 "type": "Text",
                 "title": m.getMessage("branch-about-title"),
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["BRANCH_CREATION_ABOUT"],
             },
         ]
     )
