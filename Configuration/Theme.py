@@ -20,9 +20,14 @@ ICONS = {"ic_modified": "☢", "ic_error": "✖", "ic_selection": "❤", "ic_nor
 
 INPUT_THEME = {
     "COMMIT_TYPE": {"selection": f"{CODE}221;1m"},
+    "COMMIT_SCOPE": {},
+    "COMMIT_ABOUT": {},
     "BRANCH_SELECTION": {"selection": f"{CODE}171;1m"},
     "BRANCH_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
+    "BRANCH_CREATION_ID": {},
+    "BRANCH_CREATION_ABOUT": {},
     "STASH_SELECTION": {},
+    "STASH_CREATION_NAME": {},
     "PATCH_SELECTION": {},
 }
 
