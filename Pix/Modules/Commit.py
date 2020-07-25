@@ -55,7 +55,7 @@ def save():
                 "title": m.getMessage("commit-type-title"),
                 "options": options,
                 "errorMessage": scapeError,
-                "colors": INPUT_THEME["COMMIT_TYPE"],
+                "colors": INPUT_THEME["COMMIT_CREATION_TYPE"],
                 "icons": INPUT_ICONS,
             },
             {
@@ -63,13 +63,13 @@ def save():
                 "title": m.getMessage("commit-scope-title"),
                 "placeHolder": commonDir,
                 "errorMessage": scapeError,
-                "colors": INPUT_THEME["COMMIT_SCOPE"],
+                "colors": INPUT_THEME["COMMIT_CREATION_SCOPE"],
             },
             {
                 "type": "Text",
                 "title": m.getMessage("commit-about-title"),
                 "errorMessage": scapeError,
-                "colors": INPUT_THEME["COMMIT_ABOUT"],
+                "colors": INPUT_THEME["COMMIT_CREATION_ABOUT"],
             },
         ]
     )
@@ -80,7 +80,10 @@ def save():
     commit = "{}({}):{}".format(*answers)
     m.log("preview", {"pm_preview": commit})
 
-    isSure = confirm(title=m.getMessage("confirmation"))
+    isSure = confirm(
+        title=m.getMessage("confirmation"),
+        colors=INPUT_THEME["COMMIT_CREATION_CONFIRM"],
+    )
 
     if isSure:
         run(["git", "commit", "-m", commit])

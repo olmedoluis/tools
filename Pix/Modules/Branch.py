@@ -118,7 +118,10 @@ def branchCreation():
 
     m.log("preview", {"pm_preview": branch})
 
-    isSure = confirm(title=m.getMessage("confirmation"))
+    isSure = confirm(
+        title=m.getMessage("confirmation"),
+        colors=INPUT_THEME["BRANCH_CREATION_CONFIRM"],
+    )
 
     if isSure:
         run(["git", "branch", branch])
@@ -126,7 +129,10 @@ def branchCreation():
     else:
         return m.log("commit-cancel")
 
-    shouldSwitch = confirm(title=m.getMessage("branch-shouldswitch"))
+    shouldSwitch = confirm(
+        title=m.getMessage("branch-shouldswitch"),
+        colors=INPUT_THEME["BRANCH_CREATION_SWITCH"],
+    )
 
     if shouldSwitch:
         run(["git", "checkout", branch])
