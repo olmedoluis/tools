@@ -29,6 +29,7 @@ def getCommonDirectory(directories):
 def save():
     from .Prompts import many, confirm
     from .Status import getStatus
+    from Pix.Data.Theme import INPUT_THEME, ICONS
 
     m = MessageControl()
     status = getStatus()
@@ -55,6 +56,8 @@ def save():
                 "options": options,
                 "selectedColor": "\x1b[33m",
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["COMMIT_TYPE"],
+                "icons": {"selection": ICONS["ic_selection"]},
             },
             {
                 "type": "Text",
