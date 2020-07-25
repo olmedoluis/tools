@@ -171,7 +171,7 @@ class PatchControl:
         output = ""
 
         for index in range(0, len(self.patches)):
-            active = self.COLORS["indexAct"] if index == self.patchIndexSelected else ""
+            active = self.COLORS["selection"] if index == self.patchIndexSelected else ""
             color = self.COLORS["index"]
             icon = self.ICONS["normal"]
 
