@@ -1,47 +1,37 @@
-from Pix.Data.Theme import THEME, RESET
-
-KEYWORDS = {"in_text": "{in_text}"}
-
-defaultMessages = {
-    "lineStartSel": "{th_added}❚{th_reset}".format(**THEME, **KEYWORDS),
-    "lineStart": "{th_normal}❚{th_reset}".format(**THEME, **KEYWORDS),
-    "lineBodyMod": "   {th_modified}☢{in_text}{th_reset}".format(**THEME, **KEYWORDS),
-    "lineBodyDel": "   {th_deleted}✖{in_text}{th_reset}".format(**THEME, **KEYWORDS),
-    "lineBodyDim": "   {th_dim}{in_text}{th_reset}".format(**THEME, **KEYWORDS),
-}
-
-
-def patchSelect(errorMessage="", files=[], messages=defaultMessages):
+def patchSelect(errorMessage="", files=[], colors={}, icons={}):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
+    from .Theme import INPUT_THEME, INPUT_ICONS
     from os import popen
 
     terminalHeight, terminalWidth = popen("stty size", "r").read().split()
     terminalWidth = int(terminalWidth) - 1
     selectionAreaHeight = int(terminalHeight) - 1
 
-    dim = THEME["th_dim"]
-    colors = {"+": THEME["th_modified"], "-": THEME["th_deleted"]}
-    borders = {
-        "+": THEME["th_added"] + f"❚{RESET}",
-        "-": THEME["th_normal"] + f"❚{RESET}",
-    }
-    KEYWORDS = {"+": "Mod", "-": "Del"}
+    KEYWORDS = {"+": "modification", "-": "deletation"}
+    COLORS = {**INPUT_THEME, **colors}
+    ICONS = {**INPUT_ICONS, **icons}
+    RESET = COLORS["reset"]
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
     patchControl = PatchControl(
-        offset=0, termSizeX=terminalWidth, termSizeY=selectionAreaHeight, files=files,
+        offset=0,
+        termSizeX=terminalWidth,
+        termSizeY=selectionAreaHeight,
+        files=files,
+        colors=COLORS,
+        icons=ICONS,
     )
 
     patchControl.setPatchesOfFile(1)
     patchControl.setPatchShowing(0)
 
     def updateConsole():
-        lineStart = (
-            messages["lineStartSel"]
+        state = (
+            COLORS["borderSel"]
             if patchControl.getIsPatchSelected()
-            else messages["lineStart"]
+            else COLORS["border"]
         )
 
         inputConsole.setConsoleLine(1, 2, patchControl.getFileIndexShown())
@@ -49,17 +39,18 @@ def patchSelect(errorMessage="", files=[], messages=defaultMessages):
 
         for lineNumber in range(5, selectionAreaHeight):
             textToShow = patchControl.getStyledPatchLine(lineNumber)
-            key = "Dim"
+            color = COLORS["slight"]
 
             if textToShow != "":
                 firstChar = textToShow[0]
-                key = KEYWORDS[firstChar] if firstChar in KEYWORDS else "Dim"
+                icon = ICONS[firstChar] if firstChar in ICONS else firstChar
+                color = COLORS[KEYWORDS[firstChar]] if firstChar in KEYWORDS else color
 
-                textToShow = textToShow[1:] if firstChar in KEYWORDS else textToShow
+                textToShow = color + icon + textToShow[1:] + COLORS["reset"]
 
-            message = messages[f"lineBody{key}"].format(in_text=textToShow)
-
-            inputConsole.setConsoleLine(lineNumber, 1, f"{lineStart}{message}")
+            inputConsole.setConsoleLine(
+                lineNumber, 1, f"{state}❚{RESET}   {textToShow}"
+            )
 
         inputConsole.refresh()
 
@@ -102,7 +93,10 @@ def patchSelect(errorMessage="", files=[], messages=defaultMessages):
 
 
 class PatchControl:
-    def __init__(self, offset, termSizeX, termSizeY, files):
+    def __init__(self, offset, termSizeX, termSizeY, files, colors, icons):
+        self.COLORS = colors
+        self.RESET = colors["reset"]
+        self.ICONS = icons
         self.patches = []
         self.offset = offset
         self.termSizeX = termSizeX
@@ -116,7 +110,6 @@ class PatchControl:
 
     def setPatchesOfFile(self, times):
         self.patches = self.files[self.fileNameIndex].patches
-        # self.patchIndexSelected = self.patchIndexSelected % len(self.patches)
         self.patchIndexSelected = 0 if times > 0 else len(self.patches) - 1
 
     def setPatchShowing(self, index):
@@ -178,28 +171,29 @@ class PatchControl:
         output = ""
 
         for index in range(0, len(self.patches)):
-            colorCode = "\x1b[36m" if index == self.patchIndexSelected else ""
+            active = self.COLORS["indexAct"] if index == self.patchIndexSelected else ""
+            color = self.COLORS["index"]
+            icon = self.ICONS["normal"]
 
-            output = (
-                output
-                + (
-                    f"\x1b[1m\x1b[32m{colorCode} ❤"
-                    if index in self.files[self.fileNameIndex].patchesSelected
-                    else f"\x1b[1m\x1b[37m{colorCode} •"
-                )
-                + "\x1b[0m"
-            )
+            if index in self.files[self.fileNameIndex].patchesSelected:
+                color = self.COLORS["indexSel"]
+                icon = self.ICONS["selection"]
 
-        return output + " "
+            output = f"{output}{color}{active} {icon}{self.RESET}"
+
+        return f"{output} "
 
     def getFileIndexShown(self):
         output = ""
 
         for index in range(0, len(self.files)):
-            output = output + (
-                "\x1b[1m\x1b[35m|\x1b[0m" + self.getPatchIndexShown()
-                if index == self.fileNameIndex
-                else "\x1b[1m\x1b[37m|\x1b[0m"
-            )
+            color = self.COLORS["file"]
+            extra = ""
+
+            if index == self.fileNameIndex:
+                color = self.COLORS["fileAct"]
+                extra = self.getPatchIndexShown()
+
+            output = f"{output}{color}|{self.RESET}{extra}"
 
         return output
