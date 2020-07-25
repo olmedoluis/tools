@@ -46,12 +46,16 @@ def branchSelection(branchSearch):
     branchSelected = branches[0]
 
     if len(branches) > 1:
+        from Pix.Data.Theme import INPUT_THEME, ICONS
+
         print()
         branchSelected = select(
             title=m.getMessage("branch-selection-title"),
             options=branches,
             selectedColor="\x1b[33m",
             errorMessage=m.getMessage("scape-error"),
+            colors=INPUT_THEME["BRANCH_SELECTION"],
+            icons={"selection": ICONS["ic_selection"]},
         )
 
         if branchSelected == "":
@@ -66,6 +70,7 @@ def branchSelection(branchSearch):
 
 def branchCreation():
     from .Prompts import many, confirm
+    from Pix.Data.Theme import INPUT_THEME, ICONS
 
     m = MessageControl()
     hasChanges = getHasChanges()
@@ -85,6 +90,8 @@ def branchCreation():
                 "options": options,
                 "selectedColor": "\x1b[33m",
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["BRANCH_CREATION_TYPE"],
+                "icons": {"selection": ICONS["ic_selection"]},
             },
             {
                 "type": "Text",
