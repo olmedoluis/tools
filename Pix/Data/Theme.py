@@ -13,7 +13,10 @@ THEME = {
     "th_conflicted": f"{CODE}209;1m",
     "th_error": f"{CODE}9;1m",
     "th_dim": "\u001b[2m",
+    "th_reset": RESET,
 }
+
+ICONS = {"ic_modified": "☢", "ic_error": "✖", "ic_selection": "❤", "ic_normal": "•"}
 
 
 # import sys
