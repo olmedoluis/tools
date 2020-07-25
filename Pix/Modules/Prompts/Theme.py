@@ -11,6 +11,7 @@ INPUT_THEME = {
     "index": f"{CODE}15;1m",
     "fileAct": f"{CODE}171;1m",
     "file": f"{CODE}15;1m",
+    "font": f"{CODE}255m",
     "reset": "\u001b[0m",
 }
 
