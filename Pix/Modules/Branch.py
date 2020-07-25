@@ -46,7 +46,7 @@ def branchSelection(branchSearch):
     branchSelected = branches[0]
 
     if len(branches) > 1:
-        from Pix.Data.Theme import INPUT_THEME, INPUT_ICONS
+        from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
         print()
         branchSelected = select(
@@ -69,7 +69,7 @@ def branchSelection(branchSearch):
 
 def branchCreation():
     from .Prompts import many, confirm
-    from Pix.Data.Theme import INPUT_THEME, INPUT_ICONS
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
     hasChanges = getHasChanges()

@@ -63,7 +63,7 @@ class MessageControl:
     def __init__(self):
         from pathlib import Path
         from json import loads
-        from Pix.Data.Theme import THEME, RESET
+        from Configuration.Theme import THEME, RESET
 
         self.THEME = THEME
         self.RESET = RESET

@@ -1,5 +1,5 @@
 from .Helpers import run, MessageControl
-from Pix.Data.Theme import THEME, RESET
+from Configuration.Theme import THEME
 
 
 def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):

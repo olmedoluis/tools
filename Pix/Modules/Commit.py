@@ -29,7 +29,7 @@ def getCommonDirectory(directories):
 def save():
     from .Prompts import many, confirm
     from .Status import getStatus
-    from Pix.Data.Theme import INPUT_THEME, INPUT_ICONS
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
     status = getStatus()

@@ -72,7 +72,7 @@ def parseDifferences(differencesRaw, files, getMessage):
 
 def patch(files):
     from .Prompts import patchSelect
-    from Pix.Data.Theme import INPUT_THEME, INPUT_ICONS
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
     from pathlib import Path
 
     m = MessageControl()
