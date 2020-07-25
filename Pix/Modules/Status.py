@@ -36,8 +36,9 @@ def parseChange(status, changeId, changeName, path):
                     oldFilePaths[:index]
                     + [THEME["th_modified"] + newFilePaths[index]]
                     + newFilePaths[index + 1 :]
-                    + RESET
                 )
+                path[-1] = path[-1] + RESET
+
                 path = "/".join(path)
                 break
 
