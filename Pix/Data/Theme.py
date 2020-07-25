@@ -18,6 +18,13 @@ THEME = {
 
 ICONS = {"ic_modified": "☢", "ic_error": "✖", "ic_selection": "❤", "ic_normal": "•"}
 
+INPUT_THEME = {
+    "COMMIT_TYPE": {"selection": f"{CODE}221;1m"},
+    "BRANCH_SELECTION": {"selection": f"{CODE}171;1m"},
+    "BRANCH_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
+    "STASH_SELECTION": {},
+}
+
 
 # import sys
 #     for i in range(0, 16):
