@@ -23,6 +23,14 @@ INPUT_THEME = {
     "BRANCH_SELECTION": {"selection": f"{CODE}171;1m"},
     "BRANCH_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
     "STASH_SELECTION": {},
+    "PATCH_SELECTION": {},
+}
+
+INPUT_ICONS = {
+    "+": ICONS["ic_modified"],
+    "-": ICONS["ic_error"],
+    "selection": ICONS["ic_selection"],
+    "normal": ICONS["ic_normal"],
 }
 
 
