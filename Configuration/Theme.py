@@ -19,13 +19,16 @@ THEME = {
 ICONS = {"ic_modified": "☢", "ic_error": "✖", "ic_selection": "❤", "ic_normal": "•"}
 
 INPUT_THEME = {
-    "COMMIT_TYPE": {"selection": f"{CODE}221;1m"},
-    "COMMIT_SCOPE": {},
-    "COMMIT_ABOUT": {},
+    "COMMIT_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
+    "COMMIT_CREATION_SCOPE": {},
+    "COMMIT_CREATION_ABOUT": {},
+    "COMMIT_CREATION_CONFIRM": {},
     "BRANCH_SELECTION": {"selection": f"{CODE}171;1m"},
     "BRANCH_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
     "BRANCH_CREATION_ID": {},
     "BRANCH_CREATION_ABOUT": {},
+    "BRANCH_CREATION_CONFIRM": {},
+    "BRANCH_CREATION_SWITCH": {},
     "STASH_SELECTION": {},
     "STASH_CREATION_NAME": {},
     "PATCH_SELECTION": {},
