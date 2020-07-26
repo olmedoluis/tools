@@ -61,18 +61,12 @@ def checkPixShortcut(keyword, outsideKeys, outsideAliases):
 
 class MessageControl:
     def __init__(self):
-        from pathlib import Path
-        from json import loads
         from Configuration.Theme import THEME, ICONS
+        from Configuration.Messages import MESSAGES
 
         self.THEME = {**THEME, **ICONS}
         self.RESET = THEME["th_reset"]
-
-        filePath = Path(__file__).parent.absolute()
-        filePath = str(filePath)[:-11] + "/Configuration/Messages.json"
-
-        with open(filePath, "r") as file:
-            self.messages = loads(file.read())["messages"]
+        self.messages = MESSAGES
 
     def getMessage(self, messageId, params={}):
         return str(self.messages[messageId]).format(**self.THEME, **params) + self.RESET
