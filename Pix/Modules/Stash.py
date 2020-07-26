@@ -4,6 +4,7 @@ from .Status import getStatus
 
 def addToStash():
     from .Prompts import text
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
