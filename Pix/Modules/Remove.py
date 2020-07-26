@@ -1,9 +1,7 @@
-from .Helpers import run, removeColors, MessageControl
-from .Status import getStatus, searchInStatus
-
-
 def remove(filePaths=[], shouldVerify=True):
     from .Prompts import multiSelect
+    from .Helpers import run, removeColors, MessageControl
+    from .Status import getStatus, searchInStatus
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
@@ -46,6 +44,9 @@ def remove(filePaths=[], shouldVerify=True):
 
 
 def removeAll(fileSearch):
+    from .Helpers import run, removeColors, MessageControl
+    from .Status import getStatus, searchInStatus
+
     m = MessageControl()
     status = getStatus()
 
