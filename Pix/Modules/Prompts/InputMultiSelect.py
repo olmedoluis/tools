@@ -82,7 +82,7 @@ def multiSelect(
                 f"{color}{optionSelected.getStateString()} {optionSelected.content}{RESET}",
             )
 
-            color = SLIGHT_SELECTION if optionAbove.state else COLORS["slight"]
+            color = SLIGHT_SELECTION if optionDown.state else COLORS["slight"]
             inputConsole.setConsoleLine(
                 4,
                 4,
