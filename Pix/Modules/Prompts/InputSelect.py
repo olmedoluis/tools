@@ -3,7 +3,6 @@ def select(
     finalTitle="",
     options=[""],
     errorMessage="",
-    selectedColor="\x1b[32m",
     colors={},
     icons={},
 ):
