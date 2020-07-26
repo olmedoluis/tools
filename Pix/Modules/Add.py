@@ -1,12 +1,10 @@
-from .Helpers import run, removeColors, MessageControl
-from .Status import getStatus, searchInStatus
-
-
-def add(filePaths=[], shouldVerify=True):
+def add(filePaths=[], shouldVerify=True, messages=""):
     from .Prompts import multiSelect
+    from .Helpers import run, removeColors, MessageControl
+    from .Status import getStatus, searchInStatus
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
-    m = MessageControl()
+    m = MessageControl() if messages == "" else messages
     status = getStatus()
 
     specificFiles = filePaths if filePaths else []
@@ -54,6 +52,9 @@ def add(filePaths=[], shouldVerify=True):
 
 
 def addAll(fileSearch):
+    from .Helpers import run, MessageControl
+    from .Status import getStatus, searchInStatus
+
     m = MessageControl()
     status = getStatus()
 
@@ -63,7 +64,7 @@ def addAll(fileSearch):
         return (
             m.log("error-nomatchfile")
             if len(matches) == 0
-            else add(matches, shouldVerify=False)
+            else add(matches, shouldVerify=False, messages=m)
         )
 
     hasFilesToAdd = False

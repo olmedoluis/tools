@@ -1,7 +1,3 @@
-from .Helpers import run, MessageControl
-from Configuration.Theme import THEME
-
-
 def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
     matches = []
 
@@ -22,7 +18,7 @@ def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
     return matches
 
 
-def parseChange(status, changeId, changeName, path):
+def parseChange(status, changeId, changeName, path, THEME):
     draggedChange = status[changeName] if changeName in status else []
 
     if changeId == "R":
@@ -47,6 +43,9 @@ def parseChange(status, changeId, changeName, path):
 
 
 def getStatus():
+    from .Helpers import run
+    from Configuration.Theme import THEME
+
     STATUS_MATCHES = {
         "##": "branch",
         "??": "untracked",
@@ -68,19 +67,23 @@ def getStatus():
         firstLetter, secondLetter = changeId
 
         if changeId in STATUS_MATCHES:
-            parseChange(status, changeId, STATUS_MATCHES[changeId], change)
+            parseChange(status, changeId, STATUS_MATCHES[changeId], change, THEME)
             continue
 
         if firstLetter != " ":
-            parseChange(status, firstLetter, STATUS_MATCHES["A"], change)
+            parseChange(status, firstLetter, STATUS_MATCHES["A"], change, THEME)
 
         if secondLetter != " ":
-            parseChange(status, secondLetter, STATUS_MATCHES[secondLetter], change)
+            parseChange(
+                status, secondLetter, STATUS_MATCHES[secondLetter], change, THEME
+            )
 
     return status
 
 
 def showStatus():
+    from .Helpers import MessageControl
+
     m = MessageControl()
     status = getStatus()
 

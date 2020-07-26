@@ -1,18 +1,3 @@
-from sys import argv
-from Configuration import ALIASES
-from .Data.PixRoutes import KEYS
-from .Modules import (
-    AddRouter,
-    StatusRouter,
-    BranchRouter,
-    CommitRouter,
-    RemoveRouter,
-    StashRouter,
-    PatchRouter,
-)
-from .Modules.Helpers import checkPixShortcut, checkRoute, MessageControl
-
-
 class PixTools:
     def __init__(self, argv):
         self.user_routes = argv
@@ -50,20 +35,17 @@ def getConcatenatedRoutes(routes):
 
 
 def main():
+    from sys import argv
+
     arg = argv[1:]
 
     if len(arg) == 0:
         return
 
-    PIX_STORE = {
-        "Status": StatusRouter,
-        "Add": AddRouter,
-        "Remove": RemoveRouter,
-        "Commit": CommitRouter,
-        "Branch": BranchRouter,
-        "Stash": StashRouter,
-        "Patch": PatchRouter,
-    }
+    from Configuration import ALIASES
+    from .Data.PixRoutes import KEYS
+    from .Modules import PIX_STORE
+    from .Modules.Helpers import checkPixShortcut, checkRoute
 
     allRoutes = getConcatenatedRoutes(arg) if "n" in arg else [arg]
 
@@ -73,6 +55,8 @@ def main():
         routeName = checkPixShortcut(pixTools.actual_route, KEYS, ALIASES)
 
         if routeName == False:
+            from .Modules.Helpers import MessageControl
+
             goodRoutes = f"pix {' '.join(pixTools.getGoodRoutes())}"
             wrongRoutes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
             m = MessageControl()
