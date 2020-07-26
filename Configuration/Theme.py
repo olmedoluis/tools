@@ -18,20 +18,23 @@ THEME = {
 
 ICONS = {"ic_modified": "☢", "ic_error": "✖", "ic_selection": "❤", "ic_normal": "•"}
 
+EMPTY = {}
 INPUT_THEME = {
     "COMMIT_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
-    "COMMIT_CREATION_SCOPE": {},
-    "COMMIT_CREATION_ABOUT": {},
-    "COMMIT_CREATION_CONFIRM": {},
+    "COMMIT_CREATION_SCOPE": EMPTY,
+    "COMMIT_CREATION_ABOUT": EMPTY,
+    "COMMIT_CREATION_CONFIRM": EMPTY,
+    "ADD_SELECTION": {"selection": f"{CODE}48;1m"},
+    "REMOVE_SELECTION": {"selection": f"{CODE}9;1m"},
     "BRANCH_SELECTION": {"selection": f"{CODE}171;1m"},
     "BRANCH_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
-    "BRANCH_CREATION_ID": {},
-    "BRANCH_CREATION_ABOUT": {},
-    "BRANCH_CREATION_CONFIRM": {},
-    "BRANCH_CREATION_SWITCH": {},
-    "STASH_SELECTION": {},
-    "STASH_CREATION_NAME": {},
-    "PATCH_SELECTION": {},
+    "BRANCH_CREATION_ID": EMPTY,
+    "BRANCH_CREATION_ABOUT": EMPTY,
+    "BRANCH_CREATION_CONFIRM": EMPTY,
+    "BRANCH_CREATION_SWITCH": EMPTY,
+    "STASH_SELECTION": EMPTY,
+    "STASH_CREATION_NAME": EMPTY,
+    "PATCH_SELECTION": EMPTY,
 }
 
 INPUT_ICONS = {
