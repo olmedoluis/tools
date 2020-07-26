@@ -5,7 +5,7 @@ MESSAGES = {
     "add-nofiles-error": "\n {th_error}{ic_error} There is no files to add\n",
     "add-success": "\n {th_success}{ic_success} Selected files has been added\n",
     "added-title": "\n {th_normal}Added files:\n",
-    "added": "\t{th_added}✚ {pm_change}",
+    "added": "\t{th_added}{ic_added} {pm_change}",
     "branch-about-title": "{th_normal}What is this branch about?",
     "branch-id-title": "{th_normal}What is the ticket id?",
     "branch-selection-title": "{th_normal}Select a branch to switch:",
