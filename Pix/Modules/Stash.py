@@ -1,9 +1,7 @@
-from .Helpers import run, MessageControl
-from .Status import getStatus
-
-
 def addToStash():
     from .Prompts import text
+    from .Helpers import run, MessageControl
+    from .Status import getStatus
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
@@ -27,6 +25,8 @@ def addToStash():
 
 def stashSelection():
     from .Prompts import select
+    from .Helpers import run, MessageControl
+    from .Status import getStatus
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
