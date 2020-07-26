@@ -1,12 +1,11 @@
-{
-  "messages": {
+MESSAGES = {
     "add-adition-title": "{th_normal}Select files to add:",
     "add-all-nofiles": "\n {th_error}{ic_error} There is no file to add\n",
     "add-all-success": "\n {th_success}{ic_success} All files has been added\n",
     "add-nofiles-error": "\n {th_error}{ic_error} There is no files to add\n",
     "add-success": "\n {th_success}{ic_success} Selected files has been added\n",
     "added-title": "\n {th_normal}Added files:\n",
-    "added": "\t{th_added}✚ {pm_change}",
+    "added": "\t{th_added}{ic_added} {pm_change}",
     "branch-about-title": "{th_normal}What is this branch about?",
     "branch-id-title": "{th_normal}What is the ticket id?",
     "branch-selection-title": "{th_normal}Select a branch to switch:",
@@ -63,6 +62,6 @@
     "unknown-error": "\n {th_error}{ic_error} Unknown error, something went wrong\n",
     "unknownRoute": "\n {th_error}{ic_error} Command not found: {th_success}{pm_goodRoutes}{th_error}{pm_wrongRoutes}\n",
     "untracked-title": "\n {th_normal}Untracked files:\n",
-    "untracked": "\t{th_untracked}{ic_untracked} {pm_change}"
-  }
+    "untracked": "\t{th_untracked}{ic_untracked} {pm_change}",
 }
+
