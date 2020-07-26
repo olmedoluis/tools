@@ -16,7 +16,18 @@ THEME = {
     "th_untracked": f"{CODE}69;1m",
 }
 
-ICONS = {"ic_modified": "☢", "ic_error": "✖", "ic_selection": "❤", "ic_normal": "•"}
+ICONS = {
+    "ic_modified": "☢",
+    "ic_untracked": "✱",
+    "ic_renamed": "✦",
+    "ic_deleted": "✝",
+    "ic_conflicted": "⚯",
+    "ic_error": "✖",
+    "ic_selection": "❤",
+    "ic_normal": "•",
+    "ic_success": "⚑",
+    "ic_branch": "⚲",
+}
 
 EMPTY = {}
 INPUT_THEME = {
