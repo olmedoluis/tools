@@ -29,6 +29,7 @@ def getCommonDirectory(directories):
 def save():
     from .Prompts import many, confirm
     from .Status import getStatus
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
     status = getStatus()
@@ -53,19 +54,22 @@ def save():
                 "type": "Select",
                 "title": m.getMessage("commit-type-title"),
                 "options": options,
-                "selectedColor": "\x1b[33m",
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["COMMIT_CREATION_TYPE"],
+                "icons": INPUT_ICONS,
             },
             {
                 "type": "Text",
                 "title": m.getMessage("commit-scope-title"),
                 "placeHolder": commonDir,
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["COMMIT_CREATION_SCOPE"],
             },
             {
                 "type": "Text",
                 "title": m.getMessage("commit-about-title"),
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["COMMIT_CREATION_ABOUT"],
             },
         ]
     )
@@ -76,7 +80,10 @@ def save():
     commit = "{}({}):{}".format(*answers)
     m.log("preview", {"pm_preview": commit})
 
-    isSure = confirm(title=m.getMessage("confirmation"))
+    isSure = confirm(
+        title=m.getMessage("confirmation"),
+        colors=INPUT_THEME["COMMIT_CREATION_CONFIRM"],
+    )
 
     if isSure:
         run(["git", "commit", "-m", commit])

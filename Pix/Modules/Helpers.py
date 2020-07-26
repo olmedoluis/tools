@@ -63,10 +63,10 @@ class MessageControl:
     def __init__(self):
         from pathlib import Path
         from json import loads
-        from Pix.Data.Theme import THEME, RESET
+        from Configuration.Theme import THEME, ICONS
 
-        self.THEME = THEME
-        self.RESET = RESET
+        self.THEME = {**THEME, **ICONS}
+        self.RESET = THEME["th_reset"]
 
         filePath = Path(__file__).parent.absolute()
         filePath = str(filePath)[:-11] + "/Configuration/Messages.json"

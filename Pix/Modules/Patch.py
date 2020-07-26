@@ -72,6 +72,7 @@ def parseDifferences(differencesRaw, files, getMessage):
 
 def patch(files):
     from .Prompts import patchSelect
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
     from pathlib import Path
 
     m = MessageControl()
@@ -83,7 +84,10 @@ def patch(files):
     patches = parseDifferences(differencesRaw, files, m.getMessage)
 
     selectedPatches = patchSelect(
-        files=patches, errorMessage=m.getMessage("error-nofileschoosen")
+        files=patches,
+        errorMessage=m.getMessage("error-nofileschoosen"),
+        colors=INPUT_THEME["PATCH_SELECTION"],
+        icons=INPUT_ICONS,
     )
 
     patchGenerated = parsePatches(selectedPatches)

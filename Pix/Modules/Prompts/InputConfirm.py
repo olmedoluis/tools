@@ -1,7 +1,9 @@
-def confirm(title="", finalTitle=""):
+def confirm(title="", finalTitle="", colors={}):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getResponse
+    from .Theme import INPUT_THEME
 
+    FONT_COLOR = ({**INPUT_THEME, **colors})["font"]
     getch = getGetch()
     inputConsole = ConsoleControl(1)
 
@@ -27,7 +29,7 @@ def confirm(title="", finalTitle=""):
             if state == "BREAK_CHAR":
                 exit()
 
-        inputConsole.setConsoleLine(0, 1, f"{finalTitle} {word}")
+        inputConsole.setConsoleLine(0, 1, f"{finalTitle} {FONT_COLOR}{word}")
         inputConsole.refresh()
 
     finally:

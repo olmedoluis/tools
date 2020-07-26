@@ -46,12 +46,15 @@ def branchSelection(branchSearch):
     branchSelected = branches[0]
 
     if len(branches) > 1:
+        from Configuration.Theme import INPUT_THEME, INPUT_ICONS
+
         print()
         branchSelected = select(
             title=m.getMessage("branch-selection-title"),
             options=branches,
-            selectedColor="\x1b[33m",
             errorMessage=m.getMessage("scape-error"),
+            colors=INPUT_THEME["BRANCH_SELECTION"],
+            icons=INPUT_ICONS,
         )
 
         if branchSelected == "":
@@ -66,6 +69,7 @@ def branchSelection(branchSearch):
 
 def branchCreation():
     from .Prompts import many, confirm
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
     hasChanges = getHasChanges()
@@ -83,19 +87,22 @@ def branchCreation():
                 "type": "Select",
                 "title": m.getMessage("branch-type-title"),
                 "options": options,
-                "selectedColor": "\x1b[33m",
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["BRANCH_CREATION_TYPE"],
+                "icons": INPUT_ICONS,
             },
             {
                 "type": "Text",
                 "title": m.getMessage("branch-id-title"),
                 "placeHolder": "",
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["BRANCH_CREATION_ID"],
             },
             {
                 "type": "Text",
                 "title": m.getMessage("branch-about-title"),
                 "errorMessage": scapeError,
+                "colors": INPUT_THEME["BRANCH_CREATION_ABOUT"],
             },
         ]
     )
@@ -111,7 +118,10 @@ def branchCreation():
 
     m.log("preview", {"pm_preview": branch})
 
-    isSure = confirm(title=m.getMessage("confirmation"))
+    isSure = confirm(
+        title=m.getMessage("confirmation"),
+        colors=INPUT_THEME["BRANCH_CREATION_CONFIRM"],
+    )
 
     if isSure:
         run(["git", "branch", branch])
@@ -119,7 +129,10 @@ def branchCreation():
     else:
         return m.log("commit-cancel")
 
-    shouldSwitch = confirm(title=m.getMessage("branch-shouldswitch"))
+    shouldSwitch = confirm(
+        title=m.getMessage("branch-shouldswitch"),
+        colors=INPUT_THEME["BRANCH_CREATION_SWITCH"],
+    )
 
     if shouldSwitch:
         run(["git", "checkout", branch])

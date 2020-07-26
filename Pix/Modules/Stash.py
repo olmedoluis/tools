@@ -4,6 +4,7 @@ from .Status import getStatus
 
 def addToStash():
     from .Prompts import text
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
@@ -12,7 +13,9 @@ def addToStash():
 
     print()
     title = text(
-        title=m.getMessage("stash-in-title"), errorMessage=m.getMessage("scape-error")
+        title=m.getMessage("stash-in-title"),
+        errorMessage=m.getMessage("scape-error"),
+        colors=INPUT_THEME["STASH_CREATION_NAME"],
     )
 
     if title == "":
@@ -24,6 +27,7 @@ def addToStash():
 
 def stashSelection():
     from .Prompts import select
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
@@ -60,8 +64,9 @@ def stashSelection():
     stashSelected = select(
         title=m.getMessage("branch-selection-title"),
         options=stashList,
-        selectedColor="\x1b[36m",
         errorMessage=m.getMessage("scape-error"),
+        colors=INPUT_THEME["STASH_SELECTION"],
+        icons=INPUT_ICONS,
     )
 
     if stashSelected == "":

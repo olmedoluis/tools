@@ -1,4 +1,5 @@
 from .Helpers import run, MessageControl
+from Configuration.Theme import THEME
 
 
 def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
@@ -33,9 +34,10 @@ def parseChange(status, changeId, changeName, path):
             if not oldFilePaths[index] == newFilePaths[index]:
                 path = (
                     oldFilePaths[:index]
-                    + [f"\x1b[33m" + newFilePaths[index]]
+                    + [THEME["th_modified"] + newFilePaths[index]]
                     + newFilePaths[index + 1 :]
                 )
+
                 path = "/".join(path)
                 break
 
@@ -49,6 +51,7 @@ def getStatus():
         "##": "branch",
         "??": "untracked",
         "UU": "conflicted",
+        "U": "conflicted",
         "M": "modified",
         "R": "renamed",
         "A": "added",

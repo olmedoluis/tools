@@ -4,6 +4,7 @@ from .Status import getStatus, searchInStatus
 
 def add(filePaths=[], shouldVerify=True):
     from .Prompts import multiSelect
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
     status = getStatus()
@@ -35,6 +36,8 @@ def add(filePaths=[], shouldVerify=True):
         title=m.getMessage("add-adition-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
         options=options,
+        colors=INPUT_THEME["ADD_SELECTION"],
+        icons=INPUT_ICONS,
     )
 
     if answers == "UNKNOWN_ERROR":

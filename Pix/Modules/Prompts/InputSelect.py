@@ -1,11 +1,20 @@
 def select(
-    title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"
+    title="",
+    finalTitle="",
+    options=[""],
+    errorMessage="",
+    colors={},
+    icons={},
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
+    from .Theme import INPUT_THEME, INPUT_ICONS
 
     inputConsole = ConsoleControl(5)
     getch = getGetch()
+    RESET = INPUT_THEME["reset"]
+    COLORS = {**INPUT_THEME, **colors}
+    selectionIcon = ({**INPUT_ICONS, **icons})["selection"]
 
     selectedOption = ""
 
@@ -17,19 +26,19 @@ def select(
         inputConsole.setConsoleLine(0, 1, title)
 
         while True:
-            color = "\x1b[2m"
+            color = COLORS["slight"]
             inputConsole.setConsoleLine(
-                2, 6, f"{color}{options[(index - 1) % optionsLen]}\x1b[0m"
+                2, 6, f"{color}{options[(index - 1) % optionsLen]}{RESET}"
             )
 
-            color = selectedColor
+            color = COLORS["selection"]
             inputConsole.setConsoleLine(
-                3, 4, f"{color}\x1b[1m❤ {options[index % optionsLen]}\x1b[0m"
+                3, 4, f"{color}{selectionIcon} {options[index % optionsLen]}{RESET}"
             )
 
-            color = "\x1b[2m"
+            color = COLORS["slight"]
             inputConsole.setConsoleLine(
-                4, 6, f"{color}{options[(index + 1) % optionsLen]}\x1b[0m"
+                4, 6, f"{color}{options[(index + 1) % optionsLen]}{RESET}"
             )
             inputConsole.refresh()
 
