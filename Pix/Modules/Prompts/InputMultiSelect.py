@@ -34,10 +34,22 @@ def getOptionContents(options):
 
 
 def multiSelect(
-    title="", finalTitle="", options=[""], errorMessage="", selectedColor="\x1b[32m"
+    title="",
+    finalTitle="",
+    options=[""],
+    errorMessage="",
+    selectedColor="\x1b[32m",
+    colors={},
+    icons={},
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
+    from .Theme import INPUT_THEME, INPUT_ICONS
+
+    COLORS = {**INPUT_THEME, **colors}
+    ICONS = {**INPUT_ICONS, **icons}
+    RESET = COLORS["reset"]
+    SLIGHT_SELECTION = COLORS["selection"] + COLORS["slight"]
 
     getch = getGetch()
     inputConsole = ConsoleControl(5)
@@ -56,27 +68,25 @@ def multiSelect(
             optionSelected = optionsWithStates[index % optionsLen]
             optionDown = optionsWithStates[(index + 1) % optionsLen]
 
-            color = selectedColor if optionAbove.state else "\x1b[2m"
+            color = SLIGHT_SELECTION if optionAbove.state else COLORS["slight"]
             inputConsole.setConsoleLine(
                 2,
                 4,
-                f"{color}{optionAbove.getStateString()} {optionAbove.content}\x1b[0m",
+                f"{color}{optionAbove.getStateString()} {optionAbove.content}{RESET}",
             )
 
-            color = (
-                f"{selectedColor}\x1b[1m" if optionSelected.state else "\x1b[1m\x1b[37m"
-            )
+            color = COLORS["selection"] if optionSelected.state else COLORS["file"]
             inputConsole.setConsoleLine(
                 3,
                 4,
-                f"{color}{optionSelected.getStateString()} {optionSelected.content}\x1b[0m",
+                f"{color}{optionSelected.getStateString()} {optionSelected.content}{RESET}",
             )
 
-            color = selectedColor if optionDown.state else "\x1b[2m"
+            color = SLIGHT_SELECTION if optionAbove.state else COLORS["slight"]
             inputConsole.setConsoleLine(
                 4,
                 4,
-                f"{color}{optionDown.getStateString()} {optionDown.content}\x1b[0m",
+                f"{color}{optionDown.getStateString()} {optionDown.content}{RESET}",
             )
 
             inputConsole.refresh()
