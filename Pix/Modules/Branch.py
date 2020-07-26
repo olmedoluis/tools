@@ -1,6 +1,3 @@
-from .Helpers import run, MessageControl
-
-
 def getHasChanges(change=""):
     from .Status import getStatus
 
@@ -11,6 +8,7 @@ def getHasChanges(change=""):
 
 def branchSelection(branchSearch):
     from .Prompts import select
+    from .Helpers import run, MessageControl
 
     m = MessageControl()
     hasChanges = getHasChanges()
@@ -69,6 +67,7 @@ def branchSelection(branchSearch):
 
 def branchCreation():
     from .Prompts import many, confirm
+    from .Helpers import run, MessageControl
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()

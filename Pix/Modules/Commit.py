@@ -1,7 +1,5 @@
-from .Helpers import run, removeColors, MessageControl
-
-
 def getCommonDirectory(directories):
+    from .Helpers import removeColors
     from os.path import basename
     from os import getcwd
 
@@ -23,12 +21,13 @@ def getCommonDirectory(directories):
 
         index = index + 1
 
-    return removeColors(basename(getcwd()))
+    return basename(getcwd())
 
 
 def save():
     from .Prompts import many, confirm
     from .Status import getStatus
+    from .Helpers import run, MessageControl
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()

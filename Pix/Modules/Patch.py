@@ -1,6 +1,3 @@
-from .Helpers import run, MessageControl
-
-
 def addToFile(text, filePath):
     f = open(filePath, "w+")
     f.write(text)
@@ -70,12 +67,13 @@ def parseDifferences(differencesRaw, files, getMessage):
     return outputPatches
 
 
-def patch(files):
+def patch(files, messages=""):
     from .Prompts import patchSelect
+    from .Helpers import run, MessageControl
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
     from pathlib import Path
 
-    m = MessageControl()
+    m = MessageControl() if messages == "" else messages
 
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
@@ -108,6 +106,7 @@ def patch(files):
 
 def patchAll(fileSearch):
     from .Status import getStatus, searchInStatus
+    from .Helpers import MessageControl
 
     m = MessageControl()
 
@@ -115,7 +114,7 @@ def patchAll(fileSearch):
     if len(fileSearch) > 0:
         matches = searchInStatus(fileSearch, status, includedFiles=["modified"])
 
-        return m.log("error-nomatchfile") if len(matches) == 0 else patch(matches)
+        return m.log("error-nomatchfile") if len(matches) == 0 else patch(matches, m)
 
     files = status["modified"] if "modified" in status else []
 
