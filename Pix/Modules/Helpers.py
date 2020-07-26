@@ -63,9 +63,9 @@ class MessageControl:
     def __init__(self):
         from pathlib import Path
         from json import loads
-        from Configuration.Theme import THEME
+        from Configuration.Theme import THEME, ICONS
 
-        self.THEME = THEME
+        self.THEME = {**THEME, **ICONS}
         self.RESET = THEME["th_reset"]
 
         filePath = Path(__file__).parent.absolute()
