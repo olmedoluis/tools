@@ -3,28 +3,22 @@ def text(
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import merge
-    from .Theme import INPUT_THEME
 
     getch = getGetch()
     inputConsole = ConsoleControl(1)
-
-    COLORS = {**INPUT_THEME, **colors}
-    RESET = COLORS["reset"]
-    FONT_COLOR = COLORS["font"]
-
-    word = content
-    finalTitle = finalTitle if finalTitle != "" else title
+    textControl = _TextControl(
+        initialText=content, placeHolder=placeHolder, colors=colors
+    )
 
     while True:
-        wordToShow = word if word != "" else placeHolder
-        color = FONT_COLOR if word != "" else COLORS["slight"]
+        displayText = textControl.getDisplayText()
 
-        inputConsole.setConsoleLine(0, 1, f"{title} {color}{wordToShow}{RESET}")
+        inputConsole.setConsoleLine(0, 1, f"{title} {displayText}")
         inputConsole.refresh()
 
         char = getch()
-        newWord, state = merge(word, char)
-        word = newWord
+        newText, state = merge(textControl.getText(), char)
+        textControl.setText(newText)
 
         if state == "FINISH":
             break
@@ -33,9 +27,38 @@ def text(
             inputConsole.finish()
             exit()
 
-    inputConsole.setConsoleLine(0, 1, f"{finalTitle} {FONT_COLOR}{wordToShow}{RESET}")
+    finalTitle = finalTitle if finalTitle != "" else title
+    displayText = textControl.getTextAbsolute()
+
+    inputConsole.setConsoleLine(0, 1, f"{finalTitle} {displayText}")
     inputConsole.refresh()
 
     inputConsole.finish()
 
-    return word if word != "" else placeHolder
+    return textControl.getTextAbsolute()
+
+
+class _TextControl:
+    def __init__(self, initialText, placeHolder, colors):
+        from .Theme import INPUT_THEME
+
+        self._text = initialText
+        self._placeHolder = placeHolder
+
+        self.COLORS = {**INPUT_THEME, **colors}
+        self.RESET = self.COLORS["reset"]
+
+    def setText(self, text):
+        self._text = text
+
+    def getText(self):
+        return self._text
+
+    def getTextAbsolute(self):
+        return self._text if self._text != "" else self._placeHolder
+
+    def getDisplayText(self):
+        displayText = self.getTextAbsolute()
+        fontColor = self.COLORS["font"] if self._text != "" else self.COLORS["slight"]
+
+        return f"{fontColor}{displayText}{self.RESET}"
