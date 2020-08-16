@@ -1,69 +1,75 @@
 def select(
-    title="",
-    finalTitle="",
-    options=[""],
-    errorMessage="",
-    colors={},
-    icons={},
+    title="", finalTitle="", options=[""], errorMessage="", colors={}, icons={},
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
-    from .Theme import INPUT_THEME, INPUT_ICONS
 
-    inputConsole = ConsoleControl(5)
     getch = getGetch()
-    RESET = INPUT_THEME["reset"]
-    COLORS = {**INPUT_THEME, **colors}
-    selectionIcon = ({**INPUT_ICONS, **icons})["selection"]
+    inputConsole = ConsoleControl(5)
+    selectControl = _SelectControl(colors, icons, options)
 
-    selectedOption = ""
+    inputConsole.setConsoleLine(0, 1, title)
 
-    try:
-        finalTitle = finalTitle if finalTitle != "" else title
-        index = 0
-        optionsLen = len(options)
+    while True:
+        displayText = selectControl.getDisplayOption(-1)
+        inputConsole.setConsoleLine(2, 6, displayText)
 
-        inputConsole.setConsoleLine(0, 1, title)
+        displayText = selectControl.getDisplayOption(0)
+        inputConsole.setConsoleLine(3, 4, displayText)
 
-        while True:
-            color = COLORS["slight"]
-            inputConsole.setConsoleLine(
-                2, 6, f"{color}{options[(index - 1) % optionsLen]}{RESET}"
-            )
-
-            color = COLORS["selection"]
-            inputConsole.setConsoleLine(
-                3, 4, f"{color}{selectionIcon} {options[index % optionsLen]}{RESET}"
-            )
-
-            color = COLORS["slight"]
-            inputConsole.setConsoleLine(
-                4, 6, f"{color}{options[(index + 1) % optionsLen]}{RESET}"
-            )
-            inputConsole.refresh()
-
-            char = getch()
-            state = getMovement(char)
-
-            if state == "DOWN":
-                index = index + 1
-            elif state == "UP":
-                index = index - 1
-            elif state == "FINISH" or state == "RIGHT":
-                break
-            elif state == "BREAK_CHAR":
-                print(errorMessage)
-                inputConsole.deleteLastLines(3)
-                exit()
-
-        selectedOption = options[index % optionsLen]
-        inputConsole.setConsoleLine(0, 1, f"{finalTitle} {selectedOption}")
+        displayText = selectControl.getDisplayOption(1)
+        inputConsole.setConsoleLine(4, 6, displayText)
         inputConsole.refresh()
 
-    finally:
-        inputConsole.deleteLastLines(4)
+        char = getch()
+        state = getMovement(char)
 
-        inputConsole.finish()
+        if state == "DOWN":
+            selectControl.appendToIndex(1)
+        elif state == "UP":
+            selectControl.appendToIndex(-1)
+        elif state == "FINISH" or state == "RIGHT":
+            break
+        elif state == "BREAK_CHAR":
+            inputConsole.deleteLastLines(4)
+            inputConsole.finish()
+            print(errorMessage)
+            exit()
 
-        return selectedOption
+    selectedOption = selectControl.getOption()
+    finalTitle = finalTitle if finalTitle != "" else title
+
+    inputConsole.setConsoleLine(0, 1, f"{finalTitle} {selectedOption}")
+    inputConsole.refresh()
+    inputConsole.deleteLastLines(4)
+    inputConsole.finish()
+
+    return selectedOption
+
+
+class _SelectControl:
+    def __init__(self, colors, icons, options):
+        from .Theme import INPUT_THEME, INPUT_ICONS
+
+        self._SELECTION_ICON = ({**INPUT_ICONS, **icons})["selection"]
+        self._COLORS = {**INPUT_THEME, **colors}
+        self._RESET = self._COLORS["reset"]
+
+        self._options = options
+        self._optionsSize = len(options)
+        self._selectedOption = ""
+        self._optionIndex = 0
+
+    def getDisplayOption(self, offset=0):
+        fontColor = self._COLORS["slight"] if offset else self._COLORS["selection"]
+        option = self.getOption(offset)
+        icon = "" if offset else f"{self._SELECTION_ICON} "
+
+        return f"{fontColor}{icon}{option}{self._RESET}"
+
+    def getOption(self, offset=0):
+        return self._options[(self._optionIndex + offset) % self._optionsSize]
+
+    def appendToIndex(self, number):
+        self._optionIndex = self._optionIndex + number
 
