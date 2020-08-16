@@ -23,8 +23,8 @@ def text(
         if state == "FINISH":
             break
         if state == "BREAK_CHAR":
-            print(errorMessage)
             inputConsole.finish()
+            print(errorMessage)
             exit()
 
     finalTitle = finalTitle if finalTitle != "" else title
@@ -45,8 +45,8 @@ class _TextControl:
         self._text = initialText
         self._placeHolder = placeHolder
 
-        self.COLORS = {**INPUT_THEME, **colors}
-        self.RESET = self.COLORS["reset"]
+        self._COLORS = {**INPUT_THEME, **colors}
+        self._RESET = self._COLORS["reset"]
 
     def setText(self, text):
         self._text = text
@@ -59,6 +59,6 @@ class _TextControl:
 
     def getDisplayText(self):
         displayText = self.getTextAbsolute()
-        fontColor = self.COLORS["font"] if self._text != "" else self.COLORS["slight"]
+        fontColor = self._COLORS["font"] if self._text != "" else self._COLORS["slight"]
 
-        return f"{fontColor}{displayText}{self.RESET}"
+        return f"{fontColor}{displayText}{self._RESET}"
