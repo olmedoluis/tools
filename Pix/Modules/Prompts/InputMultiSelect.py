@@ -34,6 +34,9 @@ def multiSelect(
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
+            inputConsole.deleteLastLines(4)
+            inputConsole.finish()
+
             print(errorMessage)
             exit()
 
@@ -57,7 +60,6 @@ class _MultiSelectControl:
         self._ICONS = {**INPUT_ICONS, **icons}
         self._COLORS = {**INPUT_THEME, **colors}
         self._RESET = self._COLORS["reset"]
-        self._SLIGHT_SELECTION = self._COLORS["selection"] + self._COLORS["slight"]
 
         self._optionsSize = len(options)
         self._optionsRaw = options
