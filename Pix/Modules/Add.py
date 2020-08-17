@@ -33,13 +33,12 @@ def add(filePaths=[], shouldVerify=True, messages=""):
     answers = multiSelect(
         title=m.getMessage("add-adition-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
+        errorMessage=m.getMessage("error-nofileschoosen"),
         options=options,
         colors=INPUT_THEME["ADD_SELECTION"],
         icons=INPUT_ICONS,
     )
 
-    if answers == "UNKNOWN_ERROR":
-        return m.log("unknown-error")
     if len(answers) == 0:
         return m.log("error-nofileschoosen")
 
