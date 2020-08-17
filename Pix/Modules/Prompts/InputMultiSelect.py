@@ -73,9 +73,9 @@ def multiSelect(
         elif state == "UP":
             multiSelectControl.appendToIndex(-1)
         elif state == "RIGHT":
-            multiSelectControl.setOptionState(True)
+            multiSelectControl.addIndexToSelectedOptions()
         elif state == "LEFT":
-            multiSelectControl.setOptionState(False)
+            multiSelectControl.removeIndexToSelectedOptions()
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
@@ -95,21 +95,6 @@ def multiSelect(
     return selectedOptions
 
 
-class Option:
-    selectionIcon = ""
-    defaultIcon = ""
-
-    def __init__(self, content):
-        self.state = False
-        self.content = content
-
-    def getIcon(self):
-        return self.selectionIcon if self.state else self.defaultIcon
-
-    def setState(self, newState):
-        self.state = newState
-
-
 class _MultiSelectControl:
     def __init__(self, colors, icons, options):
         from .Theme import INPUT_THEME, INPUT_ICONS
@@ -122,35 +107,45 @@ class _MultiSelectControl:
         self._optionsSize = len(options)
         self._optionsRaw = options
         self._optionIndex = 0
-        self._options = []
+        self._optionsSelected = []
 
-        for option in options:
-            self._options.append(Option(option))
-
-    def getOptionsSelected(options):
+    def getOptionsSelected(self, options):
         output = []
-        for option in self._options:
-            if option.state:
-                output.append(option)
+        for index in self._optionsSelected:
+            output.append(self._optionsRaw[index])
 
         return output
 
     def getDisplayOption(self, offset=0):
-        option = self.getOptionState(offset)
-        fontMod = self._COLORS["slight"] if offset else self._COLORS["bold"]
-        fontColor = self._COLORS["selection"] if option.state else ""
-        icon = option.getIcon()
+        option = self.getOption(offset)
+        indexInRange = self.getIndexInRange(self._optionIndex + offset)
+        isSelected = self.getIsOptionSelected(indexInRange)
 
-        return f"{fontMod}{fontColor}{icon}{option.content}{self._RESET}"
+        fontMod = self._COLORS["slight"] if offset else self._COLORS["bold"]
+        fontColor = self._COLORS["selection"] if isSelected else ""
+        icon = self._ICONS["selection"] if isSelected else self._ICONS["normal"]
+
+        return f"{fontMod}{fontColor}{option}{self._RESET}"
 
     def appendToIndex(self, number):
         self._optionIndex = self._optionIndex + number
 
+    def getIndexInRange(self, index):
+        return index % self._optionsSize
+
     def getOption(self, offset=0):
-        return self._optionsRaw[(self._optionIndex + offset) % self._optionsSize]
+        return self._optionsRaw[self.getIndexInRange(self._optionIndex + offset)]
 
-    def getOptionState(self, offset=0):
-        return self._options[(self._optionIndex + offset) % self._optionsSize]
+    def addIndexToSelectedOptions(self):
+        if not self.getIsOptionSelected():
+            self._optionsSelected.append(self.getIndexInRange(self._optionIndex))
 
-    def setOptionState(self, state, offset=0):
-        self.getOptionState(offset).setState(state)
+    def removeIndexToSelectedOptions(self):
+        if self.getIsOptionSelected():
+            self._optionsSelected.remove(self.getIndexInRange(self._optionIndex))
+
+    def getIsOptionSelected(self, index=None):
+        if index == None:
+            index = self.getIndexInRange(self._optionIndex)
+
+        return index in self._optionsSelected
