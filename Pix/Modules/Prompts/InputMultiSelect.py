@@ -1,57 +1,12 @@
-def getOptionsWithStates(options):
-    class opt:
-        def __init__(self, content):
-            self.state = False
-            self.content = content
-
-        def getStateString(self):
-            return "❤" if self.state else "•"
-
-        def setState(self, newState):
-            self.state = newState
-
-    output = []
-    for option in options:
-        output.append(opt(option))
-
-    return output
-
-
-def getOptionsSelected(options):
-    output = []
-    for option in options:
-        if option.state:
-            output.append(option)
-    return output
-
-
-def getOptionContents(options):
-    output = []
-    for option in options:
-        if option.state:
-            output.append(option.content)
-    return output
-
-
 def multiSelect(
     title="", finalTitle="", options=[""], errorMessage="", colors={}, icons={},
 ):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
-    from .Theme import INPUT_THEME, INPUT_ICONS
-
-    COLORS = {**INPUT_THEME, **colors}
-    ICONS = {**INPUT_ICONS, **icons}
-    RESET = COLORS["reset"]
-    SLIGHT_SELECTION = COLORS["selection"] + COLORS["slight"]
 
     getch = getGetch()
     inputConsole = ConsoleControl(5)
     multiSelectControl = _MultiSelectControl(colors, icons, options)
-
-    selectedOptions = []
-    finalTitle = finalTitle if finalTitle != "" else title
-    optionsWithStates = getOptionsWithStates(options)
 
     inputConsole.setConsoleLine(0, 1, title)
 
@@ -82,16 +37,16 @@ def multiSelect(
             print(errorMessage)
             exit()
 
-    selectedOptionsWithStates = getOptionsSelected(optionsWithStates)
-    selectedOptions = getOptionContents(selectedOptionsWithStates)
+    selectedOptions = multiSelectControl.getOptionsSelected()
     selectedOptionsString = ", ".join(selectedOptions)
+    finalTitle = finalTitle if finalTitle != "" else title
 
     inputConsole.setConsoleLine(0, 1, f"{finalTitle} {selectedOptionsString}")
     inputConsole.refresh()
 
     inputConsole.deleteLastLines(4)
-
     inputConsole.finish()
+
     return selectedOptions
 
 
@@ -109,7 +64,7 @@ class _MultiSelectControl:
         self._optionIndex = 0
         self._optionsSelected = []
 
-    def getOptionsSelected(self, options):
+    def getOptionsSelected(self):
         output = []
         for index in self._optionsSelected:
             output.append(self._optionsRaw[index])
