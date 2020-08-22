@@ -27,7 +27,7 @@ def add(filePaths=[], shouldVerify=True, messages=""):
             options = options + statusContent
 
     if len(options) == 0:
-        return m.log("add-nofiles-error")
+        return m.log("error-add-nofiles")
 
     print()
     answers = multiSelect(
