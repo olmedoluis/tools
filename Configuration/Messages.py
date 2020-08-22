@@ -26,7 +26,7 @@ MESSAGES = {
     "conflicted": "\t{th_conflicted}{ic_conflicted} {pm_change}",
     "deleted-title": "\n {th_normal}Deleted files:\n",
     "deleted": "\t{th_deleted}{ic_deleted} {pm_change}",
-    "error-add-nofiles": "\n {th_error}{ic_error} There is no files to add\n",
+    "error-add-nofiles": "\n {th_error}{ic_error} Error: Files to add not found\n",
     "error-empty": "\n {th_error}{ic_error} You left a field empty\n",
     "error-haschanges": "\n {th_error}{ic_error} You still have uncommited changes\n",
     "error-inputcancel": "\n {th_error}{ic_error} You have cancelled the form\n",
