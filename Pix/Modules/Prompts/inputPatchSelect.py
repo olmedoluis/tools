@@ -27,7 +27,7 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
     patchControl.setPatchesOfFile(1)
     patchControl.setPatchShowing(0)
 
-    def updateConsole():
+    while True:
         inputConsole.setConsoleLine(1, 2, patchControl.getFileIndexShown())
         inputConsole.setConsoleLine(3, 1, patchControl.getCurrentFileName())
 
@@ -37,9 +37,6 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
             inputConsole.setConsoleLine(lineNumber, 1, textToShow)
 
         inputConsole.refresh()
-
-    while True:
-        updateConsole()
 
         char = getch()
         state = getMovement(char, True)
@@ -139,7 +136,7 @@ class PatchControl:
             self.files[self._fileNameIndex].patchesSelected.append(
                 self._patchIndexSelected
             )
-            
+
             self._updateStateColor()
 
     def removeIndexSelectedToPatch(self):
