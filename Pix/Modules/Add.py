@@ -27,20 +27,20 @@ def add(filePaths=[], shouldVerify=True, messages=""):
             options = options + statusContent
 
     if len(options) == 0:
-        return m.log("error-add-nofiles")
+        return m.log("error-add-files_not_found")
 
     print()
     answers = multiSelect(
         title=m.getMessage("add-adition-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-nofileschoosen"),
+        errorMessage=m.getMessage("error-files_selected_not_found"),
         options=options,
         colors=INPUT_THEME["ADD_SELECTION"],
         icons=INPUT_ICONS,
     )
 
     if len(answers) == 0:
-        return m.log("error-nofileschoosen")
+        return m.log("error-files_selected_not_found")
 
     choices = []
     for answer in answers:
@@ -61,7 +61,7 @@ def addAll(fileSearch):
         matches = searchInStatus(fileSearch, status, excludedFiles=["branch", "added"])
 
         return (
-            m.log("error-nomatchfile")
+            m.log("error-file_match_not_found")
             if len(matches) == 0
             else add(matches, shouldVerify=False, messages=m)
         )
@@ -78,7 +78,7 @@ def addAll(fileSearch):
         run(["git", "add", "."])
         m.log("add-all-success")
     else:
-        m.log("add-all-nofiles")
+        m.log("error-add-files_not_found")
 
 
 def Router(router, subroute):
