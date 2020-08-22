@@ -83,7 +83,7 @@ def patch(files, messages=""):
 
     selectedPatches = patchSelect(
         files=patches,
-        errorMessage=m.getMessage("error-nofileschoosen"),
+        errorMessage=m.getMessage("error-files_selected_not_found"),
         colors=INPUT_THEME["PATCH_SELECTION"],
         icons=INPUT_ICONS,
     )
@@ -114,12 +114,12 @@ def patchAll(fileSearch):
     if len(fileSearch) > 0:
         matches = searchInStatus(fileSearch, status, includedFiles=["modified"])
 
-        return m.log("error-nomatchfile") if len(matches) == 0 else patch(matches, m)
+        return m.log("error-file_match_not_found") if len(matches) == 0 else patch(matches, m)
 
     files = status["modified"] if "modified" in status else []
 
     if not len(files):
-        return m.log("error-patch-nofiles")
+        return m.log("error-patch-files-not-found")
 
     patch(files)
 
