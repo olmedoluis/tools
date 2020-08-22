@@ -1,17 +1,11 @@
 def patchSelect(errorMessage="", files=[], colors={}, icons={}):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
-    from .Theme import INPUT_THEME, INPUT_ICONS
     from os import popen
 
     terminalHeight, terminalWidth = popen("stty size", "r").read().split()
     terminalWidth = int(terminalWidth) - 1
     selectionAreaHeight = int(terminalHeight) - 1
-
-    KEYWORDS = {"+": "modification", "-": "deletation"}
-    COLORS = {**INPUT_THEME, **colors}
-    ICONS = {**INPUT_ICONS, **icons}
-    RESET = COLORS["reset"]
 
     getch = getGetch()
     inputConsole = ConsoleControl(selectionAreaHeight)
@@ -20,8 +14,9 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
         termSizeX=terminalWidth,
         termSizeY=selectionAreaHeight,
         files=files,
-        colors=COLORS,
-        icons=ICONS,
+        colors=colors,
+        icons=icons,
+        keywords={"+": "modification", "-": "deletation"},
     )
 
     patchControl.setPatchesOfFile(1)
@@ -74,12 +69,14 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
 
 
 class PatchControl:
-    def __init__(self, offset, termSizeX, termSizeY, files, colors, icons):
-        self._COLORS = colors
-        self._RESET = colors["reset"]
-        self._stateColor = colors["border"]
-        self._ICONS = icons
-        self._KEYWORDS = {"+": "modification", "-": "deletation"}
+    def __init__(self, offset, termSizeX, termSizeY, files, colors, icons, keywords):
+        from .Theme import INPUT_THEME, INPUT_ICONS
+
+        self._KEYWORDS = keywords
+        self._ICONS = {**INPUT_ICONS, **icons}
+        self._COLORS = {**INPUT_THEME, **colors}
+        self._RESET = self._COLORS["reset"]
+        self._stateColor = self._COLORS["border"]
         self._patches = []
         self._offset = offset
         self._termSizeX = termSizeX
