@@ -28,29 +28,13 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
     patchControl.setPatchShowing(0)
 
     def updateConsole():
-        state = (
-            COLORS["borderSel"]
-            if patchControl.getIsPatchSelected()
-            else COLORS["border"]
-        )
-
         inputConsole.setConsoleLine(1, 2, patchControl.getFileIndexShown())
         inputConsole.setConsoleLine(3, 1, patchControl.getCurrentFileName())
 
         for lineNumber in range(5, selectionAreaHeight):
             textToShow = patchControl.getStyledPatchLine(lineNumber)
-            color = COLORS["slight"]
 
-            if textToShow != "":
-                firstChar = textToShow[0]
-                icon = ICONS[firstChar] if firstChar in ICONS else firstChar
-                color = COLORS[KEYWORDS[firstChar]] if firstChar in KEYWORDS else color
-
-                textToShow = color + icon + textToShow[1:] + COLORS["reset"]
-
-            inputConsole.setConsoleLine(
-                lineNumber, 1, f"{state}❚{RESET}   {textToShow}"
-            )
+            inputConsole.setConsoleLine(lineNumber, 1, textToShow)
 
         inputConsole.refresh()
 
@@ -96,7 +80,9 @@ class PatchControl:
     def __init__(self, offset, termSizeX, termSizeY, files, colors, icons):
         self._COLORS = colors
         self._RESET = colors["reset"]
+        self._stateColor = colors["border"]
         self._ICONS = icons
+        self._KEYWORDS = {"+": "modification", "-": "deletation"}
         self._patches = []
         self._offset = offset
         self._termSizeX = termSizeX
@@ -129,6 +115,13 @@ class PatchControl:
             else self._offset
         )
 
+    def _updateStateColor(self):
+        self._stateColor = (
+            self._COLORS["borderSel"]
+            if self.getIsPatchSelected()
+            else self._COLORS["border"]
+        )
+
     def changePage(self, times):
         newIndex = self._patchIndexSelected + times
         self._patchIndexSelected = newIndex % len(self._patches)
@@ -139,12 +132,14 @@ class PatchControl:
 
         self.setPatchShowing(self._patchIndexSelected)
         self._offset = 0
+        self._updateStateColor()
 
     def addIndexSelectedToPatch(self):
         if not self.getIsPatchSelected():
             self.files[self._fileNameIndex].patchesSelected.append(
                 self._patchIndexSelected
             )
+            self._updateStateColor()
 
     def removeIndexSelectedToPatch(self):
         if self.getIsPatchSelected():
@@ -152,13 +147,34 @@ class PatchControl:
                 self._patchIndexSelected
             )
 
+            self._stateColor = (
+                self._COLORS["borderSel"]
+                if self.getIsPatchSelected()
+                else self._COLORS["border"]
+            )
+            self._updateStateColor()
+
+
     def getStyledPatchLine(self, lineNumber):
         index = lineNumber + self._offset - 5
-        if not (index in self._textZoneArea):
-            return ""
+        lineText = (
+            self._patchShowing[index][0 : self._termSizeX - 5]
+            if index in self._textZoneArea
+            else ""
+        )
 
-        lineText = self._patchShowing[index]
-        return lineText[0 : self._termSizeX - 5]
+        if len(lineText):
+            firstChar = lineText[0]
+            icon = self._ICONS[firstChar] if firstChar in self._ICONS else firstChar
+            color = (
+                self._COLORS[self._KEYWORDS[firstChar]]
+                if firstChar in self._KEYWORDS
+                else self._COLORS["slight"]
+            )
+
+            lineText = color + icon + lineText[1:] + self._RESET
+
+        return f"{self._stateColor}❚{self._RESET}   {lineText}"
 
     def getIsPatchSelected(self):
         return (
