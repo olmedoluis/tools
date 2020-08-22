@@ -62,7 +62,7 @@ def main():
             m = MessageControl()
 
             return m.log(
-                "unknownRoute",
+                "error-unknown_route",
                 {"pm_goodRoutes": goodRoutes, "pm_wrongRoutes": wrongRoutes},
             )
 
