@@ -44,7 +44,15 @@ def _cleanLine():
 
 
 class ConsoleControl:
-    def __init__(self, lines):
+    def __init__(self, lines="default"):
+        from os import popen
+
+        terminalHeight, terminalWidth = popen("stty size", "r").read().split()
+        self.terminalWidth = int(terminalWidth) - 1
+        self.terminalHeight = int(terminalHeight) - 1
+
+        lines = self.terminalHeight if lines == "default" else lines
+
         self.display = (" " * (lines - 1)).split(" ")
 
         hide_cursor()
