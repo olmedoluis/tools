@@ -139,6 +139,7 @@ class PatchControl:
             self.files[self._fileNameIndex].patchesSelected.append(
                 self._patchIndexSelected
             )
+            
             self._updateStateColor()
 
     def removeIndexSelectedToPatch(self):
@@ -147,13 +148,7 @@ class PatchControl:
                 self._patchIndexSelected
             )
 
-            self._stateColor = (
-                self._COLORS["borderSel"]
-                if self.getIsPatchSelected()
-                else self._COLORS["border"]
-            )
             self._updateStateColor()
-
 
     def getStyledPatchLine(self, lineNumber):
         index = lineNumber + self._offset - 5
