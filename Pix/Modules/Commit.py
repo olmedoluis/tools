@@ -34,7 +34,7 @@ def save():
     status = getStatus()
 
     if not "added" in status:
-        return m.log("commit-nofiles")
+        return m.log("error-commit-files_not_found")
 
     addedFiles = status["added"]
 
@@ -43,7 +43,7 @@ def save():
         m.log("added", {"pm_change": addedFile})
 
     options = ["feat", "refactor", "fix", "style"]
-    scapeError = m.getMessage("scape-error")
+    scapeError = m.getMessage("operation-cancel")
     commonDir = getCommonDirectory(addedFiles)
 
     print()
