@@ -1,4 +1,4 @@
-def confirm(title="", finalTitle="", colors={}):
+def confirm(title="", finalTitle="", colors={}, errorMessage=""):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getResponse
     from .Theme import INPUT_THEME
@@ -8,32 +8,32 @@ def confirm(title="", finalTitle="", colors={}):
     inputConsole = ConsoleControl(1)
 
     word = False
-    try:
-        finalTitle = finalTitle if finalTitle != "" else title
 
-        while True:
-            inputConsole.setConsoleLine(0, 1, f"{title}")
-            inputConsole.refresh()
-
-            char = getch()
-            state = getResponse(char)
-
-            if state == "YES":
-                word = True
-                break
-            if state == "NO":
-                word = False
-                break
-            if state == "FINISH":
-                break
-            if state == "BREAK_CHAR":
-                exit()
-
-        inputConsole.setConsoleLine(0, 1, f"{finalTitle} {FONT_COLOR}{word}")
+    while True:
+        inputConsole.setConsoleLine(0, 1, f"{title}")
         inputConsole.refresh()
 
-    finally:
-        inputConsole.finish()
+        char = getch()
+        state = getResponse(char)
 
-        return word
+        if state == "YES":
+            word = True
+            break
+        elif state == "NO":
+            word = False
+            break
+        elif state == "FINISH":
+            break
+        elif state == "BREAK_CHAR":
+            inputConsole.finish()
+            print(errorMessage)
+            exit()
+
+    finalTitle = finalTitle if finalTitle != "" else title
+
+    inputConsole.setConsoleLine(0, 1, f"{finalTitle} {FONT_COLOR}{word}")
+    inputConsole.refresh()
+    inputConsole.finish()
+
+    return word
 

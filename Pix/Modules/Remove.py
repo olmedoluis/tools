@@ -25,13 +25,12 @@ def remove(filePaths=[], shouldVerify=True):
     answers = multiSelect(
         title=m.getMessage("remove-removing-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
+        errorMessage=m.getMessage("error-nofileschoosen"),
         options=options,
         colors=INPUT_THEME["REMOVE_SELECTION"],
         icons=INPUT_ICONS,
     )
 
-    if answers == "UNKNOWN_ERROR":
-        return m.log("unknown-error")
     if len(answers) == 0:
         return m.log("remove-nofileschoosen-error")
 
