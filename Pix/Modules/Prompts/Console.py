@@ -32,17 +32,6 @@ def show_cursor():
         stdout.flush()
 
 
-code = "\x1b["
-
-
-def _cursorUp(times):
-    stdout.write(f"{code}{times}A")
-
-
-def _cleanLine():
-    stdout.write(f"{code}2K")
-
-
 class ConsoleControl:
     def __init__(self, lines="default"):
         from os import popen
@@ -60,14 +49,22 @@ class ConsoleControl:
         for emptyValue in self.display:
             print(emptyValue)
 
+    @staticmethod
+    def _cursorUp(times):
+        stdout.write(f"\x1b[{times}A")
+
+    @staticmethod
+    def _cleanLine():
+        stdout.write(f"\x1b[2K")
+
     def setConsoleLine(self, row=0, column=0, content=""):
         self.display[row] = " " * column + content
 
     def refresh(self):
         count = len(self.display)
-        _cursorUp(count)
+        self._cursorUp(count)
         for line in self.display:
-            _cleanLine()
+            self._cleanLine()
             print(line)
 
     def deleteLastLines(self, lines):
@@ -75,8 +72,8 @@ class ConsoleControl:
         newNumberOfLines = lastNumberOfLines - lines
         self.display = (" " * (newNumberOfLines)).split(" ")
         for i in range(0, lines):
-            _cleanLine()
-            _cursorUp(1)
+            self._cleanLine()
+            self._cursorUp(1)
 
     def finish(self):
         show_cursor()
