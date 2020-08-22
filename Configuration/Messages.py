@@ -19,7 +19,7 @@ MESSAGES = {
     "commit-about-title": "{th_normal}What is this commit about?",
     "commit-cancel": "\n {th_error}{ic_success} You have cancelled commiting\n",
     "commit-scope-title": "{th_normal}What is the scope?",
-    "commit-success": "\n {th_success}{ic_success} You have commited added files\n",
+    "commit-success": "\n {th_success}{ic_success} You have committed added files\n",
     "commit-type-title": "{th_normal}What type of commit is this?",
     "confirmation": "{th_normal}Are you sure? y/n",
     "conflicted-title": "\n {th_normal}Conflicted files:\n",
