@@ -77,7 +77,7 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
             patchControl.changePage(1)
         elif state == "NO":
             patchControl.removeIndexSelectedToPatch()
-            patchControl.changePage(-1)
+            patchControl.changePage(1)
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
