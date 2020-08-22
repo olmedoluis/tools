@@ -1,18 +1,13 @@
 def patchSelect(errorMessage="", files=[], colors={}, icons={}):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import getMovement
-    from os import popen
-
-    terminalHeight, terminalWidth = popen("stty size", "r").read().split()
-    terminalWidth = int(terminalWidth) - 1
-    selectionAreaHeight = int(terminalHeight) - 1
 
     getch = getGetch()
-    inputConsole = ConsoleControl(selectionAreaHeight)
+    inputConsole = ConsoleControl(lines="default")
     patchControl = PatchControl(
         offset=0,
-        termSizeX=terminalWidth,
-        termSizeY=selectionAreaHeight,
+        termSizeX=inputConsole.terminalWidth,
+        termSizeY=inputConsole.terminalHeight,
         files=files,
         colors=colors,
         icons=icons,
@@ -26,7 +21,7 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
         inputConsole.setConsoleLine(1, 2, patchControl.getFileIndexShown())
         inputConsole.setConsoleLine(3, 1, patchControl.getCurrentFileName())
 
-        for lineNumber in range(5, selectionAreaHeight):
+        for lineNumber in range(5, inputConsole.terminalHeight):
             textToShow = patchControl.getStyledPatchLine(lineNumber)
 
             inputConsole.setConsoleLine(lineNumber, 1, textToShow)
@@ -57,12 +52,12 @@ def patchSelect(errorMessage="", files=[], colors={}, icons={}):
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
-            inputConsole.deleteLastLines(selectionAreaHeight + 4)
+            inputConsole.deleteLastLines(inputConsole.terminalHeight + 4)
             inputConsole.finish()
             print(errorMessage)
             exit()
 
-    inputConsole.deleteLastLines(selectionAreaHeight + 4)
+    inputConsole.deleteLastLines(inputConsole.terminalHeight + 4)
     inputConsole.finish()
 
     return patchControl.files
