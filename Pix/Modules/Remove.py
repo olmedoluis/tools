@@ -19,20 +19,20 @@ def remove(filePaths=[], shouldVerify=True):
     options = specificFiles if len(specificFiles) != 0 else options
 
     if len(options) == 0:
-        return m.log("remove-nofiles-error")
+        return m.log("error-remove-files_not_found")
 
     print()
     answers = multiSelect(
-        title=m.getMessage("remove-removing-title"),
+        title=m.getMessage("remove-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-nofileschoosen"),
+        errorMessage=m.getMessage("error-files_selected_not_found"),
         options=options,
         colors=INPUT_THEME["REMOVE_SELECTION"],
         icons=INPUT_ICONS,
     )
 
     if len(answers) == 0:
-        return m.log("remove-nofileschoosen-error")
+        return m.log("error-files_selected_not_found")
 
     choices = []
     for answer in answers:
@@ -53,7 +53,9 @@ def removeAll(fileSearch):
         matches = searchInStatus(fileSearch, status, includedFiles=["added"])
 
         return (
-            m.log("error-nomatchfile") if len(matches) == 0 else remove(matches, False)
+            m.log("error-file_match_not_found")
+            if len(matches) == 0
+            else remove(matches, False)
         )
 
     hasFilesToRemove = False
@@ -68,7 +70,7 @@ def removeAll(fileSearch):
         run(["git", "reset", "."])
         m.log("remove-all-success")
     else:
-        m.log("remove-all-nofiles")
+        m.log("error-remove-files_not_found")
 
 
 def Router(router, subroute):

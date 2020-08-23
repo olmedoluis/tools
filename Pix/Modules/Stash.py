@@ -12,7 +12,7 @@ def addToStash():
     print()
     title = text(
         title=m.getMessage("stash-in-title"),
-        errorMessage=m.getMessage("scape-error"),
+        errorMessage=m.getMessage("operation-cancel"),
         colors=INPUT_THEME["STASH_CREATION_NAME"],
     )
 
@@ -38,7 +38,7 @@ def stashSelection():
     stashesSpaced = stashesOutput.rstrip().split("\n")
 
     if stashesSpaced[0] == "":
-        return m.log("error-nostashes")
+        return m.log("error-stash-stashes_not_found")
 
     stashList = []
     for stashWithSpaces in stashesSpaced:
@@ -55,7 +55,7 @@ def stashSelection():
 
         stashList.append(
             m.getMessage(
-                "stash-listitem",
+                "stash-list_item",
                 {"pm_stashid": stashId, "pm_stashname": name, "pm_stashbranch": branch},
             )
         )
@@ -64,7 +64,7 @@ def stashSelection():
     stashSelected = select(
         title=m.getMessage("branch-selection-title"),
         options=stashList,
-        errorMessage=m.getMessage("scape-error"),
+        errorMessage=m.getMessage("operation-cancel"),
         colors=INPUT_THEME["STASH_SELECTION"],
         icons=INPUT_ICONS,
     )

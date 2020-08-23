@@ -34,7 +34,7 @@ def save():
     status = getStatus()
 
     if not "added" in status:
-        return m.log("commit-nofiles")
+        return m.log("error-commit-files_not_found")
 
     addedFiles = status["added"]
 
@@ -43,7 +43,7 @@ def save():
         m.log("added", {"pm_change": addedFile})
 
     options = ["feat", "refactor", "fix", "style"]
-    scapeError = m.getMessage("scape-error")
+    scapeError = m.getMessage("operation-cancel")
     commonDir = getCommonDirectory(addedFiles)
 
     print()
@@ -51,7 +51,7 @@ def save():
         [
             {
                 "type": "Select",
-                "title": m.getMessage("commit-type-title"),
+                "title": m.getMessage("commit-creation-type_title"),
                 "options": options,
                 "errorMessage": scapeError,
                 "colors": INPUT_THEME["COMMIT_CREATION_TYPE"],
@@ -59,14 +59,14 @@ def save():
             },
             {
                 "type": "Text",
-                "title": m.getMessage("commit-scope-title"),
+                "title": m.getMessage("commit-creation-scope_title"),
                 "placeHolder": commonDir,
                 "errorMessage": scapeError,
                 "colors": INPUT_THEME["COMMIT_CREATION_SCOPE"],
             },
             {
                 "type": "Text",
-                "title": m.getMessage("commit-about-title"),
+                "title": m.getMessage("commit-creation-about_title"),
                 "errorMessage": scapeError,
                 "colors": INPUT_THEME["COMMIT_CREATION_ABOUT"],
             },

@@ -20,7 +20,7 @@ def branchSelection(branchSearch):
     branchesSpaced = branchesOutput.rstrip().split("\n")
 
     if branchesSpaced[0] == "":
-        return m.log("error-nobranches")
+        return m.log("error-branch-branches_not_found")
 
     if branchSearch != "":
         branchMatch = []
@@ -29,7 +29,7 @@ def branchSelection(branchSearch):
                 branchMatch.append(branch)
 
         if len(branchMatch) == 0:
-            return m.log("error-nomatchbranch", {"pm_branch": branchSearch})
+            return m.log("error-branch-match_not_found", {"pm_branch": branchSearch})
 
         branchesSpaced = branchMatch
 
@@ -50,7 +50,7 @@ def branchSelection(branchSearch):
         branchSelected = select(
             title=m.getMessage("branch-selection-title"),
             options=branches,
-            errorMessage=m.getMessage("scape-error"),
+            errorMessage=m.getMessage("operation-cancel"),
             colors=INPUT_THEME["BRANCH_SELECTION"],
             icons=INPUT_ICONS,
         )
@@ -62,7 +62,7 @@ def branchSelection(branchSearch):
         run(["git", "checkout", branchSelected])
         m.log("branch-success", {"pm_branch": branchSelected})
     else:
-        m.log("error-samebranch", {"pm_branch": branchSelected})
+        m.log("branch-selection-same_branch", {"pm_branch": branchSelected})
 
 
 def branchCreation():
@@ -77,14 +77,14 @@ def branchCreation():
         return m.log("error-haschanges")
 
     options = ["feature", "refactor", "bugfix", "style"]
-    scapeError = m.getMessage("scape-error")
+    scapeError = m.getMessage("operation-cancel")
 
     print()
     answers = many(
         [
             {
                 "type": "Select",
-                "title": m.getMessage("branch-type-title"),
+                "title": m.getMessage("branch-creation-type_title"),
                 "options": options,
                 "errorMessage": scapeError,
                 "colors": INPUT_THEME["BRANCH_CREATION_TYPE"],
@@ -92,14 +92,14 @@ def branchCreation():
             },
             {
                 "type": "Text",
-                "title": m.getMessage("branch-id-title"),
+                "title": m.getMessage("branch-creation-id_title"),
                 "placeHolder": "",
                 "errorMessage": scapeError,
                 "colors": INPUT_THEME["BRANCH_CREATION_ID"],
             },
             {
                 "type": "Text",
-                "title": m.getMessage("branch-about-title"),
+                "title": m.getMessage("branch-creation-about_title"),
                 "errorMessage": scapeError,
                 "colors": INPUT_THEME["BRANCH_CREATION_ABOUT"],
             },
@@ -129,15 +129,15 @@ def branchCreation():
         return m.log("commit-cancel")
 
     shouldSwitch = confirm(
-        title=m.getMessage("branch-shouldswitch"),
+        title=m.getMessage("branch-creation-shouldswitch"),
         colors=INPUT_THEME["BRANCH_CREATION_SWITCH"],
     )
 
     if shouldSwitch:
         run(["git", "checkout", branch])
-        m.log("branch-switchsuccess", {"pm_branch": branch})
+        m.log("branch-creation-switch_success", {"pm_branch": branch})
     else:
-        m.log("error-inputcancel")
+        m.log("branch-creation-switch_cancel")
 
 
 def Router(router, subroute):
