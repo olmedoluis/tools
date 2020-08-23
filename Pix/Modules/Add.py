@@ -31,7 +31,7 @@ def add(filePaths=[], shouldVerify=True, messages=""):
 
     print()
     answers = multiSelect(
-        title=m.getMessage("add-adition-title"),
+        title=m.getMessage("add-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
         errorMessage=m.getMessage("error-files_selected_not_found"),
         options=options,
