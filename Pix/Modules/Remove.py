@@ -23,7 +23,7 @@ def remove(filePaths=[], shouldVerify=True):
 
     print()
     answers = multiSelect(
-        title=m.getMessage("remove-removing-title"),
+        title=m.getMessage("remove-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
         errorMessage=m.getMessage("error-files_selected_not_found"),
         options=options,
