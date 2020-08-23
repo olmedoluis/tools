@@ -55,7 +55,7 @@ def stashSelection():
 
         stashList.append(
             m.getMessage(
-                "stash-listitem",
+                "stash-list_item",
                 {"pm_stashid": stashId, "pm_stashname": name, "pm_stashbranch": branch},
             )
         )
