@@ -32,4 +32,7 @@ KEYS = {
     "Patch": {
         "keys": ["patch", "exam"]
     },
+    "Reset": {
+        "keys": ["reset", "restart"]
+    },
 }
