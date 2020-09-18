@@ -2,16 +2,16 @@ def getCommonDirectory(directories):
     from os.path import basename
     from os import getcwd
 
-    directoriesSplited = []
+    directoriesSplitted = []
     for directory in directories:
-        directoriesSplited.append(directory.split("/"))
+        directoriesSplitted.append(directory.split("/"))
 
-    if len(directoriesSplited) == 1:
-        return directoriesSplited[0][-1]
+    if len(directoriesSplitted) == 1:
+        return directoriesSplitted[0][-1]
 
     index = 0
-    for example in directoriesSplited[0]:
-        for directory in directoriesSplited:
+    for example in directoriesSplitted[0]:
+        for directory in directoriesSplitted:
             if example == directory[index]:
                 continue
 
