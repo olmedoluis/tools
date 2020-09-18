@@ -30,9 +30,11 @@ def parseChange(status, changeId, changeName, path, THEME):
             if not oldFilePaths[index] == newFilePaths[index]:
                 path = (
                     oldFilePaths[:index]
-                    + [THEME["th_modified"] + newFilePaths[index] + THEME["th_reset"]]
+                    + [THEME["th_modified"] + newFilePaths[index]]
                     + newFilePaths[index + 1 :]
                 )
+
+                path[-1] += THEME["th_reset"]
 
                 path = "/".join(path)
                 break
