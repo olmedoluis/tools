@@ -32,4 +32,7 @@ ALIASES = {
     "Patch": {
         "aliases": ["e"]
     },
+    "Reset": {
+        "aliases": ["rst"]
+    },
 }
