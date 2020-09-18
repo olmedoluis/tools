@@ -1,5 +1,4 @@
 def getCommonDirectory(directories):
-    from .Helpers import removeColors
     from os.path import basename
     from os import getcwd
 
@@ -15,9 +14,8 @@ def getCommonDirectory(directories):
         for directory in directoriesSplited:
             if example == directory[index]:
                 continue
-            return removeColors(
-                directory[index - 1] if index > 0 else basename(getcwd())
-            )
+
+            return directory[index - 1] if index > 0 else basename(getcwd())
 
         index = index + 1
 
@@ -27,7 +25,7 @@ def getCommonDirectory(directories):
 def save():
     from .Prompts import many, confirm
     from .Status import getStatus
-    from .Helpers import run, MessageControl
+    from .Helpers import run, MessageControl, removeColors
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
@@ -60,7 +58,7 @@ def save():
             {
                 "type": "Text",
                 "title": m.getMessage("commit-creation-scope_title"),
-                "placeHolder": commonDir,
+                "placeHolder": removeColors(commonDir),
                 "errorMessage": scapeError,
                 "colors": INPUT_THEME["COMMIT_CREATION_SCOPE"],
             },
