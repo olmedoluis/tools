@@ -1,4 +1,4 @@
-def add(file_paths=[], should_verify=True, messages=""):
+def add(file_paths=[], use_availables=False, messages=""):
     from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
     from .Status import get_status, search_in_status, get_status_paths
@@ -16,7 +16,7 @@ def add(file_paths=[], should_verify=True, messages=""):
 
     if len(file_paths) == 0:
         return m.log("error-add-files_not_found")
-    elif not should_verify:
+    elif use_availables:
         run(["git", "add"] + file_paths)
         return m.log("add-all-success")
     elif is_individual_path and len(file_paths) == 1:
@@ -54,11 +54,11 @@ def add_individually(file_paths):
 
         return m.log("add-success")
 
-    add(should_verify=False, messages=m)
+    add(messages=m)
 
 
 def router(argument_manager, sub_route):
     if sub_route == "ADD_ALL":
-        add(should_verify=False)
+        add(use_availables=True)
     if sub_route == "DEFAULT":
         add_individually(argument_manager.left_keys)
