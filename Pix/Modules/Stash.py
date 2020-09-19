@@ -56,7 +56,11 @@ def stash_selection():
         stash_list.append(
             m.getMessage(
                 "stash-list_item",
-                {"pm_stashid": stash_id, "pm_stashname": name, "pm_stashbranch": branch},
+                {
+                    "pm_stashid": stash_id,
+                    "pm_stashname": name,
+                    "pm_stashbranch": branch,
+                },
             )
         )
 
@@ -77,8 +81,8 @@ def stash_selection():
     m.log("stash-back-success", {"pm_stash": stash_selected})
 
 
-def Router(router, subroute):
-    if subroute == "ADD_STASH":
+def router(argument_manager, sub_route):
+    if sub_route == "ADD_STASH":
         add_to_stash()
-    if subroute == "DEFAULT":
+    if sub_route == "DEFAULT":
         stash_selection()
