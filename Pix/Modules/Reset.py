@@ -31,15 +31,15 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
 
             specificFiles = specificFiles + statusContent
 
-    if len(filePaths) != 0 and shouldVerify:
+    if len(specificFiles) != 0:
         filesForParsing = searchInStatus(
-            filePaths,
+            specificFiles,
             status,
             excludedFiles=["branch", "added"],
             getOriginalStructure=True,
         )
         specificFiles = searchInStatus(
-            filePaths, status, excludedFiles=["branch", "added"]
+            specificFiles, status, excludedFiles=["branch", "added"]
         )
 
     if not shouldVerify:
@@ -79,6 +79,12 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
     m.log("reset-success")
 
 
+def resetAll():
+    reset(filePaths=[], shouldVerify=False)
+
+
 def Router(router, subroute):
-    if subroute == "DEFAULT":
+    if subroute == "RESET_ALL":
+        resetAll()
+    elif subroute == "DEFAULT":
         reset(router.leftKeys)
