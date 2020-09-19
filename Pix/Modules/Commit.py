@@ -89,6 +89,6 @@ def save():
         m.log("commit-cancel")
 
 
-def Router(router, subroute):
-    if subroute == "DEFAULT":
+def router(argument_manager, sub_route):
+    if sub_route == "DEFAULT":
         save()
