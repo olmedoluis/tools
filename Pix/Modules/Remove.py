@@ -1,32 +1,30 @@
 def remove(file_paths=[], should_verify=True):
     from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
-    from .Status import get_status, search_in_status
+    from .Status import get_status, search_in_status, get_status_paths
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
     status = get_status()
 
-    specific_files = file_paths if file_paths else []
-    if len(file_paths) != 0 and should_verify:
-        specific_files = search_in_status(file_paths, status, included_files=["added"])
+    file_paths = (
+        search_in_status(file_paths, status, included_files=["added"])
+        if len(file_paths)
+        else get_status_paths(status, included_files=["added"])
+    )
 
-    if len(specific_files) == 1 or not should_verify:
-        run(["git", "reset"] + specific_files)
-        return m.log("remove-success")
-
-    options = status["added"] if "added" in status else []
-    options = specific_files if len(specific_files) != 0 else options
-
-    if len(options) == 0:
+    if len(file_paths) == 0:
         return m.log("error-remove-files_not_found")
+    elif not should_verify:
+        run(["git", "reset"] + file_paths)
+        return m.log("remove-all-success")
 
     print()
     answers = multi_select(
         title=m.getMessage("remove-title"),
         final_title=m.getMessage("file-selection-finaltitle"),
         error_message=m.getMessage("error-files_selected_not_found"),
-        options=options,
+        options=file_paths,
         colors=INPUT_THEME["REMOVE_SELECTION"],
         icons=INPUT_ICONS,
     )
@@ -43,34 +41,7 @@ def remove(file_paths=[], should_verify=True):
 
 
 def remove_all(file_search):
-    from .Helpers import run, removeColors, MessageControl
-    from .Status import get_status, search_in_status
-
-    m = MessageControl()
-    status = get_status()
-
-    if len(file_search) > 0:
-        matches = search_in_status(file_search, status, included_files=["added"])
-
-        return (
-            m.log("error-file_match_not_found")
-            if len(matches) == 0
-            else remove(matches, False)
-        )
-
-    has_files_to_remove = False
-    for status_id in status:
-        if status_id != "added":
-            continue
-
-        has_files_to_remove = True
-        break
-
-    if has_files_to_remove:
-        run(["git", "reset", "."])
-        m.log("remove-all-success")
-    else:
-        m.log("error-remove-files_not_found")
+    remove(file_paths=[], should_verify=False)
 
 
 def router(argument_manager, sub_route):
