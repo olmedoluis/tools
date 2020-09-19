@@ -30,6 +30,18 @@ def search_in_status(
     return matches
 
 
+def get_status_paths(status, excluded_files=[], included_files=[]):
+    file_paths = []
+
+    for status_id in status:
+        status_content = status[status_id]
+
+        if not (status_id in excluded_files) or status_id in included_files:
+            file_paths = file_paths + status_content
+
+    return file_paths
+
+
 def parse_change(status, change_id, change_name, path, THEME):
     carried_change = status[change_name] if change_name in status else []
 

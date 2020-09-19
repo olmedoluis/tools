@@ -1,19 +1,7 @@
-def get_status_paths(status, excluded_files=[], included_files=[]):
-    file_paths = []
-
-    for status_id in status:
-        status_content = status[status_id]
-
-        if not (status_id in excluded_files) or status_id in included_files:
-            file_paths = file_paths + status_content
-
-    return file_paths
-
-
 def add(file_paths=[], should_verify=True, messages=""):
     from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
-    from .Status import get_status, search_in_status
+    from .Status import get_status, search_in_status, get_status_paths
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
