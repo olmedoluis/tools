@@ -36,9 +36,9 @@ def runAll(commands=[]):
 
 
 def checkRoute(keyword, outsideKeys, outsideAliases):
-    childKeys = outsideKeys["child_keys"] if "child_keys" in outsideKeys else []
+    childKeys = outsideKeys["CHILD_KEYS"] if "CHILD_KEYS" in outsideKeys else []
     childAliases = (
-        outsideAliases["child_aliases"] if "child_aliases" in outsideAliases else []
+        outsideAliases["CHILD_ALIASES"] if "CHILD_ALIASES" in outsideAliases else []
     )
 
     for entityId in childKeys:
@@ -52,8 +52,8 @@ def checkRoute(keyword, outsideKeys, outsideAliases):
 
 def checkPixShortcut(keyword, outsideKeys, outsideAliases):
     for entityId in outsideKeys:
-        keys = outsideKeys[entityId]["keys"]
-        aliases = outsideAliases[entityId]["aliases"]
+        keys = outsideKeys[entityId]["KEYS"]
+        aliases = outsideAliases[entityId]["ALIASES"]
         posibleRoutes = keys + aliases
 
         if keyword in posibleRoutes:
