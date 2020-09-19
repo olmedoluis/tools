@@ -1,4 +1,4 @@
-def addToStash():
+def add_to_stash():
     from .Prompts import text
     from .Helpers import run, MessageControl
     from .Status import get_status
@@ -23,7 +23,7 @@ def addToStash():
     m.log("stash-in-success")
 
 
-def stashSelection():
+def stash_selection():
     from .Prompts import select
     from .Helpers import run, MessageControl
     from .Status import get_status
@@ -34,51 +34,51 @@ def stashSelection():
     if len(get_status()) > 1:
         return m.log("error-haschanges")
 
-    stashesOutput = run(["git", "stash", "list"])
-    stashesSpaced = stashesOutput.rstrip().split("\n")
+    stashes_raw = run(["git", "stash", "list"])
+    stashes_spaced = stashes_raw.rstrip().split("\n")
 
-    if stashesSpaced[0] == "":
+    if stashes_spaced[0] == "":
         return m.log("error-stash-stashes_not_found")
 
-    stashList = []
-    for stashWithSpaces in stashesSpaced:
-        stash = stashWithSpaces.lstrip()
+    stash_list = []
+    for stash_with_spaces in stashes_spaced:
+        stash = stash_with_spaces.lstrip()
 
-        idStartIndex = stash.find("{") + 1
-        stashId = stash[idStartIndex : idStartIndex + 1]
+        id_start_index = stash.find("{") + 1
+        stash_id = stash[id_start_index : id_start_index + 1]
 
-        branchStartIndex = stash.find("On") + 3
-        branchEndIndex = stash.find(" ", branchStartIndex) - 1
-        branch = stash[branchStartIndex:branchEndIndex]
+        branch_start_index = stash.find("On") + 3
+        branch_end_index = stash.find(" ", branch_start_index) - 1
+        branch = stash[branch_start_index:branch_end_index]
 
-        name = stash[branchEndIndex + 2 :]
+        name = stash[branch_end_index + 2 :]
 
-        stashList.append(
+        stash_list.append(
             m.getMessage(
                 "stash-list_item",
-                {"pm_stashid": stashId, "pm_stashname": name, "pm_stashbranch": branch},
+                {"pm_stashid": stash_id, "pm_stashname": name, "pm_stashbranch": branch},
             )
         )
 
     print()
-    stashSelected = select(
+    stash_selected = select(
         title=m.getMessage("branch-selection-title"),
-        options=stashList,
+        options=stash_list,
         errorMessage=m.getMessage("operation-cancel"),
         colors=INPUT_THEME["STASH_SELECTION"],
         icons=INPUT_ICONS,
     )
 
-    if stashSelected == "":
+    if stash_selected == "":
         return m.log("error-empty")
 
-    stashId = stashSelected[0]
-    run(["git", "stash", "pop", stashId])
-    m.log("stash-back-success", {"pm_stash": stashSelected})
+    stash_id = stash_selected[0]
+    run(["git", "stash", "pop", stash_id])
+    m.log("stash-back-success", {"pm_stash": stash_selected})
 
 
 def Router(router, subroute):
     if subroute == "ADD_STASH":
-        addToStash()
+        add_to_stash()
     if subroute == "DEFAULT":
-        stashSelection()
+        stash_selection()
