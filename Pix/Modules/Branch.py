@@ -141,8 +141,8 @@ def branchCreation():
         m.log("branch-creation-switch_cancel")
 
 
-def Router(router, subroute):
-    if subroute == "BRANCH_CREATION":
+def router(argument_manager, sub_route):
+    if sub_route == "BRANCH_CREATION":
         branchCreation()
-    elif subroute == "DEFAULT":
-        branchSelection(router.get_next_route())
+    elif sub_route == "DEFAULT":
+        branchSelection(argument_manager.get_next_route())
