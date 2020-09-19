@@ -49,7 +49,7 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
         return m.log("reset-all-success")
 
     if len(specificFiles) == 0:
-        return m.log("error-add-files_not_found")
+        return m.log("error-reset-files_not_found")
 
     print()
     answers = multiSelect(
@@ -57,7 +57,7 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
         finalTitle=m.getMessage("file-selection-finaltitle"),
         errorMessage=m.getMessage("error-files_selected_not_found"),
         options=specificFiles,
-        colors=INPUT_THEME["ADD_SELECTION"],
+        colors=INPUT_THEME["RESET_SELECTION"],
         icons=INPUT_ICONS,
     )
 
