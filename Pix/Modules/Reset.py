@@ -48,7 +48,8 @@ def reset(file_paths=[], use_availables=False, messages=""):
     )
 
     if len(file_paths) == 0:
-        return m.log("error-reset-files_not_found")
+        m.log("error-reset-files_not_found")
+        exit()
     elif use_availables:
         executeReset(file_paths, status)
         return m.log("reset-all-success")

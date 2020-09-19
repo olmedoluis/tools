@@ -15,7 +15,8 @@ def remove(file_paths=[], use_availables=False, messages=""):
     )
 
     if len(file_paths) == 0:
-        return m.log("error-remove-files_not_found")
+        m.log("error-remove-files_not_found")
+        exit()
     elif use_availables:
         run(["git", "reset"] + file_paths)
         return m.log("remove-all-success")
