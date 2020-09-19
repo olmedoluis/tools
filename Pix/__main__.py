@@ -1,76 +1,75 @@
-class PixTools:
+class ArgumentManager:
     def __init__(self, argv):
         self.user_routes = argv
         self.actual_route = argv[0]
-        self.leftKeys = argv[1:]
+        self.left_keys = argv[1:]
 
-    def getGoodRoutes(self):
-        goodRoutes = []
+    def get_good_routes(self):
+        good_routes = []
 
         for route in self.user_routes:
             if route != self.actual_route:
-                goodRoutes.append(route)
+                good_routes.append(route)
             else:
                 break
 
-        return goodRoutes
+        return good_routes
 
-    def getNextRoute(self):
-        return "" if 0 == len(self.leftKeys) else self.leftKeys[0]
+    def get_next_route(self):
+        return "" if 0 == len(self.left_keys) else self.left_keys[0]
 
 
-def getConcatenatedRoutes(routes):
+def get_concatenated_routes(routes):
     indexes = [i for i, e in enumerate(routes) if e == "n"]
-    lastRoute = routes[indexes[-1] + 1 :]
-    allRoutes = []
-    lastIndex = 0
+    last_route = routes[indexes[-1] + 1 :]
+    all_routes = []
+    last_index = 0
 
     for index in indexes:
-        allRoutes.append(routes[lastIndex:index])
-        lastIndex = index + 1
+        all_routes.append(routes[last_index:index])
+        last_index = index + 1
 
-    allRoutes.append(lastRoute)
+    all_routes.append(last_route)
 
-    return allRoutes
+    return all_routes
 
 
 def main():
     from sys import argv
 
-    arg = argv[1:]
+    user_arguments = argv[1:]
 
-    if len(arg) == 0:
+    if len(user_arguments) == 0:
         return
 
     from Configuration import ALIASES
-    from .Data.PixRoutes import KEYS
+    from .Data.Routes import KEYS
     from .Modules import PIX_STORE
-    from .Modules.Helpers import checkPixShortcut, checkRoute
+    from .Modules.Helpers import check_pix_shortcut, check_route
 
-    allRoutes = getConcatenatedRoutes(arg) if "n" in arg else [arg]
+    all_routes = get_concatenated_routes(user_arguments) if "n" in user_arguments else [user_arguments]
 
-    for arguments in allRoutes:
-        pixTools = PixTools(arguments)
+    for arguments in all_routes:
+        argument_manager = ArgumentManager(arguments)
 
-        routeName = checkPixShortcut(pixTools.actual_route, KEYS, ALIASES)
+        route_name = check_pix_shortcut(argument_manager.actual_route, KEYS, ALIASES)
 
-        if routeName == False:
+        if route_name == False:
             from .Modules.Helpers import MessageControl
 
-            goodRoutes = f"pix {' '.join(pixTools.getGoodRoutes())}"
-            wrongRoutes = f"{pixTools.actual_route} {' '.join(pixTools.leftKeys)}"
-            m = MessageControl()
+            good_routes = f"pix {' '.join(argument_manager.get_good_routes())}"
+            wrong_routes = f"{argument_manager.actual_route} {' '.join(argument_manager.left_keys)}"
 
-            return m.log(
+            return MessageControl().log(
                 "error-unknown_route",
-                {"pm_goodRoutes": goodRoutes, "pm_wrongRoutes": wrongRoutes},
+                {"pm_goodRoutes": good_routes, "pm_wrongRoutes": wrong_routes},
             )
 
-        next_route = pixTools.getNextRoute()
-        subroute = checkRoute(next_route, KEYS[routeName], ALIASES[routeName])
+        next_route = argument_manager.get_next_route()
+        sub_route = check_route(next_route, KEYS[route_name], ALIASES[route_name])
 
-        requiredRouter = PIX_STORE[routeName]
-        requiredRouter(pixTools, subroute)
+        required_router = PIX_STORE[route_name]
+        required_router(argument_manager, sub_route)
 
 
 if __name__ == "__main__":

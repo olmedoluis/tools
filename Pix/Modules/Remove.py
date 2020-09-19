@@ -1,31 +1,31 @@
-def remove(filePaths=[], shouldVerify=True):
-    from .Prompts import multiSelect
+def remove(file_paths=[], should_verify=True):
+    from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
-    specificFiles = filePaths if filePaths else []
-    if len(filePaths) != 0 and shouldVerify:
-        specificFiles = searchInStatus(filePaths, status, includedFiles=["added"])
+    specific_files = file_paths if file_paths else []
+    if len(file_paths) != 0 and should_verify:
+        specific_files = search_in_status(file_paths, status, included_files=["added"])
 
-    if len(specificFiles) == 1 or not shouldVerify:
-        run(["git", "reset"] + specificFiles)
+    if len(specific_files) == 1 or not should_verify:
+        run(["git", "reset"] + specific_files)
         return m.log("remove-success")
 
     options = status["added"] if "added" in status else []
-    options = specificFiles if len(specificFiles) != 0 else options
+    options = specific_files if len(specific_files) != 0 else options
 
     if len(options) == 0:
         return m.log("error-remove-files_not_found")
 
     print()
-    answers = multiSelect(
+    answers = multi_select(
         title=m.getMessage("remove-title"),
-        finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-files_selected_not_found"),
+        final_title=m.getMessage("file-selection-finaltitle"),
+        error_message=m.getMessage("error-files_selected_not_found"),
         options=options,
         colors=INPUT_THEME["REMOVE_SELECTION"],
         icons=INPUT_ICONS,
@@ -42,15 +42,15 @@ def remove(filePaths=[], shouldVerify=True):
     m.log("remove-success")
 
 
-def removeAll(fileSearch):
+def remove_all(file_search):
     from .Helpers import run, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
-    if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, includedFiles=["added"])
+    if len(file_search) > 0:
+        matches = search_in_status(file_search, status, included_files=["added"])
 
         return (
             m.log("error-file_match_not_found")
@@ -58,23 +58,23 @@ def removeAll(fileSearch):
             else remove(matches, False)
         )
 
-    hasFilesToRemove = False
-    for statusId in status:
-        if statusId != "added":
+    has_files_to_remove = False
+    for status_id in status:
+        if status_id != "added":
             continue
 
-        hasFilesToRemove = True
+        has_files_to_remove = True
         break
 
-    if hasFilesToRemove:
+    if has_files_to_remove:
         run(["git", "reset", "."])
         m.log("remove-all-success")
     else:
         m.log("error-remove-files_not_found")
 
 
-def Router(router, subroute):
-    if subroute == "REMOVE_ALL":
-        removeAll(router.leftKeys[1:])
-    if subroute == "DEFAULT":
-        remove(router.leftKeys)
+def router(argument_manager, sub_route):
+    if sub_route == "REMOVE_ALL":
+        remove_all(argument_manager.left_keys[1:])
+    if sub_route == "DEFAULT":
+        remove(argument_manager.left_keys)

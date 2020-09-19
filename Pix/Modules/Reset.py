@@ -12,13 +12,13 @@ def parse_status(status):
 
 
 def reset(file_paths=[], should_verify=True, messages=""):
-    from .Prompts import multiSelect
+    from .Prompts import multi_select
     from .Helpers import runAll, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
-    status = getStatus()
+    status = get_status()
 
     files_for_parsing = []
 
@@ -31,14 +31,14 @@ def reset(file_paths=[], should_verify=True, messages=""):
             file_paths = file_paths + status_content
 
     if len(file_paths) != 0:
-        files_for_parsing = searchInStatus(
+        files_for_parsing = search_in_status(
             file_paths,
             status,
-            excludedFiles=["branch", "added"],
-            getOriginalStructure=True,
+            excluded_files=["branch", "added"],
+            get_original_structure=True,
         )
-        file_paths = searchInStatus(
-            file_paths, status, excludedFiles=["branch", "added"]
+        file_paths = search_in_status(
+            file_paths, status, excluded_files=["branch", "added"]
         )
 
     if not should_verify:
@@ -51,10 +51,10 @@ def reset(file_paths=[], should_verify=True, messages=""):
         return m.log("error-reset-files_not_found")
 
     print()
-    answers = multiSelect(
+    answers = multi_select(
         title=m.getMessage("reset-title"),
-        finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-files_selected_not_found"),
+        final_title=m.getMessage("file-selection-finaltitle"),
+        error_message=m.getMessage("error-files_selected_not_found"),
         options=file_paths,
         colors=INPUT_THEME["RESET_SELECTION"],
         icons=INPUT_ICONS,
@@ -67,11 +67,11 @@ def reset(file_paths=[], should_verify=True, messages=""):
     for answer in answers:
         choices.append(removeColors(answer))
 
-    files_for_parsing = searchInStatus(
+    files_for_parsing = search_in_status(
         choices,
         status,
-        excludedFiles=["branch", "added"],
-        getOriginalStructure=True,
+        excluded_files=["branch", "added"],
+        get_original_structure=True,
     )
 
     runAll(parse_status(files_for_parsing))
@@ -82,8 +82,8 @@ def reset_all():
     reset(file_paths=[], should_verify=False)
 
 
-def Router(router, sub_route):
+def router(argument_manager, sub_route):
     if sub_route == "RESET_ALL":
         reset_all()
     elif sub_route == "DEFAULT":
-        reset(router.leftKeys)
+        reset(argument_manager.left_keys)

@@ -1,40 +1,40 @@
 ALIASES = {
-    "Status": {
-        "aliases": ["w", "st"]
+    "STATUS": {
+        "ALIASES": ["w", "st"]
     },
-    "Add": {
-        "aliases": ["a"], 
-        "child_aliases": {
+    "ADD": {
+        "ALIASES": ["a"], 
+        "CHILD_ALIASES": {
             "ADD_ALL": ["."]
         }
     },
-    "Remove": {
-        "aliases": ["una", "rm"], 
-        "child_aliases": {
+    "REMOVE": {
+        "ALIASES": ["una", "rm"], 
+        "CHILD_ALIASES": {
             "REMOVE_ALL": ["."]
         }
     },
-    "Commit": {
-        "aliases": ["s", "c"],
+    "COMMIT": {
+        "ALIASES": ["s", "c"],
     },
-    "Branch": {
-        "aliases": ["br"],
-        "child_aliases": {
+    "BRANCH": {
+        "ALIASES": ["br"],
+        "CHILD_ALIASES": {
             "BRANCH_CREATION": ["cr"]
         }
     },
-    "Stash": {
-        "aliases": ["b"],
-        "child_aliases": {
+    "STASH": {
+        "ALIASES": ["b"],
+        "CHILD_ALIASES": {
             "ADD_STASH": ["a", "i"]
         }
     },
-    "Patch": {
-        "aliases": ["e"]
+    "PATCH": {
+        "ALIASES": ["e"]
     },
-    "Reset": {
-        "aliases": ["rs"],
-        "child_aliases": {
+    "RESET": {
+        "ALIASES": ["rs"],
+        "CHILD_ALIASES": {
             "RESET_ALL": ["."]
         }
     },

@@ -35,10 +35,10 @@ def runAll(commands=[]):
         run(command)
 
 
-def checkRoute(keyword, outsideKeys, outsideAliases):
-    childKeys = outsideKeys["child_keys"] if "child_keys" in outsideKeys else []
+def check_route(keyword, outsideKeys, outsideAliases):
+    childKeys = outsideKeys["CHILD_KEYS"] if "CHILD_KEYS" in outsideKeys else []
     childAliases = (
-        outsideAliases["child_aliases"] if "child_aliases" in outsideAliases else []
+        outsideAliases["CHILD_ALIASES"] if "CHILD_ALIASES" in outsideAliases else []
     )
 
     for entityId in childKeys:
@@ -50,10 +50,10 @@ def checkRoute(keyword, outsideKeys, outsideAliases):
     return "DEFAULT"
 
 
-def checkPixShortcut(keyword, outsideKeys, outsideAliases):
+def check_pix_shortcut(keyword, outsideKeys, outsideAliases):
     for entityId in outsideKeys:
-        keys = outsideKeys[entityId]["keys"]
-        aliases = outsideAliases[entityId]["aliases"]
+        keys = outsideKeys[entityId]["KEYS"]
+        aliases = outsideAliases[entityId]["ALIASES"]
         posibleRoutes = keys + aliases
 
         if keyword in posibleRoutes:

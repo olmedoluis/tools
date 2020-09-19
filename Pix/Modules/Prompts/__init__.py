@@ -1,27 +1,28 @@
 from .InputText import text
 from .InputSelect import select
 from .InputConfirm import confirm
-from .InputMultiSelect import multiSelect
-from .inputPatchSelect import patchSelect
+from .InputMultiSelect import multi_select
+from .inputPatchSelect import patch_select
 
 
-def many(choosenInputsData):
-    inputs = {
-        "Text": text,
-        "Select": select,
-        "Confirm": confirm,
-        "MultiSelect": multiSelect,
-        "patchSelect": patchSelect,
+def many(selected_inputs_data):
+    STORE = {
+        "text": text,
+        "select": select,
+        "confirm": confirm,
+        "multi_select": multi_select,
+        "patch_select": patch_select,
     }
     responses = []
 
-    for choosenInputData in choosenInputsData:
-        choosenInput = inputs[choosenInputData["type"]]
-        choosenInputData.pop("type")
+    for selected_input_data in selected_inputs_data:
+        selected_input = STORE[selected_input_data["type"]]
+        selected_input_data.pop("type")
+        response = selected_input(**selected_input_data)
 
-        response = choosenInput(**choosenInputData)
         if response == "":
             break
+
         responses.append(response)
 
     return responses

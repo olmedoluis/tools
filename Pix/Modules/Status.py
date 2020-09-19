@@ -1,35 +1,39 @@
-def searchInStatus(
-    fileSearch, status, excludedFiles=[], includedFiles=[], getOriginalStructure=False
+def search_in_status(
+    files_searching,
+    status,
+    excluded_files=[],
+    included_files=[],
+    get_original_structure=False,
 ):
-    matches = {} if getOriginalStructure else []
+    matches = {} if get_original_structure else []
 
-    for statusId in status:
-        isExcludedFile = statusId in excludedFiles
-        isIncludedFile = not statusId in includedFiles
+    for status_id in status:
+        is_excluded_file = status_id in excluded_files
+        is_included_file = not status_id in included_files
 
-        if isExcludedFile if len(excludedFiles) != 0 else isIncludedFile:
+        if is_excluded_file if len(excluded_files) != 0 else is_included_file:
             continue
 
-        changes = status[statusId]
+        changes = status[status_id]
 
         for change in changes:
-            for file in fileSearch:
+            for file in files_searching:
                 if file.lower() in change.lower():
-                    if getOriginalStructure:
+                    if get_original_structure:
                         carriedMatches = (
-                            matches[statusId] if statusId in matches else []
+                            matches[status_id] if status_id in matches else []
                         )
-                        matches[statusId] = [*carriedMatches, change]
+                        matches[status_id] = [*carriedMatches, change]
                     else:
                         matches.append(change)
 
     return matches
 
 
-def parseChange(status, changeId, changeName, path, THEME):
-    draggedChange = status[changeName] if changeName in status else []
+def parse_change(status, change_id, change_name, path, THEME):
+    carried_change = status[change_name] if change_name in status else []
 
-    if changeId == "R":
+    if change_id == "R":
         oldFilePaths, newFilePaths = path.split(" -> ")
         oldFilePaths = oldFilePaths.split("/")
         newFilePaths = newFilePaths.split("/")
@@ -47,12 +51,12 @@ def parseChange(status, changeId, changeName, path, THEME):
                 path = "/".join(path)
                 break
 
-    status[changeName] = [*draggedChange, path]
+    status[change_name] = [*carried_change, path]
 
     return status
 
 
-def getStatus():
+def get_status():
     from .Helpers import run
     from Configuration.Theme import THEME
 
@@ -67,35 +71,35 @@ def getStatus():
         "D": "deleted",
     }
 
-    statusData = run(["git", "status", "-sb"])
-    statusData = statusData.rstrip().split("\n")
+    status_data = run(["git", "status", "-sb"])
+    status_data = status_data.rstrip().split("\n")
 
     status = {}
-    for changeRaw in statusData:
-        change = changeRaw[3:]
-        changeId = changeRaw[:2]
-        firstLetter, secondLetter = changeId
+    for change_raw in status_data:
+        change = change_raw[3:]
+        change_id = change_raw[:2]
+        first_letter, second_letter = change_id
 
-        if changeId in STATUS_MATCHES:
-            parseChange(status, changeId, STATUS_MATCHES[changeId], change, THEME)
+        if change_id in STATUS_MATCHES:
+            parse_change(status, change_id, STATUS_MATCHES[change_id], change, THEME)
             continue
 
-        if firstLetter != " ":
-            parseChange(status, firstLetter, STATUS_MATCHES["A"], change, THEME)
+        if first_letter != " ":
+            parse_change(status, first_letter, STATUS_MATCHES["A"], change, THEME)
 
-        if secondLetter != " ":
-            parseChange(
-                status, secondLetter, STATUS_MATCHES[secondLetter], change, THEME
+        if second_letter != " ":
+            parse_change(
+                status, second_letter, STATUS_MATCHES[second_letter], change, THEME
             )
 
     return status
 
 
-def showStatus():
+def show_status():
     from .Helpers import MessageControl
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
     print()
     if "branch" in status:
@@ -115,6 +119,6 @@ def showStatus():
     print()
 
 
-def Router(router, subroute):
-    if subroute == "DEFAULT":
-        showStatus()
+def router(argument_manager, sub_route):
+    if sub_route == "DEFAULT":
+        show_status()

@@ -1,27 +1,27 @@
-def add(filePaths=[], shouldVerify=True, messages=""):
-    from .Prompts import multiSelect
+def add(file_paths=[], should_verify=True, messages=""):
+    from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
-    status = getStatus()
+    status = get_status()
 
-    specificFiles = filePaths if filePaths else []
-    if len(filePaths) != 0 and shouldVerify:
-        specificFiles = searchInStatus(
-            filePaths, status, excludedFiles=["branch", "added"]
+    specific_files = file_paths if file_paths else []
+    if len(file_paths) != 0 and should_verify:
+        specific_files = search_in_status(
+            file_paths, status, excluded_files=["branch", "added"]
         )
 
-    if len(specificFiles) == 1 or not shouldVerify:
-        run(["git", "add"] + specificFiles)
+    if len(specific_files) == 1 or not should_verify:
+        run(["git", "add"] + specific_files)
         return m.log("add-success")
 
-    options = specificFiles
-    if len(specificFiles) == 0:
-        for statusId in status:
-            statusContent = status[statusId]
-            if statusId == "branch" or statusId == "added":
+    options = specific_files
+    if len(specific_files) == 0:
+        for status_id in status:
+            statusContent = status[status_id]
+            if status_id == "branch" or status_id == "added":
                 continue
 
             options = options + statusContent
@@ -30,10 +30,10 @@ def add(filePaths=[], shouldVerify=True, messages=""):
         return m.log("error-add-files_not_found")
 
     print()
-    answers = multiSelect(
+    answers = multi_select(
         title=m.getMessage("add-title"),
-        finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-files_selected_not_found"),
+        final_title=m.getMessage("file-selection-finaltitle"),
+        error_message=m.getMessage("error-files_selected_not_found"),
         options=options,
         colors=INPUT_THEME["ADD_SELECTION"],
         icons=INPUT_ICONS,
@@ -52,37 +52,37 @@ def add(filePaths=[], shouldVerify=True, messages=""):
 
 def addAll(fileSearch):
     from .Helpers import run, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
     if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, excludedFiles=["branch", "added"])
+        matches = search_in_status(fileSearch, status, excluded_files=["branch", "added"])
 
         return (
             m.log("error-file_match_not_found")
             if len(matches) == 0
-            else add(matches, shouldVerify=False, messages=m)
+            else add(matches, should_verify=False, messages=m)
         )
 
-    hasFilesToAdd = False
-    for statusId in status:
-        if statusId == "branch" or statusId == "added":
+    has_files_to_add = False
+    for status_id in status:
+        if status_id == "branch" or status_id == "added":
             continue
 
-        hasFilesToAdd = True
+        has_files_to_add = True
         break
 
-    if hasFilesToAdd:
+    if has_files_to_add:
         run(["git", "add", "."])
         m.log("add-all-success")
     else:
         m.log("error-add-files_not_found")
 
 
-def Router(router, subroute):
-    if subroute == "ADD_ALL":
-        addAll(router.leftKeys[1:])
-    if subroute == "DEFAULT":
-        add(router.leftKeys)
+def router(argument_manager, sub_route):
+    if sub_route == "ADD_ALL":
+        addAll(argument_manager.left_keys[1:])
+    if sub_route == "DEFAULT":
+        add(argument_manager.left_keys)
