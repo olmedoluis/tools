@@ -30,6 +30,11 @@ def run(command=[]):
     return output
 
 
+def runAll(commands=[]):
+    for command in commands:
+        run(command)
+
+
 def checkRoute(keyword, outsideKeys, outsideAliases):
     childKeys = outsideKeys["child_keys"] if "child_keys" in outsideKeys else []
     childAliases = (

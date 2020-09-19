@@ -5,6 +5,7 @@ from .Commit import Router as CommitRouter
 from .Remove import Router as RemoveRouter
 from .Stash import Router as StashRouter
 from .Patch import Router as PatchRouter
+from .Reset import Router as ResetRouter
 
 PIX_STORE = {
     "Status": StatusRouter,
@@ -14,5 +15,6 @@ PIX_STORE = {
     "Branch": BranchRouter,
     "Stash": StashRouter,
     "Patch": PatchRouter,
+    "Reset": ResetRouter,
 }
 

@@ -45,6 +45,7 @@ INPUT_THEME = {
     "COMMIT_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
     "PATCH_SELECTION": EMPTY,
     "REMOVE_SELECTION": {"selection": f"{CODE}9;1m"},
+    "RESET_SELECTION": {"selection": f"{CODE}48;1m"},
     "STASH_CREATION_NAME": EMPTY,
     "STASH_SELECTION": EMPTY,
 }

@@ -32,4 +32,10 @@ KEYS = {
     "Patch": {
         "keys": ["patch", "exam"]
     },
+    "Reset": {
+        "keys": ["reset", "restart"],
+        "child_keys": {
+            "RESET_ALL": ["all"]
+        }
+    },
 }

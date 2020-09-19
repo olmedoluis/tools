@@ -1,5 +1,7 @@
-def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
-    matches = []
+def searchInStatus(
+    fileSearch, status, excludedFiles=[], includedFiles=[], getOriginalStructure=False
+):
+    matches = {} if getOriginalStructure else []
 
     for statusId in status:
         isExcludedFile = statusId in excludedFiles
@@ -13,7 +15,13 @@ def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
         for change in changes:
             for file in fileSearch:
                 if file.lower() in change.lower():
-                    matches.append(change)
+                    if getOriginalStructure:
+                        carriedMatches = (
+                            matches[statusId] if statusId in matches else []
+                        )
+                        matches[statusId] = [*carriedMatches, change]
+                    else:
+                        matches.append(change)
 
     return matches
 
@@ -30,9 +38,11 @@ def parseChange(status, changeId, changeName, path, THEME):
             if not oldFilePaths[index] == newFilePaths[index]:
                 path = (
                     oldFilePaths[:index]
-                    + [THEME["th_modified"] + newFilePaths[index] + THEME["th_reset"]]
+                    + [THEME["th_modified"] + newFilePaths[index]]
                     + newFilePaths[index + 1 :]
                 )
+
+                path[-1] += THEME["th_reset"]
 
                 path = "/".join(path)
                 break
