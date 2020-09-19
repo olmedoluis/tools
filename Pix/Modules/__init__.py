@@ -1,11 +1,11 @@
-from .Status import Router as StatusRouter
+from .Status import router as StatusRouter
 from .Add import router as AddRouter
-from .Branch import Router as BranchRouter
-from .Commit import Router as CommitRouter
-from .Remove import Router as RemoveRouter
-from .Stash import Router as StashRouter
-from .Patch import Router as PatchRouter
-from .Reset import Router as ResetRouter
+from .Branch import router as BranchRouter
+from .Commit import router as CommitRouter
+from .Remove import router as RemoveRouter
+from .Stash import router as StashRouter
+from .Patch import router as PatchRouter
+from .Reset import router as ResetRouter
 
 PIX_STORE = {
     "STATUS": StatusRouter,
@@ -17,4 +17,3 @@ PIX_STORE = {
     "PATCH": PatchRouter,
     "RESET": ResetRouter,
 }
-
