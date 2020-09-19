@@ -1,22 +1,22 @@
-def remove(filePaths=[], shouldVerify=True):
+def remove(file_paths=[], should_verify=True):
     from .Prompts import multiSelect
     from .Helpers import run, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
-    specificFiles = filePaths if filePaths else []
-    if len(filePaths) != 0 and shouldVerify:
-        specificFiles = searchInStatus(filePaths, status, included_files=["added"])
+    specific_files = file_paths if file_paths else []
+    if len(file_paths) != 0 and should_verify:
+        specific_files = search_in_status(file_paths, status, included_files=["added"])
 
-    if len(specificFiles) == 1 or not shouldVerify:
-        run(["git", "reset"] + specificFiles)
+    if len(specific_files) == 1 or not should_verify:
+        run(["git", "reset"] + specific_files)
         return m.log("remove-success")
 
     options = status["added"] if "added" in status else []
-    options = specificFiles if len(specificFiles) != 0 else options
+    options = specific_files if len(specific_files) != 0 else options
 
     if len(options) == 0:
         return m.log("error-remove-files_not_found")
@@ -42,15 +42,15 @@ def remove(filePaths=[], shouldVerify=True):
     m.log("remove-success")
 
 
-def removeAll(fileSearch):
+def remove_all(file_search):
     from .Helpers import run, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
-    if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, included_files=["added"])
+    if len(file_search) > 0:
+        matches = search_in_status(file_search, status, included_files=["added"])
 
         return (
             m.log("error-file_match_not_found")
@@ -58,15 +58,15 @@ def removeAll(fileSearch):
             else remove(matches, False)
         )
 
-    hasFilesToRemove = False
-    for statusId in status:
-        if statusId != "added":
+    has_files_to_remove = False
+    for status_id in status:
+        if status_id != "added":
             continue
 
-        hasFilesToRemove = True
+        has_files_to_remove = True
         break
 
-    if hasFilesToRemove:
+    if has_files_to_remove:
         run(["git", "reset", "."])
         m.log("remove-all-success")
     else:
@@ -75,6 +75,6 @@ def removeAll(fileSearch):
 
 def Router(router, subroute):
     if subroute == "REMOVE_ALL":
-        removeAll(router.left_keys[1:])
+        remove_all(router.left_keys[1:])
     if subroute == "DEFAULT":
         remove(router.left_keys)
