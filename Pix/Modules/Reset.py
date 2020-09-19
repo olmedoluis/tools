@@ -82,8 +82,8 @@ def reset_all():
     reset(file_paths=[], should_verify=False)
 
 
-def Router(router, sub_route):
+def router(argument_manager, sub_route):
     if sub_route == "RESET_ALL":
         reset_all()
     elif sub_route == "DEFAULT":
-        reset(router.left_keys)
+        reset(argument_manager.left_keys)
