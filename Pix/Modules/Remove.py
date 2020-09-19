@@ -1,5 +1,5 @@
 def remove(file_paths=[], should_verify=True):
-    from .Prompts import multiSelect
+    from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
     from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
@@ -22,10 +22,10 @@ def remove(file_paths=[], should_verify=True):
         return m.log("error-remove-files_not_found")
 
     print()
-    answers = multiSelect(
+    answers = multi_select(
         title=m.getMessage("remove-title"),
-        finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-files_selected_not_found"),
+        final_title=m.getMessage("file-selection-finaltitle"),
+        error_message=m.getMessage("error-files_selected_not_found"),
         options=options,
         colors=INPUT_THEME["REMOVE_SELECTION"],
         icons=INPUT_ICONS,

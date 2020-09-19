@@ -12,7 +12,7 @@ def add_to_stash():
     print()
     title = text(
         title=m.getMessage("stash-in-title"),
-        errorMessage=m.getMessage("operation-cancel"),
+        error_message=m.getMessage("operation-cancel"),
         colors=INPUT_THEME["STASH_CREATION_NAME"],
     )
 
@@ -68,7 +68,7 @@ def stash_selection():
     stash_selected = select(
         title=m.getMessage("branch-selection-title"),
         options=stash_list,
-        errorMessage=m.getMessage("operation-cancel"),
+        error_message=m.getMessage("operation-cancel"),
         colors=INPUT_THEME["STASH_SELECTION"],
         icons=INPUT_ICONS,
     )

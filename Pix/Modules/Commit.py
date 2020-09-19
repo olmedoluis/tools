@@ -48,24 +48,24 @@ def save():
     answers = many(
         [
             {
-                "type": "Select",
+                "type": "select",
                 "title": m.getMessage("commit-creation-type_title"),
                 "options": options,
-                "errorMessage": scape_error,
+                "error_message": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_TYPE"],
                 "icons": INPUT_ICONS,
             },
             {
-                "type": "Text",
+                "type": "text",
                 "title": m.getMessage("commit-creation-scope_title"),
-                "placeHolder": removeColors(common_dir),
-                "errorMessage": scape_error,
+                "place_holder": removeColors(common_dir),
+                "error_message": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_SCOPE"],
             },
             {
-                "type": "Text",
+                "type": "text",
                 "title": m.getMessage("commit-creation-about_title"),
-                "errorMessage": scape_error,
+                "error_message": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_ABOUT"],
             },
         ]

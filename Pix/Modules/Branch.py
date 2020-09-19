@@ -51,7 +51,7 @@ def branchSelection(branch_search):
         branch_selected = select(
             title=m.getMessage("branch-selection-title"),
             options=branches,
-            errorMessage=m.getMessage("operation-cancel"),
+            error_message=m.getMessage("operation-cancel"),
             colors=INPUT_THEME["BRANCH_SELECTION"],
             icons=INPUT_ICONS,
         )
@@ -84,24 +84,23 @@ def branchCreation():
     answers = many(
         [
             {
-                "type": "Select",
+                "type": "select",
                 "title": m.getMessage("branch-creation-type_title"),
                 "options": options,
-                "errorMessage": scape_error,
+                "error_message": scape_error,
                 "colors": INPUT_THEME["BRANCH_CREATION_TYPE"],
                 "icons": INPUT_ICONS,
             },
             {
-                "type": "Text",
+                "type": "text",
                 "title": m.getMessage("branch-creation-id_title"),
-                "placeHolder": "",
-                "errorMessage": scape_error,
+                "error_message": scape_error,
                 "colors": INPUT_THEME["BRANCH_CREATION_ID"],
             },
             {
-                "type": "Text",
+                "type": "text",
                 "title": m.getMessage("branch-creation-about_title"),
-                "errorMessage": scape_error,
+                "error_message": scape_error,
                 "colors": INPUT_THEME["BRANCH_CREATION_ABOUT"],
             },
         ]

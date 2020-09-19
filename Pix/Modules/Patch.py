@@ -1,5 +1,5 @@
-def add_to_file(text, filePath):
-    f = open(filePath, "w+")
+def add_to_file(text, file_path):
+    f = open(file_path, "w+")
     f.write(text)
     f.close()
 
@@ -68,7 +68,7 @@ def parse_differences(differences_raw, files, get_message):
 
 
 def patch(files, messages=""):
-    from .Prompts import patchSelect
+    from .Prompts import patch_select
     from .Helpers import run, MessageControl
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
     from pathlib import Path
@@ -76,14 +76,14 @@ def patch(files, messages=""):
     m = MessageControl() if messages == "" else messages
 
     cwd = Path.cwd()
-    filePath = f"{cwd}/changes.patch"
+    file_path = f"{cwd}/changes.patch"
 
     differences_raw = run(["git", "diff-files", "-p"] + files)
     patches = parse_differences(differences_raw, files, m.getMessage)
 
-    selected_patches = patchSelect(
+    selected_patches = patch_select(
         files=patches,
-        errorMessage=m.getMessage("error-files_selected_not_found"),
+        error_message=m.getMessage("error-files_selected_not_found"),
         colors=INPUT_THEME["PATCH_SELECTION"],
         icons=INPUT_ICONS,
     )
@@ -93,14 +93,14 @@ def patch(files, messages=""):
     if len(patch_generated) == 1:
         return m.log("error-empty")
 
-    add_to_file("\n".join(patch_generated), filePath)
+    add_to_file("\n".join(patch_generated), file_path)
 
-    with open(filePath, "w+") as file:
+    with open(file_path, "w+") as file:
         file.write("\n".join(patch_generated))
 
-    run(["git", "apply", "--cached", filePath])
+    run(["git", "apply", "--cached", file_path])
 
-    run(["rm", filePath])
+    run(["rm", file_path])
     m.log("patch-success")
 
 

@@ -12,7 +12,7 @@ def parse_status(status):
 
 
 def reset(file_paths=[], should_verify=True, messages=""):
-    from .Prompts import multiSelect
+    from .Prompts import multi_select
     from .Helpers import runAll, removeColors, MessageControl
     from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
@@ -51,10 +51,10 @@ def reset(file_paths=[], should_verify=True, messages=""):
         return m.log("error-reset-files_not_found")
 
     print()
-    answers = multiSelect(
+    answers = multi_select(
         title=m.getMessage("reset-title"),
-        finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-files_selected_not_found"),
+        final_title=m.getMessage("file-selection-finaltitle"),
+        error_message=m.getMessage("error-files_selected_not_found"),
         options=file_paths,
         colors=INPUT_THEME["RESET_SELECTION"],
         icons=INPUT_ICONS,

@@ -1,5 +1,5 @@
 def add(file_paths=[], should_verify=True, messages=""):
-    from .Prompts import multiSelect
+    from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
     from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
@@ -30,10 +30,10 @@ def add(file_paths=[], should_verify=True, messages=""):
         return m.log("error-add-files_not_found")
 
     print()
-    answers = multiSelect(
+    answers = multi_select(
         title=m.getMessage("add-title"),
-        finalTitle=m.getMessage("file-selection-finaltitle"),
-        errorMessage=m.getMessage("error-files_selected_not_found"),
+        final_title=m.getMessage("file-selection-finaltitle"),
+        error_message=m.getMessage("error-files_selected_not_found"),
         options=options,
         colors=INPUT_THEME["ADD_SELECTION"],
         icons=INPUT_ICONS,
