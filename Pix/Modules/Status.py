@@ -1,3 +1,15 @@
+STATUS_MATCHES = {
+    "##": "branch",
+    "??": "untracked",
+    "UU": "conflicted",
+    "U": "conflicted",
+    "M": "modified",
+    "R": "renamed",
+    "A": "added",
+    "D": "deleted",
+}
+
+
 def search_in_status(
     files_searching,
     status,
@@ -30,13 +42,15 @@ def search_in_status(
     return matches
 
 
-def get_status_paths(status, excluded_files=[], included_files=[]):
+def get_status_paths(
+    status, excluded_files=["branch"], included_files=STATUS_MATCHES.values()
+):
     file_paths = []
 
     for status_id in status:
         status_content = status[status_id]
 
-        if not (status_id in excluded_files) or status_id in included_files:
+        if not (status_id in excluded_files) and status_id in included_files:
             file_paths = file_paths + status_content
 
     return file_paths
@@ -71,17 +85,6 @@ def parse_change(status, change_id, change_name, path, THEME):
 def get_status():
     from .Helpers import run
     from Configuration.Theme import THEME
-
-    STATUS_MATCHES = {
-        "##": "branch",
-        "??": "untracked",
-        "UU": "conflicted",
-        "U": "conflicted",
-        "M": "modified",
-        "R": "renamed",
-        "A": "added",
-        "D": "deleted",
-    }
 
     status_data = run(["git", "status", "-sb"])
     status_data = status_data.rstrip().split("\n")
