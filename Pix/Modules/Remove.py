@@ -40,12 +40,8 @@ def remove(file_paths=[], should_verify=True):
     m.log("remove-success")
 
 
-def remove_all(file_search):
-    remove(file_paths=[], should_verify=False)
-
-
 def router(argument_manager, sub_route):
     if sub_route == "REMOVE_ALL":
-        remove_all(argument_manager.left_keys[1:])
+        remove(file_paths=[], should_verify=False)
     if sub_route == "DEFAULT":
         remove(argument_manager.left_keys)
