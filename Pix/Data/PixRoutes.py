@@ -1,40 +1,40 @@
 KEYS = {
-    "Status": {
-        "keys": ["status", "work"]
+    "STATUS": {
+        "KEYS": ["status", "work"]
     },
-    "Add": {
-        "keys":["add"], 
-        "child_keys": {
+    "ADD": {
+        "KEYS":["add"], 
+        "CHILD_KEYS": {
             "ADD_ALL": ["all"]
         }
     },
-    "Remove": {
-        "keys": ["remove"], 
-        "child_keys": {
+    "REMOVE": {
+        "KEYS": ["remove"], 
+        "CHILD_KEYS": {
             "REMOVE_ALL": ["all"]
         }
     },
-    "Commit": {
-        "keys": ["commit"],
+    "COMMIT": {
+        "KEYS": ["commit"],
     },
-    "Branch": {
-        "keys": ["branch"],
-        "child_keys": {
+    "BRANCH": {
+        "KEYS": ["branch"],
+        "CHILD_KEYS": {
             "BRANCH_CREATION": ["create", "new"]
         }
     },
-    "Stash": {
-        "keys": ["stash"],
-        "child_keys": {
+    "STASH": {
+        "KEYS": ["stash"],
+        "CHILD_KEYS": {
             "ADD_STASH": ["add", "in"]
         }
     },
-    "Patch": {
-        "keys": ["patch", "exam"]
+    "PATCH": {
+        "KEYS": ["patch", "exam"]
     },
-    "Reset": {
-        "keys": ["reset", "restart"],
-        "child_keys": {
+    "RESET": {
+        "KEYS": ["reset", "restart"],
+        "CHILD_KEYS": {
             "RESET_ALL": ["all"]
         }
     },
