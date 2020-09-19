@@ -1,10 +1,14 @@
 def parse_status(status):
+    from os.path import isdir
+
     reset_commands = []
 
     for status_id in status:
         for change in status[status_id]:
             if status_id == "untracked":
-                reset_commands.append(["rm", change])
+                folderDelete = ["-r", "-f"] if isdir(change) else []
+
+                reset_commands.append(["rm", *folderDelete, change])
             else:
                 reset_commands.append(["git", "checkout", change])
 
