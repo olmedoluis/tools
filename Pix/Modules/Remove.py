@@ -73,8 +73,8 @@ def remove_all(file_search):
         m.log("error-remove-files_not_found")
 
 
-def Router(router, subroute):
-    if subroute == "REMOVE_ALL":
-        remove_all(router.left_keys[1:])
-    if subroute == "DEFAULT":
-        remove(router.left_keys)
+def router(argument_manager, sub_route):
+    if sub_route == "REMOVE_ALL":
+        remove_all(argument_manager.left_keys[1:])
+    if sub_route == "DEFAULT":
+        remove(argument_manager.left_keys)
