@@ -76,10 +76,6 @@ def reset(file_paths=[], use_availables=False, messages=""):
     m.log("reset-success")
 
 
-def reset_all():
-    reset(file_paths=[], use_availables=True)
-
-
 def reset_individually(file_paths):
     from .Helpers import MessageControl
 
