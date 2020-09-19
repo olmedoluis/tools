@@ -34,11 +34,11 @@ def reset(file_paths=[], should_verify=True, messages=""):
         files_for_parsing = searchInStatus(
             file_paths,
             status,
-            excludedFiles=["branch", "added"],
-            getOriginalStructure=True,
+            excluded_files=["branch", "added"],
+            get_original_structure=True,
         )
         file_paths = searchInStatus(
-            file_paths, status, excludedFiles=["branch", "added"]
+            file_paths, status, excluded_files=["branch", "added"]
         )
 
     if not should_verify:
@@ -70,8 +70,8 @@ def reset(file_paths=[], should_verify=True, messages=""):
     files_for_parsing = searchInStatus(
         choices,
         status,
-        excludedFiles=["branch", "added"],
-        getOriginalStructure=True,
+        excluded_files=["branch", "added"],
+        get_original_structure=True,
     )
 
     runAll(parse_status(files_for_parsing))

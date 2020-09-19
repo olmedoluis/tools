@@ -10,7 +10,7 @@ def add(file_paths=[], should_verify=True, messages=""):
     specific_files = file_paths if file_paths else []
     if len(file_paths) != 0 and should_verify:
         specific_files = searchInStatus(
-            file_paths, status, excludedFiles=["branch", "added"]
+            file_paths, status, excluded_files=["branch", "added"]
         )
 
     if len(specific_files) == 1 or not should_verify:
@@ -58,7 +58,7 @@ def addAll(fileSearch):
     status = getStatus()
 
     if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, excludedFiles=["branch", "added"])
+        matches = searchInStatus(fileSearch, status, excluded_files=["branch", "added"])
 
         return (
             m.log("error-file_match_not_found")

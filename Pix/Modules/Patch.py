@@ -112,7 +112,7 @@ def patchAll(fileSearch):
 
     status = getStatus()
     if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, includedFiles=["modified"])
+        matches = searchInStatus(fileSearch, status, included_files=["modified"])
 
         return m.log("error-file_match_not_found") if len(matches) == 0 else patch(matches, m)
 
