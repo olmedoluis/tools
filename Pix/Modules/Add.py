@@ -83,6 +83,6 @@ def addAll(fileSearch):
 
 def Router(router, subroute):
     if subroute == "ADD_ALL":
-        addAll(router.leftKeys[1:])
+        addAll(router.left_keys[1:])
     if subroute == "DEFAULT":
-        add(router.leftKeys)
+        add(router.left_keys)

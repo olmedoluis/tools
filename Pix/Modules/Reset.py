@@ -86,4 +86,4 @@ def Router(router, sub_route):
     if sub_route == "RESET_ALL":
         reset_all()
     elif sub_route == "DEFAULT":
-        reset(router.leftKeys)
+        reset(router.left_keys)

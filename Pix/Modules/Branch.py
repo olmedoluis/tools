@@ -144,4 +144,4 @@ def Router(router, subroute):
     if subroute == "BRANCH_CREATION":
         branchCreation()
     elif subroute == "DEFAULT":
-        branchSelection(router.getNextRoute())
+        branchSelection(router.get_next_route())

@@ -126,5 +126,5 @@ def patchAll(fileSearch):
 
 def Router(router, subroute):
     if subroute == "DEFAULT":
-        patchAll(router.leftKeys)
+        patchAll(router.left_keys)
 

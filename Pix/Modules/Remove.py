@@ -75,6 +75,6 @@ def removeAll(fileSearch):
 
 def Router(router, subroute):
     if subroute == "REMOVE_ALL":
-        removeAll(router.leftKeys[1:])
+        removeAll(router.left_keys[1:])
     if subroute == "DEFAULT":
-        remove(router.leftKeys)
+        remove(router.left_keys)
