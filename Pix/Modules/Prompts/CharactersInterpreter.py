@@ -11,7 +11,7 @@ def merge(word, char):
         return word, "UNKNOWN"
 
 
-def getMovement(char, shouldImplementResponse=False):
+def get_movement(char, shouldImplementResponse=False):
     charLower = char.lower()
 
     if charLower == "a":
@@ -31,10 +31,10 @@ def getMovement(char, shouldImplementResponse=False):
     elif ord(char) == 27:
         return "BREAK_CHAR"
     else:
-        return getResponse(charLower) if shouldImplementResponse else "UNKNOWN"
+        return get_response(charLower) if shouldImplementResponse else "UNKNOWN"
 
 
-def getResponse(char):
+def get_response(char):
     charLower = char.lower()
 
     if charLower == "y":

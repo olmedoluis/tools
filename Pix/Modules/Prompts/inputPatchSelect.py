@@ -1,149 +1,151 @@
-def patchSelect(errorMessage="", files=[], colors={}, icons={}):
+def patch_select(error_message="", files=[], colors={}, icons={}):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import getMovement
+    from .CharactersInterpreter import get_movement
 
     getch = getGetch()
-    inputConsole = ConsoleControl(lines="default")
-    patchControl = PatchControl(
+    input_console = ConsoleControl(lines="default")
+    patch_control = PatchControl(
         offset=0,
-        termSizeX=inputConsole.terminalWidth,
-        termSizeY=inputConsole.terminalHeight,
+        term_size_x=input_console.terminalWidth,
+        term_size_y=input_console.terminalHeight,
         files=files,
         colors=colors,
         icons=icons,
         keywords={"+": "modification", "-": "deletation"},
     )
 
-    patchControl.setPatchesOfFile(1)
-    patchControl.setPatchShowing(0)
+    patch_control.set_patches_of_file(1)
+    patch_control.set_patch_showing(0)
 
     while True:
-        inputConsole.setConsoleLine(1, 2, patchControl.getFileIndexShown())
-        inputConsole.setConsoleLine(3, 1, patchControl.getCurrentFileName())
+        input_console.setConsoleLine(1, 2, patch_control.get_file_index_shown())
+        input_console.setConsoleLine(3, 1, patch_control.get_current_file_name())
 
-        for lineNumber in range(5, inputConsole.terminalHeight):
-            textToShow = patchControl.getStyledPatchLine(lineNumber)
+        for line_number in range(5, input_console.terminalHeight):
+            text_to_show = patch_control.get_styled_patch_line(line_number)
 
-            inputConsole.setConsoleLine(lineNumber, 1, textToShow)
+            input_console.setConsoleLine(line_number, 1, text_to_show)
 
-        inputConsole.refresh()
+        input_console.refresh()
 
         char = getch()
-        state = getMovement(char, True)
+        state = get_movement(char, True)
 
         if state == "DOWN":
-            patchControl.increaseOffset()
+            patch_control.increase_offset()
         elif state == "UP":
-            patchControl.decreaseOffset()
+            patch_control.decrease_offset()
         elif state == "RIGHT":
-            patchControl.changePage(1)
+            patch_control.change_page(1)
         elif state == "LEFT":
-            patchControl.changePage(-1)
+            patch_control.change_page(-1)
         elif state == "EXTENDED_RIGHT":
-            patchControl.addIndexSelectedToPatch()
+            patch_control.add_index_selected_to_patch()
         elif state == "EXTENDED_LEFT":
-            patchControl.removeIndexSelectedToPatch()
+            patch_control.remove_index_selected_to_patch()
         elif state == "YES":
-            patchControl.addIndexSelectedToPatch()
-            patchControl.changePage(1)
+            patch_control.add_index_selected_to_patch()
+            patch_control.change_page(1)
         elif state == "NO":
-            patchControl.removeIndexSelectedToPatch()
-            patchControl.changePage(1)
+            patch_control.remove_index_selected_to_patch()
+            patch_control.change_page(1)
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
-            inputConsole.deleteLastLines(inputConsole.terminalHeight + 4)
-            inputConsole.finish()
-            print(errorMessage)
+            input_console.deleteLastLines(input_console.terminalHeight + 4)
+            input_console.finish()
+            print(error_message)
             exit()
 
-    inputConsole.deleteLastLines(inputConsole.terminalHeight + 4)
-    inputConsole.finish()
+    input_console.deleteLastLines(input_console.terminalHeight + 4)
+    input_console.finish()
 
-    return patchControl.files
+    return patch_control.files
 
 
 class PatchControl:
-    def __init__(self, offset, termSizeX, termSizeY, files, colors, icons, keywords):
+    def __init__(
+        self, offset, term_size_x, term_size_y, files, colors, icons, keywords
+    ):
         from .Theme import INPUT_THEME, INPUT_ICONS
 
         self._KEYWORDS = keywords
         self._ICONS = {**INPUT_ICONS, **icons}
         self._COLORS = {**INPUT_THEME, **colors}
         self._RESET = self._COLORS["reset"]
-        self._stateColor = self._COLORS["border"]
+        self._state_color = self._COLORS["border"]
         self._patches = []
         self._offset = offset
-        self._termSizeX = termSizeX
-        self._termSizeY = termSizeY
-        self._patchIndexSelected = 0
-        self._patchShowing = []
-        self._textZoneArea = range(0)
-        self._fileNameIndex = 0
+        self._term_size_x = term_size_x
+        self._term_size_y = term_size_y
+        self._patch_index_selected = 0
+        self._patch_showing = []
+        self._text_zone_area = range(0)
+        self._file_name_index = 0
         self.files = files
 
-    def setPatchesOfFile(self, times):
-        self._patches = self.files[self._fileNameIndex].patches
-        self._patchIndexSelected = 0 if times > 0 else len(self._patches) - 1
+    def set_patches_of_file(self, times):
+        self._patches = self.files[self._file_name_index].patches
+        self._patch_index_selected = 0 if times > 0 else len(self._patches) - 1
 
-    def setPatchShowing(self, index):
-        self._patchShowing = self._patches[index][1:]
-        self._textZoneArea = range(0, len(self._patchShowing))
+    def set_patch_showing(self, index):
+        self._patch_showing = self._patches[index][1:]
+        self._text_zone_area = range(0, len(self._patch_showing))
 
-    def decreaseOffset(self):
+    def decrease_offset(self):
         newOffset = self._offset - 1
-        self._offset = newOffset if newOffset in self._textZoneArea else self._offset
+        self._offset = newOffset if newOffset in self._text_zone_area else self._offset
 
-    def increaseOffset(self):
+    def increase_offset(self):
         newOffset = self._offset + 1
         self._offset = (
             newOffset
-            if newOffset in self._textZoneArea
-            and (len(self._patchShowing) > self._termSizeY)
-            and (newOffset < (len(self._patchShowing) * 0.5))
+            if newOffset in self._text_zone_area
+            and (len(self._patch_showing) > self._term_size_y)
+            and (newOffset < (len(self._patch_showing) * 0.5))
             else self._offset
         )
 
-    def _updateStateColor(self):
-        self._stateColor = (
+    def _update_state_color(self):
+        self._state_color = (
             self._COLORS["borderSel"]
-            if self.getIsPatchSelected()
+            if self.get_is_patch_selected()
             else self._COLORS["border"]
         )
 
-    def changePage(self, times):
-        newIndex = self._patchIndexSelected + times
-        self._patchIndexSelected = newIndex % len(self._patches)
+    def change_page(self, times):
+        newIndex = self._patch_index_selected + times
+        self._patch_index_selected = newIndex % len(self._patches)
 
         if not (newIndex in range(len(self._patches))) and len(self.files) > 1:
-            self._fileNameIndex = (self._fileNameIndex + times) % len(self.files)
-            self.setPatchesOfFile(times)
+            self._file_name_index = (self._file_name_index + times) % len(self.files)
+            self.set_patches_of_file(times)
 
-        self.setPatchShowing(self._patchIndexSelected)
+        self.set_patch_showing(self._patch_index_selected)
         self._offset = 0
-        self._updateStateColor()
+        self._update_state_color()
 
-    def addIndexSelectedToPatch(self):
-        if not self.getIsPatchSelected():
-            self.files[self._fileNameIndex].patches_selected.append(
-                self._patchIndexSelected
+    def add_index_selected_to_patch(self):
+        if not self.get_is_patch_selected():
+            self.files[self._file_name_index].patches_selected.append(
+                self._patch_index_selected
             )
 
-            self._updateStateColor()
+            self._update_state_color()
 
-    def removeIndexSelectedToPatch(self):
-        if self.getIsPatchSelected():
-            self.files[self._fileNameIndex].patches_selected.remove(
-                self._patchIndexSelected
+    def remove_index_selected_to_patch(self):
+        if self.get_is_patch_selected():
+            self.files[self._file_name_index].patches_selected.remove(
+                self._patch_index_selected
             )
 
-            self._updateStateColor()
+            self._update_state_color()
 
-    def getStyledPatchLine(self, lineNumber):
+    def get_styled_patch_line(self, lineNumber):
         index = lineNumber + self._offset - 5
         lineText = (
-            self._patchShowing[index][0 : self._termSizeX - 5]
-            if index in self._textZoneArea
+            self._patch_showing[index][0 : self._term_size_x - 5]
+            if index in self._text_zone_area
             else ""
         )
 
@@ -158,27 +160,28 @@ class PatchControl:
 
             lineText = color + icon + lineText[1:] + self._RESET
 
-        return f"{self._stateColor}❚{self._RESET}   {lineText}"
+        return f"{self._state_color}❚{self._RESET}   {lineText}"
 
-    def getIsPatchSelected(self):
+    def get_is_patch_selected(self):
         return (
-            self._patchIndexSelected in self.files[self._fileNameIndex].patches_selected
+            self._patch_index_selected
+            in self.files[self._file_name_index].patches_selected
         )
 
-    def getCurrentFileName(self):
-        return self.files[self._fileNameIndex].file_name
+    def get_current_file_name(self):
+        return self.files[self._file_name_index].file_name
 
-    def getPatchIndexShown(self):
+    def get_patch_index_shown(self):
         output = ""
 
         for index in range(0, len(self._patches)):
             active = (
-                self._COLORS["selection"] if index == self._patchIndexSelected else ""
+                self._COLORS["selection"] if index == self._patch_index_selected else ""
             )
             color = self._COLORS["index"]
             icon = self._ICONS["normal"]
 
-            if index in self.files[self._fileNameIndex].patches_selected:
+            if index in self.files[self._file_name_index].patches_selected:
                 color = self._COLORS["indexSel"]
                 icon = self._ICONS["selection"]
 
@@ -186,16 +189,16 @@ class PatchControl:
 
         return f"{output} "
 
-    def getFileIndexShown(self):
+    def get_file_index_shown(self):
         output = ""
 
         for index in range(0, len(self.files)):
             color = self._COLORS["file"]
             extra = ""
 
-            if index == self._fileNameIndex:
+            if index == self._file_name_index:
                 color = self._COLORS["fileAct"]
-                extra = self.getPatchIndexShown()
+                extra = self.get_patch_index_shown()
 
             output = f"{output}{color}|{self._RESET}{extra}"
 

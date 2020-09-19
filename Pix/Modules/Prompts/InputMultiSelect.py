@@ -1,56 +1,61 @@
-def multiSelect(
-    title="", finalTitle="", options=[""], errorMessage="", colors={}, icons={},
+def multi_select(
+    title="",
+    final_title="",
+    options=[""],
+    error_message="",
+    colors={},
+    icons={},
 ):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import getMovement
+    from .CharactersInterpreter import get_movement
 
     getch = getGetch()
-    inputConsole = ConsoleControl(5)
-    multiSelectControl = _MultiSelectControl(colors, icons, options)
+    input_console = ConsoleControl(5)
+    multi_select_control = _MultiSelectControl(colors, icons, options)
 
-    inputConsole.setConsoleLine(0, 1, title)
+    input_console.setConsoleLine(0, 1, title)
 
     while True:
-        optionAbove = multiSelectControl.getDisplayOption(-1)
-        optionSelected = multiSelectControl.getDisplayOption(0)
-        optionDown = multiSelectControl.getDisplayOption(1)
+        option_above = multi_select_control.get_display_option(-1)
+        option_selected = multi_select_control.get_display_option(0)
+        option_down = multi_select_control.get_display_option(1)
 
-        inputConsole.setConsoleLine(2, 4, optionAbove)
-        inputConsole.setConsoleLine(3, 4, optionSelected)
-        inputConsole.setConsoleLine(4, 4, optionDown)
-        inputConsole.refresh()
+        input_console.setConsoleLine(2, 4, option_above)
+        input_console.setConsoleLine(3, 4, option_selected)
+        input_console.setConsoleLine(4, 4, option_down)
+        input_console.refresh()
 
         char = getch()
-        state = getMovement(char)
+        state = get_movement(char)
 
         if state == "DOWN":
-            multiSelectControl.appendToIndex(1)
+            multi_select_control.append_to_index(1)
         elif state == "UP":
-            multiSelectControl.appendToIndex(-1)
+            multi_select_control.append_to_index(-1)
         elif state == "RIGHT":
-            multiSelectControl.addIndexToSelectedOptions()
+            multi_select_control.add_index_to_selected_options()
         elif state == "LEFT":
-            multiSelectControl.removeIndexToSelectedOptions()
+            multi_select_control.remove_index_to_selected_options()
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
-            inputConsole.deleteLastLines(4)
-            inputConsole.finish()
+            input_console.deleteLastLines(4)
+            input_console.finish()
 
-            print(errorMessage)
+            print(error_message)
             exit()
 
-    selectedOptions = multiSelectControl.getOptionsSelected()
-    selectedOptionsString = ", ".join(selectedOptions)
-    finalTitle = finalTitle if finalTitle != "" else title
+    selected_options = multi_select_control.get_options_selected()
+    selected_options_string = ", ".join(selected_options)
+    final_title = final_title if final_title != "" else title
 
-    inputConsole.setConsoleLine(0, 1, f"{finalTitle} {selectedOptionsString}")
-    inputConsole.refresh()
+    input_console.setConsoleLine(0, 1, f"{final_title} {selected_options_string}")
+    input_console.refresh()
 
-    inputConsole.deleteLastLines(4)
-    inputConsole.finish()
+    input_console.deleteLastLines(4)
+    input_console.finish()
 
-    return selectedOptions
+    return selected_options
 
 
 class _MultiSelectControl:
@@ -61,48 +66,48 @@ class _MultiSelectControl:
         self._COLORS = {**INPUT_THEME, **colors}
         self._RESET = self._COLORS["reset"]
 
-        self._optionsSize = len(options)
-        self._optionsRaw = options
-        self._optionIndex = 0
-        self._optionsSelected = []
+        self._options_size = len(options)
+        self._options_raw = options
+        self._option_index = 0
+        self._options_selected = []
 
-    def getOptionsSelected(self):
+    def get_options_selected(self):
         output = []
-        for index in self._optionsSelected:
-            output.append(self._optionsRaw[index])
+        for index in self._options_selected:
+            output.append(self._options_raw[index])
 
         return output
 
-    def getDisplayOption(self, offset=0):
-        option = self.getOption(offset)
-        indexInRange = self.getIndexInRange(self._optionIndex + offset)
-        isSelected = self.getIsOptionSelected(indexInRange)
+    def get_display_option(self, offset=0):
+        option = self.get_option(offset)
+        index_in_range = self.get_index_in_range(self._option_index + offset)
+        is_selected = self.get_is_option_selected(index_in_range)
 
-        fontMod = self._COLORS["slight"] if offset else self._COLORS["bold"]
-        fontColor = self._COLORS["selection"] if isSelected else ""
-        icon = self._ICONS["selection"] if isSelected else self._ICONS["normal"]
+        font_mod = self._COLORS["slight"] if offset else self._COLORS["bold"]
+        font_color = self._COLORS["selection"] if is_selected else ""
+        icon = self._ICONS["selection"] if is_selected else self._ICONS["normal"]
 
-        return f"{fontMod}{fontColor}{option}{self._RESET}"
+        return f"{font_mod}{font_color}{option}{self._RESET}"
 
-    def appendToIndex(self, number):
-        self._optionIndex = self._optionIndex + number
+    def append_to_index(self, number):
+        self._option_index = self._option_index + number
 
-    def getIndexInRange(self, index):
-        return index % self._optionsSize
+    def get_index_in_range(self, index):
+        return index % self._options_size
 
-    def getOption(self, offset=0):
-        return self._optionsRaw[self.getIndexInRange(self._optionIndex + offset)]
+    def get_option(self, offset=0):
+        return self._options_raw[self.get_index_in_range(self._option_index + offset)]
 
-    def addIndexToSelectedOptions(self):
-        if not self.getIsOptionSelected():
-            self._optionsSelected.append(self.getIndexInRange(self._optionIndex))
+    def add_index_to_selected_options(self):
+        if not self.get_is_option_selected():
+            self._options_selected.append(self.get_index_in_range(self._option_index))
 
-    def removeIndexToSelectedOptions(self):
-        if self.getIsOptionSelected():
-            self._optionsSelected.remove(self.getIndexInRange(self._optionIndex))
+    def remove_index_to_selected_options(self):
+        if self.get_is_option_selected():
+            self._options_selected.remove(self.get_index_in_range(self._option_index))
 
-    def getIsOptionSelected(self, index=None):
+    def get_is_option_selected(self, index=None):
         if index == None:
-            index = self.getIndexInRange(self._optionIndex)
+            index = self.get_index_in_range(self._option_index)
 
-        return index in self._optionsSelected
+        return index in self._options_selected
