@@ -1,17 +1,17 @@
-def getCommonDirectory(directories):
+def get_common_directory(directories):
     from os.path import basename
     from os import getcwd
 
-    directoriesSplitted = []
+    directories_splitted = []
     for directory in directories:
-        directoriesSplitted.append(directory.split("/"))
+        directories_splitted.append(directory.split("/"))
 
-    if len(directoriesSplitted) == 1:
-        return directoriesSplitted[0][-1]
+    if len(directories_splitted) == 1:
+        return directories_splitted[0][-1]
 
     index = 0
-    for example in directoriesSplitted[0]:
-        for directory in directoriesSplitted:
+    for example in directories_splitted[0]:
+        for directory in directories_splitted:
             if example == directory[index]:
                 continue
 
@@ -34,15 +34,15 @@ def save():
     if not "added" in status:
         return m.log("error-commit-files_not_found")
 
-    addedFiles = status["added"]
+    added_files = status["added"]
 
     m.log("added-title")
-    for addedFile in addedFiles:
-        m.log("added", {"pm_change": addedFile})
+    for added_file in added_files:
+        m.log("added", {"pm_change": added_file})
 
     options = ["feat", "refactor", "fix", "style"]
-    scapeError = m.getMessage("operation-cancel")
-    commonDir = getCommonDirectory(addedFiles)
+    scape_error = m.getMessage("operation-cancel")
+    common_dir = get_common_directory(added_files)
 
     print()
     answers = many(
@@ -51,21 +51,21 @@ def save():
                 "type": "Select",
                 "title": m.getMessage("commit-creation-type_title"),
                 "options": options,
-                "errorMessage": scapeError,
+                "errorMessage": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_TYPE"],
                 "icons": INPUT_ICONS,
             },
             {
                 "type": "Text",
                 "title": m.getMessage("commit-creation-scope_title"),
-                "placeHolder": removeColors(commonDir),
-                "errorMessage": scapeError,
+                "placeHolder": removeColors(common_dir),
+                "errorMessage": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_SCOPE"],
             },
             {
                 "type": "Text",
                 "title": m.getMessage("commit-creation-about_title"),
-                "errorMessage": scapeError,
+                "errorMessage": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_ABOUT"],
             },
         ]
@@ -77,12 +77,12 @@ def save():
     commit = "{}({}):{}".format(*answers)
     m.log("preview", {"pm_preview": commit})
 
-    isSure = confirm(
+    should_commit = confirm(
         title=m.getMessage("confirmation"),
         colors=INPUT_THEME["COMMIT_CREATION_CONFIRM"],
     )
 
-    if isSure:
+    if should_commit:
         run(["git", "commit", "-m", commit])
         m.log("commit-success")
     else:
