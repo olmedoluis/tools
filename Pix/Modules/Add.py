@@ -81,8 +81,8 @@ def addAll(fileSearch):
         m.log("error-add-files_not_found")
 
 
-def router(router, sub_route):
+def router(argument_manager, sub_route):
     if sub_route == "ADD_ALL":
-        addAll(router.left_keys[1:])
+        addAll(argument_manager.left_keys[1:])
     if sub_route == "DEFAULT":
-        add(router.left_keys)
+        add(argument_manager.left_keys)
