@@ -7,6 +7,7 @@ def remove(file_paths=[], use_availables=False, messages=""):
     m = MessageControl() if messages == "" else messages
     status = get_status()
 
+    is_individual_path = len(file_paths) == 1
     file_paths = (
         search_in_status(file_paths, status, included_files=["added"])
         if len(file_paths)
@@ -18,6 +19,8 @@ def remove(file_paths=[], use_availables=False, messages=""):
     elif use_availables:
         run(["git", "reset"] + file_paths)
         return m.log("remove-all-success")
+    elif is_individual_path and len(file_paths) == 1:
+        return run(["git", "reset"] + file_paths)
 
     print()
     answers = multi_select(
