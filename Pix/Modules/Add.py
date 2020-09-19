@@ -1,4 +1,4 @@
-def add(filePaths=[], shouldVerify=True, messages=""):
+def add(file_paths=[], should_verify=True, messages=""):
     from .Prompts import multiSelect
     from .Helpers import run, removeColors, MessageControl
     from .Status import getStatus, searchInStatus
@@ -7,21 +7,21 @@ def add(filePaths=[], shouldVerify=True, messages=""):
     m = MessageControl() if messages == "" else messages
     status = getStatus()
 
-    specificFiles = filePaths if filePaths else []
-    if len(filePaths) != 0 and shouldVerify:
-        specificFiles = searchInStatus(
-            filePaths, status, excludedFiles=["branch", "added"]
+    specific_files = file_paths if file_paths else []
+    if len(file_paths) != 0 and should_verify:
+        specific_files = searchInStatus(
+            file_paths, status, excludedFiles=["branch", "added"]
         )
 
-    if len(specificFiles) == 1 or not shouldVerify:
-        run(["git", "add"] + specificFiles)
+    if len(specific_files) == 1 or not should_verify:
+        run(["git", "add"] + specific_files)
         return m.log("add-success")
 
-    options = specificFiles
-    if len(specificFiles) == 0:
-        for statusId in status:
-            statusContent = status[statusId]
-            if statusId == "branch" or statusId == "added":
+    options = specific_files
+    if len(specific_files) == 0:
+        for status_id in status:
+            statusContent = status[status_id]
+            if status_id == "branch" or status_id == "added":
                 continue
 
             options = options + statusContent
@@ -63,26 +63,26 @@ def addAll(fileSearch):
         return (
             m.log("error-file_match_not_found")
             if len(matches) == 0
-            else add(matches, shouldVerify=False, messages=m)
+            else add(matches, should_verify=False, messages=m)
         )
 
-    hasFilesToAdd = False
-    for statusId in status:
-        if statusId == "branch" or statusId == "added":
+    has_files_to_add = False
+    for status_id in status:
+        if status_id == "branch" or status_id == "added":
             continue
 
-        hasFilesToAdd = True
+        has_files_to_add = True
         break
 
-    if hasFilesToAdd:
+    if has_files_to_add:
         run(["git", "add", "."])
         m.log("add-all-success")
     else:
         m.log("error-add-files_not_found")
 
 
-def Router(router, subroute):
-    if subroute == "ADD_ALL":
+def router(router, sub_route):
+    if sub_route == "ADD_ALL":
         addAll(router.left_keys[1:])
-    if subroute == "DEFAULT":
+    if sub_route == "DEFAULT":
         add(router.left_keys)
