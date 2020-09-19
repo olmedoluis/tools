@@ -43,7 +43,7 @@ def main():
         return
 
     from Configuration import ALIASES
-    from .Data.PixRoutes import KEYS
+    from .Data.Routes import KEYS
     from .Modules import PIX_STORE
     from .Modules.Helpers import checkPixShortcut, checkRoute
 
