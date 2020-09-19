@@ -119,6 +119,6 @@ def showStatus():
     print()
 
 
-def Router(router, subroute):
-    if subroute == "DEFAULT":
+def router(argument_manager, sub_route):
+    if sub_route == "DEFAULT":
         showStatus()
