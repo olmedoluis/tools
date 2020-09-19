@@ -7,6 +7,7 @@ def add(file_paths=[], should_verify=True, messages=""):
     m = MessageControl() if messages == "" else messages
     status = get_status()
 
+    is_individual_path = len(file_paths) == 1
     file_paths = (
         search_in_status(file_paths, status, excluded_files=["branch", "added"])
         if len(file_paths)
@@ -18,6 +19,8 @@ def add(file_paths=[], should_verify=True, messages=""):
     elif not should_verify:
         run(["git", "add"] + file_paths)
         return m.log("add-all-success")
+    elif is_individual_path and len(file_paths) == 1:
+        return run(["git", "add"] + file_paths)
 
     print()
     answers = multi_select(
@@ -40,8 +43,22 @@ def add(file_paths=[], should_verify=True, messages=""):
     m.log("add-success")
 
 
+def add_individually(file_paths):
+    from .Helpers import MessageControl
+
+    m = MessageControl()
+
+    if len(file_paths):
+        for file_path in file_paths:
+            add(file_paths=[file_path], messages=m)
+
+        return m.log("add-success")
+
+    add(should_verify=False, messages=m)
+
+
 def router(argument_manager, sub_route):
     if sub_route == "ADD_ALL":
-        add(file_paths=[], should_verify=False)
+        add(should_verify=False)
     if sub_route == "DEFAULT":
-        add(argument_manager.left_keys)
+        add_individually(argument_manager.left_keys)
