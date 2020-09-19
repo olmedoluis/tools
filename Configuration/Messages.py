@@ -37,6 +37,7 @@ MESSAGES = {
     "error-not_git_repository": "\n {th_error}{ic_error} Error: Not supported repository\n",
     "error-patch-files-not-found": "\n {th_error}{ic_error} Error: Files to patch not found\n",
     "error-remove-files_not_found": "\n {th_error}{ic_error} Error: Files to remove not found\n",
+    "error-reset-files_not_found": "\n {th_error}{ic_error} Error: Files to reset not found\n",
     "error-stash-addedfiles": "\n {th_error}{ic_error} Error: Added files to stash not found\n",
     "error-stash-stashes_not_found": "\n {th_error}{ic_error} Error: Stashes not found\n",
     "error-unknown_route": "\n {th_error}{ic_error} Error: Command not found {th_success}{pm_goodRoutes}{th_error}{pm_wrongRoutes}\n",
