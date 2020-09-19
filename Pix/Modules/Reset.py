@@ -1,17 +1,17 @@
-def parseStatus(status):
-    resetCommands = []
+def parse_status(status):
+    reset_commands = []
 
-    for statusId in status:
-        for change in status[statusId]:
-            if statusId == "untracked":
-                resetCommands.append(["rm", change])
+    for status_id in status:
+        for change in status[status_id]:
+            if status_id == "untracked":
+                reset_commands.append(["rm", change])
             else:
-                resetCommands.append(["git", "checkout", change])
+                reset_commands.append(["git", "checkout", change])
 
-    return resetCommands
+    return reset_commands
 
 
-def reset(filePaths=[], shouldVerify=True, messages=""):
+def reset(file_paths=[], should_verify=True, messages=""):
     from .Prompts import multiSelect
     from .Helpers import runAll, removeColors, MessageControl
     from .Status import getStatus, searchInStatus
@@ -20,32 +20,34 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
     m = MessageControl() if messages == "" else messages
     status = getStatus()
 
-    filesForParsing = []
+    files_for_parsing = []
 
-    if len(filePaths) == 0:
-        for statusId in status:
-            statusContent = status[statusId]
-            if statusId == "branch" or statusId == "added":
+    if len(file_paths) == 0:
+        for status_id in status:
+            status_content = status[status_id]
+            if status_id == "branch" or status_id == "added":
                 continue
 
-            filePaths = filePaths + statusContent
+            file_paths = file_paths + status_content
 
-    if len(filePaths) != 0:
-        filesForParsing = searchInStatus(
-            filePaths,
+    if len(file_paths) != 0:
+        files_for_parsing = searchInStatus(
+            file_paths,
             status,
             excludedFiles=["branch", "added"],
             getOriginalStructure=True,
         )
-        filePaths = searchInStatus(filePaths, status, excludedFiles=["branch", "added"])
+        file_paths = searchInStatus(
+            file_paths, status, excludedFiles=["branch", "added"]
+        )
 
-    if not shouldVerify:
-        commands = parseStatus(filesForParsing)
+    if not should_verify:
+        commands = parse_status(files_for_parsing)
 
         runAll(commands)
         return m.log("reset-all-success")
 
-    if len(filePaths) == 0:
+    if len(file_paths) == 0:
         return m.log("error-reset-files_not_found")
 
     print()
@@ -53,7 +55,7 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
         title=m.getMessage("reset-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
         errorMessage=m.getMessage("error-files_selected_not_found"),
-        options=filePaths,
+        options=file_paths,
         colors=INPUT_THEME["RESET_SELECTION"],
         icons=INPUT_ICONS,
     )
@@ -65,23 +67,23 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
     for answer in answers:
         choices.append(removeColors(answer))
 
-    filesForParsing = searchInStatus(
+    files_for_parsing = searchInStatus(
         choices,
         status,
         excludedFiles=["branch", "added"],
         getOriginalStructure=True,
     )
 
-    runAll(parseStatus(filesForParsing))
+    runAll(parse_status(files_for_parsing))
     m.log("reset-success")
 
 
-def resetAll():
-    reset(filePaths=[], shouldVerify=False)
+def reset_all():
+    reset(file_paths=[], should_verify=False)
 
 
-def Router(router, subroute):
-    if subroute == "RESET_ALL":
-        resetAll()
-    elif subroute == "DEFAULT":
+def Router(router, sub_route):
+    if sub_route == "RESET_ALL":
+        reset_all()
+    elif sub_route == "DEFAULT":
         reset(router.leftKeys)
