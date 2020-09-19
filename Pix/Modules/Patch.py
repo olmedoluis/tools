@@ -128,6 +128,6 @@ def patch_all(file_search):
     patch(files)
 
 
-def Router(router, subroute):
-    if subroute == "DEFAULT":
-        patch_all(router.left_keys)
+def router(argument_manager, sub_route):
+    if sub_route == "DEFAULT":
+        patch_all(argument_manager.left_keys)
