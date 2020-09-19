@@ -37,9 +37,9 @@ def get_concatenated_routes(routes):
 def main():
     from sys import argv
 
-    arg = argv[1:]
+    user_arguments = argv[1:]
 
-    if len(arg) == 0:
+    if len(user_arguments) == 0:
         return
 
     from Configuration import ALIASES
@@ -47,9 +47,9 @@ def main():
     from .Modules import PIX_STORE
     from .Modules.Helpers import check_pix_shortcut, check_route
 
-    allRoutes = get_concatenated_routes(arg) if "n" in arg else [arg]
+    all_routes = get_concatenated_routes(user_arguments) if "n" in user_arguments else [user_arguments]
 
-    for arguments in allRoutes:
+    for arguments in all_routes:
         argument_manager = ArgumentManager(arguments)
 
         route_name = check_pix_shortcut(argument_manager.actual_route, KEYS, ALIASES)
@@ -68,8 +68,8 @@ def main():
         next_route = argument_manager.get_next_route()
         sub_route = check_route(next_route, KEYS[route_name], ALIASES[route_name])
 
-        requiredRouter = PIX_STORE[route_name]
-        requiredRouter(argument_manager, sub_route)
+        required_router = PIX_STORE[route_name]
+        required_router(argument_manager, sub_route)
 
 
 if __name__ == "__main__":
