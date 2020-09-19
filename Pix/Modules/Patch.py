@@ -1,70 +1,70 @@
-def addToFile(text, filePath):
+def add_to_file(text, filePath):
     f = open(filePath, "w+")
     f.write(text)
     f.close()
 
 
-def parsePatches(patches):
-    parsedPatches = []
+def parse_patches(patches):
+    parsed_patches = []
 
     for patch in patches:
-        if len(patch.patchesSelected):
-            parsedPatches = parsedPatches + patch.metaData
+        if len(patch.patches_selected):
+            parsed_patches = parsed_patches + patch.meta_data
 
-            for indexSelected in patch.patchesSelected:
-                parsedPatches = parsedPatches + patch.patches[indexSelected]
+            for index_selected in patch.patches_selected:
+                parsed_patches = parsed_patches + patch.patches[index_selected]
 
-    if not len(parsedPatches):
-        parsedPatches = [""]
+    if not len(parsed_patches):
+        parsed_patches = [""]
 
-    return parsedPatches if parsedPatches[-1] == "" else parsedPatches + [""]
+    return parsed_patches if parsed_patches[-1] == "" else parsed_patches + [""]
 
 
-def parseDifferences(differencesRaw, files, getMessage):
+def parse_differences(differences_raw, files, get_message):
     class Patch:
-        def __init__(self, fileName, metaData):
-            self.fileName = fileName
-            self.metaData = metaData
+        def __init__(self, file_name, meta_data):
+            self.file_name = file_name
+            self.meta_data = meta_data
             self.patches = []
-            self.patchesSelected = []
+            self.patches_selected = []
 
-    lines = differencesRaw.split("\n")
+    lines = differences_raw.split("\n")
     differences = []
 
     index = 0
-    lastIndex = 0
+    last_index = 0
     for line in lines[1:]:
         if "diff --git a" == line[:12]:
-            differences.append(lines[lastIndex : index + 1])
-            lastIndex = index + 1
+            differences.append(lines[last_index : index + 1])
+            last_index = index + 1
 
         index = index + 1
 
-    differences.append(lines[lastIndex:])
+    differences.append(lines[last_index:])
 
-    outputPatches = []
-    indexFile = 0
+    output_patches = []
+    index_file = 0
     for lines in differences:
-        metaData = lines[:4]
-        newPatch = Patch(
-            fileName=getMessage("file-title", {"pm_file": files[indexFile]}),
-            metaData=metaData,
+        meta_data = lines[:4]
+        new_patch = Patch(
+            file_name=get_message("file-title", {"pm_file": files[index_file]}),
+            meta_data=meta_data,
         )
 
         index = 4
-        lastIndex = 4
+        last_index = 4
         for line in lines[5:]:
             if "@@ " == line[:3] and " @@" in line[3:]:
-                newPatch.patches.append(lines[lastIndex : index + 1])
-                lastIndex = index + 1
+                new_patch.patches.append(lines[last_index : index + 1])
+                last_index = index + 1
 
             index = index + 1
 
-        newPatch.patches.append(lines[lastIndex:] + [""])
-        outputPatches.append(newPatch)
-        indexFile = indexFile + 1
+        new_patch.patches.append(lines[last_index:] + [""])
+        output_patches.append(new_patch)
+        index_file = index_file + 1
 
-    return outputPatches
+    return output_patches
 
 
 def patch(files, messages=""):
@@ -78,25 +78,25 @@ def patch(files, messages=""):
     cwd = Path.cwd()
     filePath = f"{cwd}/changes.patch"
 
-    differencesRaw = run(["git", "diff-files", "-p"] + files)
-    patches = parseDifferences(differencesRaw, files, m.getMessage)
+    differences_raw = run(["git", "diff-files", "-p"] + files)
+    patches = parse_differences(differences_raw, files, m.getMessage)
 
-    selectedPatches = patchSelect(
+    selected_patches = patchSelect(
         files=patches,
         errorMessage=m.getMessage("error-files_selected_not_found"),
         colors=INPUT_THEME["PATCH_SELECTION"],
         icons=INPUT_ICONS,
     )
 
-    patchGenerated = parsePatches(selectedPatches)
+    patch_generated = parse_patches(selected_patches)
 
-    if len(patchGenerated) == 1:
+    if len(patch_generated) == 1:
         return m.log("error-empty")
 
-    addToFile("\n".join(patchGenerated), filePath)
+    add_to_file("\n".join(patch_generated), filePath)
 
     with open(filePath, "w+") as file:
-        file.write("\n".join(patchGenerated))
+        file.write("\n".join(patch_generated))
 
     run(["git", "apply", "--cached", filePath])
 
@@ -104,17 +104,21 @@ def patch(files, messages=""):
     m.log("patch-success")
 
 
-def patchAll(fileSearch):
+def patch_all(file_search):
     from .Status import get_status, search_in_status
     from .Helpers import MessageControl
 
     m = MessageControl()
 
     status = get_status()
-    if len(fileSearch) > 0:
-        matches = search_in_status(fileSearch, status, included_files=["modified"])
+    if len(file_search) > 0:
+        matches = search_in_status(file_search, status, included_files=["modified"])
 
-        return m.log("error-file_match_not_found") if len(matches) == 0 else patch(matches, m)
+        return (
+            m.log("error-file_match_not_found")
+            if len(matches) == 0
+            else patch(matches, m)
+        )
 
     files = status["modified"] if "modified" in status else []
 
@@ -126,5 +130,4 @@ def patchAll(fileSearch):
 
 def Router(router, subroute):
     if subroute == "DEFAULT":
-        patchAll(router.left_keys)
-
+        patch_all(router.left_keys)
