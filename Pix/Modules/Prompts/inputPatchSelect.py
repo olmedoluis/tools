@@ -125,7 +125,7 @@ class PatchControl:
 
     def addIndexSelectedToPatch(self):
         if not self.getIsPatchSelected():
-            self.files[self._fileNameIndex].patchesSelected.append(
+            self.files[self._fileNameIndex].patches_selected.append(
                 self._patchIndexSelected
             )
 
@@ -133,7 +133,7 @@ class PatchControl:
 
     def removeIndexSelectedToPatch(self):
         if self.getIsPatchSelected():
-            self.files[self._fileNameIndex].patchesSelected.remove(
+            self.files[self._fileNameIndex].patches_selected.remove(
                 self._patchIndexSelected
             )
 
@@ -162,11 +162,11 @@ class PatchControl:
 
     def getIsPatchSelected(self):
         return (
-            self._patchIndexSelected in self.files[self._fileNameIndex].patchesSelected
+            self._patchIndexSelected in self.files[self._fileNameIndex].patches_selected
         )
 
     def getCurrentFileName(self):
-        return self.files[self._fileNameIndex].fileName
+        return self.files[self._fileNameIndex].file_name
 
     def getPatchIndexShown(self):
         output = ""
@@ -178,7 +178,7 @@ class PatchControl:
             color = self._COLORS["index"]
             icon = self._ICONS["normal"]
 
-            if index in self.files[self._fileNameIndex].patchesSelected:
+            if index in self.files[self._fileNameIndex].patches_selected:
                 color = self._COLORS["indexSel"]
                 icon = self._ICONS["selection"]
 
