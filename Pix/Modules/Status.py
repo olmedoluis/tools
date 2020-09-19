@@ -1,5 +1,7 @@
-def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
-    matches = []
+def searchInStatus(
+    fileSearch, status, excludedFiles=[], includedFiles=[], getOriginalStructure=False
+):
+    matches = {} if getOriginalStructure else []
 
     for statusId in status:
         isExcludedFile = statusId in excludedFiles
@@ -13,7 +15,13 @@ def searchInStatus(fileSearch, status, excludedFiles=[], includedFiles=[]):
         for change in changes:
             for file in fileSearch:
                 if file.lower() in change.lower():
-                    matches.append(change)
+                    if getOriginalStructure:
+                        carriedMatches = (
+                            matches[statusId] if statusId in matches else []
+                        )
+                        matches[statusId] = [*carriedMatches, change]
+                    else:
+                        matches.append(change)
 
     return matches
 
