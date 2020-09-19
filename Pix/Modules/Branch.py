@@ -1,7 +1,7 @@
 def get_has_changes(change=""):
-    from .Status import getStatus
+    from .Status import get_status
 
-    status = getStatus()
+    status = get_status()
 
     return len(status.keys()) > 1 if change == "" else change in status
 

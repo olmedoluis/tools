@@ -1,15 +1,15 @@
 def add(file_paths=[], should_verify=True, messages=""):
     from .Prompts import multiSelect
     from .Helpers import run, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
-    status = getStatus()
+    status = get_status()
 
     specific_files = file_paths if file_paths else []
     if len(file_paths) != 0 and should_verify:
-        specific_files = searchInStatus(
+        specific_files = search_in_status(
             file_paths, status, excluded_files=["branch", "added"]
         )
 
@@ -52,13 +52,13 @@ def add(file_paths=[], should_verify=True, messages=""):
 
 def addAll(fileSearch):
     from .Helpers import run, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
     if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, excluded_files=["branch", "added"])
+        matches = search_in_status(fileSearch, status, excluded_files=["branch", "added"])
 
         return (
             m.log("error-file_match_not_found")

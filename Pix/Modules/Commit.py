@@ -24,12 +24,12 @@ def get_common_directory(directories):
 
 def save():
     from .Prompts import many, confirm
-    from .Status import getStatus
+    from .Status import get_status
     from .Helpers import run, MessageControl, removeColors
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
     if not "added" in status:
         return m.log("error-commit-files_not_found")

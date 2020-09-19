@@ -14,11 +14,11 @@ def parse_status(status):
 def reset(file_paths=[], should_verify=True, messages=""):
     from .Prompts import multiSelect
     from .Helpers import runAll, removeColors, MessageControl
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
-    status = getStatus()
+    status = get_status()
 
     files_for_parsing = []
 
@@ -31,13 +31,13 @@ def reset(file_paths=[], should_verify=True, messages=""):
             file_paths = file_paths + status_content
 
     if len(file_paths) != 0:
-        files_for_parsing = searchInStatus(
+        files_for_parsing = search_in_status(
             file_paths,
             status,
             excluded_files=["branch", "added"],
             get_original_structure=True,
         )
-        file_paths = searchInStatus(
+        file_paths = search_in_status(
             file_paths, status, excluded_files=["branch", "added"]
         )
 
@@ -67,7 +67,7 @@ def reset(file_paths=[], should_verify=True, messages=""):
     for answer in answers:
         choices.append(removeColors(answer))
 
-    files_for_parsing = searchInStatus(
+    files_for_parsing = search_in_status(
         choices,
         status,
         excluded_files=["branch", "added"],

@@ -1,12 +1,12 @@
 def addToStash():
     from .Prompts import text
     from .Helpers import run, MessageControl
-    from .Status import getStatus
+    from .Status import get_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
-    if not "added" in getStatus():
+    if not "added" in get_status():
         return m.log("error-stash-addedfiles")
 
     print()
@@ -26,12 +26,12 @@ def addToStash():
 def stashSelection():
     from .Prompts import select
     from .Helpers import run, MessageControl
-    from .Status import getStatus
+    from .Status import get_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
-    if len(getStatus()) > 1:
+    if len(get_status()) > 1:
         return m.log("error-haschanges")
 
     stashesOutput = run(["git", "stash", "list"])

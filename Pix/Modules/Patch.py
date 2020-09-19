@@ -105,14 +105,14 @@ def patch(files, messages=""):
 
 
 def patchAll(fileSearch):
-    from .Status import getStatus, searchInStatus
+    from .Status import get_status, search_in_status
     from .Helpers import MessageControl
 
     m = MessageControl()
 
-    status = getStatus()
+    status = get_status()
     if len(fileSearch) > 0:
-        matches = searchInStatus(fileSearch, status, included_files=["modified"])
+        matches = search_in_status(fileSearch, status, included_files=["modified"])
 
         return m.log("error-file_match_not_found") if len(matches) == 0 else patch(matches, m)
 
