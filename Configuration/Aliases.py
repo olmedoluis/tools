@@ -33,6 +33,9 @@ ALIASES = {
         "aliases": ["e"]
     },
     "Reset": {
-        "aliases": ["rst"]
+        "aliases": ["rs"],
+        "child_aliases": {
+            "RESET_ALL": ["."]
+        }
     },
 }
