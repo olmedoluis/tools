@@ -1,4 +1,4 @@
-def searchInStatus(
+def search_in_status(
     files_searching,
     status,
     excluded_files=[],
@@ -56,7 +56,7 @@ def parse_change(status, change_id, change_name, path, THEME):
     return status
 
 
-def getStatus():
+def get_status():
     from .Helpers import run
     from Configuration.Theme import THEME
 
@@ -95,11 +95,11 @@ def getStatus():
     return status
 
 
-def showStatus():
+def show_status():
     from .Helpers import MessageControl
 
     m = MessageControl()
-    status = getStatus()
+    status = get_status()
 
     print()
     if "branch" in status:
@@ -121,4 +121,4 @@ def showStatus():
 
 def router(argument_manager, sub_route):
     if sub_route == "DEFAULT":
-        showStatus()
+        show_status()
