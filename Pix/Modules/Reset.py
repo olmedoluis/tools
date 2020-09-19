@@ -21,26 +21,23 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
     status = getStatus()
 
     filesForParsing = []
-    specificFiles = filePaths if filePaths else []
 
-    if len(specificFiles) == 0:
+    if len(filePaths) == 0:
         for statusId in status:
             statusContent = status[statusId]
             if statusId == "branch" or statusId == "added":
                 continue
 
-            specificFiles = specificFiles + statusContent
+            filePaths = filePaths + statusContent
 
-    if len(specificFiles) != 0:
+    if len(filePaths) != 0:
         filesForParsing = searchInStatus(
-            specificFiles,
+            filePaths,
             status,
             excludedFiles=["branch", "added"],
             getOriginalStructure=True,
         )
-        specificFiles = searchInStatus(
-            specificFiles, status, excludedFiles=["branch", "added"]
-        )
+        filePaths = searchInStatus(filePaths, status, excludedFiles=["branch", "added"])
 
     if not shouldVerify:
         commands = parseStatus(filesForParsing)
@@ -48,7 +45,7 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
         runAll(commands)
         return m.log("reset-all-success")
 
-    if len(specificFiles) == 0:
+    if len(filePaths) == 0:
         return m.log("error-reset-files_not_found")
 
     print()
@@ -56,7 +53,7 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
         title=m.getMessage("reset-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
         errorMessage=m.getMessage("error-files_selected_not_found"),
-        options=specificFiles,
+        options=filePaths,
         colors=INPUT_THEME["RESET_SELECTION"],
         icons=INPUT_ICONS,
     )
