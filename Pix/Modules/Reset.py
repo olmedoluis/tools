@@ -46,14 +46,14 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
         commands = parseStatus(filesForParsing)
 
         runAll(commands)
-        return m.log("add-success")
+        return m.log("reset-all-success")
 
     if len(specificFiles) == 0:
         return m.log("error-add-files_not_found")
 
     print()
     answers = multiSelect(
-        title=m.getMessage("add-title"),
+        title=m.getMessage("reset-title"),
         finalTitle=m.getMessage("file-selection-finaltitle"),
         errorMessage=m.getMessage("error-files_selected_not_found"),
         options=specificFiles,
@@ -76,7 +76,7 @@ def reset(filePaths=[], shouldVerify=True, messages=""):
     )
 
     runAll(parseStatus(filesForParsing))
-    # m.log("add-success")
+    m.log("reset-success")
 
 
 def Router(router, subroute):
