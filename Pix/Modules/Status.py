@@ -35,7 +35,11 @@ def search_in_status(
                         carriedMatches = (
                             matches[status_id] if status_id in matches else []
                         )
-                        matches[status_id] = [*carriedMatches, change]
+                        matches[status_id] = (
+                            carriedMatches
+                            if change in carriedMatches
+                            else [*carriedMatches, change]
+                        )
                     else:
                         matches.append(change)
 
