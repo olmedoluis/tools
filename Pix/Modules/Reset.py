@@ -93,6 +93,6 @@ def reset_individually(file_paths):
 
 def router(argument_manager, sub_route):
     if sub_route == "RESET_ALL":
-        reset(use_availables=True)
+        reset(argument_manager.left_keys[1:], use_availables=True)
     elif sub_route == "DEFAULT":
         reset_individually(argument_manager.left_keys)
