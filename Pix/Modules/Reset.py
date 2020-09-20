@@ -6,9 +6,9 @@ def parse_status(status):
     for status_id in status:
         for change in status[status_id]:
             if status_id == "untracked":
-                folderDelete = ["-r", "-f"] if isdir(change) else []
+                folder_delete = ["-r", "-f"] if isdir(change) else []
 
-                reset_commands.append(["rm", *folderDelete, change])
+                reset_commands.append(["rm", *folder_delete, change])
             else:
                 reset_commands.append(["git", "checkout", change])
 
@@ -93,6 +93,6 @@ def reset_individually(file_paths):
 
 def router(argument_manager, sub_route):
     if sub_route == "RESET_ALL":
-        reset(use_availables=True)
+        reset(argument_manager.left_keys[1:], use_availables=True)
     elif sub_route == "DEFAULT":
         reset_individually(argument_manager.left_keys)

@@ -60,6 +60,6 @@ def remove_individually(file_paths):
 
 def router(argument_manager, sub_route):
     if sub_route == "REMOVE_ALL":
-        remove(file_paths=[], use_availables=True)
+        remove(argument_manager.left_keys[1:], use_availables=True)
     if sub_route == "DEFAULT":
         remove_individually(argument_manager.left_keys)

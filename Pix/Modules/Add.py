@@ -60,6 +60,6 @@ def add_individually(file_paths):
 
 def router(argument_manager, sub_route):
     if sub_route == "ADD_ALL":
-        add(use_availables=True)
+        add(argument_manager.left_keys[1:], use_availables=True)
     if sub_route == "DEFAULT":
         add_individually(argument_manager.left_keys)
