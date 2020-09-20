@@ -6,9 +6,9 @@ def parse_status(status):
     for status_id in status:
         for change in status[status_id]:
             if status_id == "untracked":
-                folderDelete = ["-r", "-f"] if isdir(change) else []
+                folder_delete = ["-r", "-f"] if isdir(change) else []
 
-                reset_commands.append(["rm", *folderDelete, change])
+                reset_commands.append(["rm", *folder_delete, change])
             else:
                 reset_commands.append(["git", "checkout", change])
 
