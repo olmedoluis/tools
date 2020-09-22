@@ -14,21 +14,33 @@ def parse_patch(indexes, meta_data, carried_values, values):
     return carried_values
 
 
+def set_last_space(patches):
+    if not len(patches):
+        patches = [""]
+
+    return patches if patches[-1] == "" else patches + [""]
+
+
 def parse_patches(patches):
-    parsed_patches = []
+    parsed_patches_add = []
+    parsed_patches_remove = []
 
     for patch in patches:
-        parsed_patches = parse_patch(
+        parsed_patches_add = parse_patch(
             indexes=patch.patches_selected_add,
             meta_data=patch.meta_data,
-            carried_values=parsed_patches,
+            carried_values=parsed_patches_add,
             values=patch.patches,
         )
 
-    if not len(parsed_patches):
-        parsed_patches = [""]
+        parsed_patches_remove = parse_patch(
+            indexes=patch.patches_selected_add,
+            meta_data=patch.meta_data,
+            carried_values=parsed_patches_add,
+            values=patch.patches,
+        )
 
-    return parsed_patches if parsed_patches[-1] == "" else parsed_patches + [""]
+    return set_last_space(parsed_patches_add)
 
 
 def parse_differences(differences_raw, files, get_message):
@@ -38,6 +50,7 @@ def parse_differences(differences_raw, files, get_message):
             self.meta_data = meta_data
             self.patches = []
             self.patches_selected_add = []
+            self.patches_selected_remove = []
 
     lines = differences_raw.split("\n")
     differences = []
