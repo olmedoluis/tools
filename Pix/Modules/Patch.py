@@ -8,10 +8,10 @@ def parse_patches(patches):
     parsed_patches = []
 
     for patch in patches:
-        if len(patch.patches_selected):
+        if len(patch.patches_selected_add):
             parsed_patches = parsed_patches + patch.meta_data
 
-            for index_selected in patch.patches_selected:
+            for index_selected in patch.patches_selected_add:
                 parsed_patches = parsed_patches + patch.patches[index_selected]
 
     if not len(parsed_patches):
@@ -26,7 +26,7 @@ def parse_differences(differences_raw, files, get_message):
             self.file_name = file_name
             self.meta_data = meta_data
             self.patches = []
-            self.patches_selected = []
+            self.patches_selected_add = []
 
     lines = differences_raw.split("\n")
     differences = []
