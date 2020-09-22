@@ -4,15 +4,26 @@ def add_to_file(text, file_path):
     f.close()
 
 
+def parse_patch(indexes, meta_data, carried_values, values):
+    if len(indexes):
+        carried_values = carried_values + meta_data
+
+        for index in indexes:
+            carried_values = carried_values + values[index]
+
+    return carried_values
+
+
 def parse_patches(patches):
     parsed_patches = []
 
     for patch in patches:
-        if len(patch.patches_selected_add):
-            parsed_patches = parsed_patches + patch.meta_data
-
-            for index_selected in patch.patches_selected_add:
-                parsed_patches = parsed_patches + patch.patches[index_selected]
+        parsed_patches = parse_patch(
+            indexes=patch.patches_selected_add,
+            meta_data=patch.meta_data,
+            carried_values=parsed_patches,
+            values=patch.patches,
+        )
 
     if not len(parsed_patches):
         parsed_patches = [""]
