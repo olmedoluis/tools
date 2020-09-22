@@ -60,7 +60,7 @@ def parse_differences(differences_raw, files, get_message):
 
             index = index + 1
 
-        new_patch.patches.append(lines[last_index:] + [""])
+        new_patch.patches.append(lines[last_index:-1])
         output_patches.append(new_patch)
         index_file = index_file + 1
 
