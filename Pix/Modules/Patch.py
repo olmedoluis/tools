@@ -40,7 +40,7 @@ def parse_patches(patches):
             values=patch.patches,
         )
 
-    return set_last_space(parsed_patches_add)
+    return set_last_space(parsed_patches_add), set_last_space(parsed_patches_remove)
 
 
 def parse_differences(differences_raw, files, get_message):
@@ -115,17 +115,19 @@ def patch(files, messages=""):
         icons=INPUT_ICONS,
     )
 
-    patch_generated = parse_patches(selected_patches)
+    patch_generated_add, patch_generated_remove = parse_patches(selected_patches)
 
-    if len(patch_generated) == 1:
-        return m.log("error-empty")
+    if len(patch_generated_add) != 1:
+        add_to_file("\n".join(patch_generated_add), file_path)
 
-    add_to_file("\n".join(patch_generated), file_path)
+        run(["git", "apply", "--cached", file_path])
 
-    with open(file_path, "w+") as file:
-        file.write("\n".join(patch_generated))
+    if len(patch_generated_remove) != 1:
+        add_to_file("\n".join(patch_generated_remove), file_path)
 
-    run(["git", "apply", "--cached", file_path])
+        run(["git", "checkout", "--patch", file_path])
+    else:
+        m.log("error-empty")
 
     run(["rm", file_path])
     m.log("patch-success")
