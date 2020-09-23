@@ -40,14 +40,14 @@ def patch_select(error_message="", files=[], colors={}, icons={}):
         elif state == "LEFT":
             patch_control.change_page(-1)
         elif state == "EXTENDED_RIGHT":
-            patch_control.add_index_selected_to_patch()
+            patch_control.change_selected_patch_state(transition="add")
         elif state == "EXTENDED_LEFT":
-            patch_control.remove_index_selected_to_patch()
+            patch_control.change_selected_patch_state(transition="remove")
         elif state == "YES":
-            patch_control.add_index_selected_to_patch()
+            patch_control.change_selected_patch_state(transition="add", force_transition=True)
             patch_control.change_page(1)
         elif state == "NO":
-            patch_control.remove_index_selected_to_patch()
+            patch_control.change_selected_patch_state(transition="remove", force_transition=True)
             patch_control.change_page(1)
         elif state == "FINISH":
             break
@@ -107,9 +107,16 @@ class PatchControl:
         )
 
     def _update_state_color(self):
+        patch = self.files[self._file_name_index]
+
+        if self.get_is_patch_selected(patch.patches_selected_add):
+            self._state_color = self._COLORS["borderSel"]
+
+            return
+
         self._state_color = (
-            self._COLORS["borderSel"]
-            if self.get_is_patch_selected()
+            self._COLORS["deletation"]
+            if self.get_is_patch_selected(patch.patches_selected_remove)
             else self._COLORS["border"]
         )
 
@@ -125,21 +132,51 @@ class PatchControl:
         self._offset = 0
         self._update_state_color()
 
-    def add_index_selected_to_patch(self):
-        if not self.get_is_patch_selected():
-            self.files[self._file_name_index].patches_selected_add.append(
-                self._patch_index_selected
-            )
+    def add_index_selected_to_patch(self, patch_type):
+        patch_indexes = (
+            self.files[self._file_name_index].patches_selected_add
+            if patch_type == "add"
+            else self.files[self._file_name_index].patches_selected_remove
+        )
+        hasAdded = False
+
+        if not self.get_is_patch_selected(patch_indexes):
+            patch_indexes.append(self._patch_index_selected)
 
             self._update_state_color()
+            hasAdded = True
 
-    def remove_index_selected_to_patch(self):
-        if self.get_is_patch_selected():
-            self.files[self._file_name_index].patches_selected_add.remove(
-                self._patch_index_selected
-            )
+        return hasAdded
+
+    def remove_index_selected_to_patch(self, patch_type):
+        patch_indexes = (
+            self.files[self._file_name_index].patches_selected_add
+            if patch_type == "add"
+            else self.files[self._file_name_index].patches_selected_remove
+        )
+        hasRemoved = False
+
+        if self.get_is_patch_selected(patch_indexes):
+            patch_indexes.remove(self._patch_index_selected)
 
             self._update_state_color()
+            hasRemoved = True
+
+        return hasRemoved
+
+    def change_selected_patch_state(self, transition, force_transition=False):
+        if transition == "remove":
+            has_removed_from_added = self.remove_index_selected_to_patch(
+                patch_type="add"
+            )
+            if not has_removed_from_added or force_transition:
+                self.add_index_selected_to_patch(patch_type="remove")
+        elif transition == "add":
+            has_removed_from_removed = self.remove_index_selected_to_patch(
+                patch_type="remove"
+            )
+            if not has_removed_from_removed or force_transition:
+                self.add_index_selected_to_patch(patch_type="add")
 
     def get_styled_patch_line(self, lineNumber):
         index = lineNumber + self._offset - 5
@@ -162,11 +199,8 @@ class PatchControl:
 
         return f"{self._state_color}❚{self._RESET}   {lineText}"
 
-    def get_is_patch_selected(self):
-        return (
-            self._patch_index_selected
-            in self.files[self._file_name_index].patches_selected_add
-        )
+    def get_is_patch_selected(self, indexes):
+        return self._patch_index_selected in indexes
 
     def get_current_file_name(self):
         return self.files[self._file_name_index].file_name
