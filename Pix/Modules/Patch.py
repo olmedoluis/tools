@@ -114,21 +114,19 @@ def patch(files, messages=""):
         icons=INPUT_ICONS,
     )
 
-    patch_generated_add, patch_generated_remove = parse_files(selected_patches)
+    patch_generated_add, files_generated_remove = parse_files(selected_patches)
+
+    if len(files_generated_remove) == 1 and len(patch_generated_add) == 0:
+        return m.log("error-empty")
 
     if len(patch_generated_add) != 1:
         add_to_file("\n".join(patch_generated_add), file_path)
         run(["git", "apply", "--cached", file_path])
+        run(["rm", file_path])
 
-    if len(patch_generated_remove) != 1:
-        # add_to_file("\n".join(patch_generated_remove), file_path)
-        # run(["git", "checkout", "--patch", file_path])
-        pass
+    if len(files_generated_remove) != 0:
+        run(["git", "checkout"] + files_generated_remove)
 
-    if len(patch_generated_remove) == 1 and len(patch_generated_add) == 1:
-        return m.log("error-empty")
-
-    run(["rm", file_path])
     m.log("patch-success")
 
 
