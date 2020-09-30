@@ -21,36 +21,34 @@ def set_last_space(patches):
     return patches if patches[-1] == "" else patches + [""]
 
 
-def parse_patches(patches):
+def parse_files(files):
     parsed_patches_add = []
-    parsed_patches_remove = []
+    files_to_remove = []
 
-    for patch in patches:
+    for file in files:
+        if file.is_file_removed:
+            files_to_remove = files_to_remove + [file.file_name_raw]
+            continue
+
         parsed_patches_add = parse_patch(
-            indexes=patch.patches_selected_add,
-            meta_data=patch.meta_data,
+            indexes=file.patches_selected_add,
+            meta_data=file.meta_data,
             carried_values=parsed_patches_add,
-            values=patch.patches,
+            values=file.patches,
         )
 
-        parsed_patches_remove = parse_patch(
-            indexes=patch.patches_selected_remove,
-            meta_data=patch.meta_data,
-            carried_values=parsed_patches_remove,
-            values=patch.patches,
-        )
-
-    return set_last_space(parsed_patches_add), set_last_space(parsed_patches_remove)
+    return set_last_space(parsed_patches_add), files_to_remove
 
 
 def parse_differences(differences_raw, files, get_message):
-    class Patch:
-        def __init__(self, file_name, meta_data):
+    class File:
+        def __init__(self, file_name, file_name_raw, meta_data):
             self.file_name = file_name
+            self.file_name_raw = file_name_raw
             self.meta_data = meta_data
             self.patches = []
             self.patches_selected_add = []
-            self.patches_selected_remove = []
+            self.is_file_removed = []
 
     lines = differences_raw.split("\n")
     differences = []
@@ -70,8 +68,9 @@ def parse_differences(differences_raw, files, get_message):
     index_file = 0
     for lines in differences:
         meta_data = lines[:4]
-        new_patch = Patch(
+        new_patch = File(
             file_name=get_message("file-title", {"pm_file": files[index_file]}),
+            file_name_raw=files[index_file],
             meta_data=meta_data,
         )
 
@@ -115,21 +114,22 @@ def patch(files, messages=""):
         icons=INPUT_ICONS,
     )
 
-    patch_generated_add, patch_generated_remove = parse_patches(selected_patches)
+    patch_generated_add, patch_generated_remove = parse_files(selected_patches)
 
     if len(patch_generated_add) != 1:
-        add_to_file("\n".join(patch_generated_add), file_path)
-
-        run(["git", "apply", "--cached", file_path])
+        # add_to_file("\n".join(patch_generated_add), file_path)
+        # run(["git", "apply", "--cached", file_path])
+        pass
 
     if len(patch_generated_remove) != 1:
-        add_to_file("\n".join(patch_generated_remove), file_path)
-        run(["git", "checkout", "--patch", file_path])
+        # add_to_file("\n".join(patch_generated_remove), file_path)
+        # run(["git", "checkout", "--patch", file_path])
+        pass
 
     if len(patch_generated_remove) != 1 and len(patch_generated_add) != 1:
         return m.log("error-empty")
 
-    run(["rm", file_path])
+    # run(["rm", file_path])
     m.log("patch-success")
 
 
