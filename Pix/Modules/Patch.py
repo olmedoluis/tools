@@ -34,9 +34,9 @@ def parse_patches(patches):
         )
 
         parsed_patches_remove = parse_patch(
-            indexes=patch.patches_selected_add,
+            indexes=patch.patches_selected_remove,
             meta_data=patch.meta_data,
-            carried_values=parsed_patches_add,
+            carried_values=parsed_patches_remove,
             values=patch.patches,
         )
 
@@ -124,10 +124,10 @@ def patch(files, messages=""):
 
     if len(patch_generated_remove) != 1:
         add_to_file("\n".join(patch_generated_remove), file_path)
-
         run(["git", "checkout", "--patch", file_path])
-    else:
-        m.log("error-empty")
+
+    if len(patch_generated_remove) != 1 and len(patch_generated_add) != 1:
+        return m.log("error-empty")
 
     run(["rm", file_path])
     m.log("patch-success")
