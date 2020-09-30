@@ -44,10 +44,14 @@ def patch_select(error_message="", files=[], colors={}, icons={}):
         elif state == "EXTENDED_LEFT":
             patch_control.change_selected_patch_state(transition="remove")
         elif state == "YES":
-            patch_control.change_selected_patch_state(transition="add", force_transition=True)
+            patch_control.change_selected_patch_state(
+                transition="add", force_transition=True
+            )
             patch_control.change_page(1)
         elif state == "NO":
-            patch_control.change_selected_patch_state(transition="remove", force_transition=True)
+            patch_control.change_selected_patch_state(
+                transition="remove", force_transition=True
+            )
             patch_control.change_page(1)
         elif state == "FINISH":
             break
@@ -214,9 +218,13 @@ class PatchControl:
             )
             color = self._COLORS["index"]
             icon = self._ICONS["normal"]
+            patch = self.files[self._file_name_index]
 
-            if index in self.files[self._file_name_index].patches_selected_add:
+            if index in patch.patches_selected_add:
                 color = self._COLORS["indexSel"]
+                icon = self._ICONS["selection"]
+            elif index in patch.patches_selected_remove:
+                color = self._COLORS["deletation"]
                 icon = self._ICONS["selection"]
 
             output = f"{output}{color}{active} {icon}{self._RESET}"
