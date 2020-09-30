@@ -178,6 +178,8 @@ class PatchControl:
             if not was_file_removed or force_transition:
                 self.add_index_selected_to_patch()
 
+        self._update_state_color()
+
     def get_styled_patch_line(self, lineNumber):
         index = lineNumber + self._offset - 5
         lineText = (
