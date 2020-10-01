@@ -71,8 +71,16 @@ class MessageControl:
         self.RESET = THEME["th_reset"]
         self.messages = MESSAGES
 
-    def get_message(self, messageId, params={}):
-        return str(self.messages[messageId]).format(**self.THEME, **params) + self.RESET
+    def get_message(self, message_id, params={}):
+        return (
+            str(self.messages[message_id]).format(**self.THEME, **params) + self.RESET
+        )
 
-    def log(self, messageId, params={}):
-        return print(self.get_message(messageId, params))
+    def log(self, message_id, params={}):
+        print(self.get_message(message_id, params))
+
+    def logMany(self, contents, param_name, message_id):
+        param = {}
+        for content in contents:
+            param[param_name] = content
+            self.log(message_id=message_id, params=param)
