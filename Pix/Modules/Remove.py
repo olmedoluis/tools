@@ -1,11 +1,11 @@
 def remove(file_paths=[], use_availables=False, messages=""):
     from .Prompts import multi_select
-    from .Helpers import run, removeColors, MessageControl
+    from .Helpers import run, MessageControl
     from .Status import get_status, search_in_status, get_status_paths
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
-    status = get_status()
+    status = get_status(ignoreColors=True)
 
     is_individual_path = len(file_paths) == 1
     file_paths = (
@@ -18,10 +18,11 @@ def remove(file_paths=[], use_availables=False, messages=""):
         m.log("error-remove-files_not_found")
         exit()
     elif use_availables:
-        run(["git", "reset"] + file_paths)
+        run(["git", "reset", "."])
         return m.log("remove-all-success")
     elif is_individual_path and len(file_paths) == 1:
-        return run(["git", "reset"] + file_paths)
+        run(["git", "reset"] + file_paths)
+        return m.log("remove-success")
 
     print()
     answers = multi_select(
@@ -36,11 +37,7 @@ def remove(file_paths=[], use_availables=False, messages=""):
     if len(answers) == 0:
         return m.log("error-files_selected_not_found")
 
-    choices = []
-    for answer in answers:
-        choices.append(removeColors(answer))
-
-    run(["git", "reset"] + choices)
+    run(["git", "reset"] + answers)
     m.log("remove-success")
 
 
@@ -52,8 +49,6 @@ def remove_individually(file_paths):
     if len(file_paths):
         for file_path in file_paths:
             remove(file_paths=[file_path], messages=m)
-
-        return m.log("remove-success")
 
     remove(messages=m)
 
