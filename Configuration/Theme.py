@@ -21,7 +21,7 @@ ICONS = {
     "ic_untracked": "✱",
     "ic_renamed": "✦",
     "ic_deleted": "✝",
-    "ic_conflicted": "⚯",
+    "ic_conflicted": "■",
     "ic_added": "✚",
     "ic_error": "✖",
     "ic_selection": "❤",
