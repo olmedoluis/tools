@@ -151,7 +151,7 @@ def patch_all(file_search):
     if not len(files):
         return m.log("error-patch-files-not-found")
 
-    patch(files)
+    patch(files, m)
 
 
 def router(argument_manager, sub_route):
