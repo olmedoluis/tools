@@ -63,5 +63,7 @@ MESSAGES = {
     "stash-list_item": "{pm_stashid} - {pm_stashname} {th_dim}{pm_stashbranch}",
     "untracked-title": "\n {th_normal}Untracked files:\n",
     "untracked": "\t{th_untracked}{ic_untracked} {pm_change}",
+    "reset-file": "\t{th_deleted}{pm_file}",
+    "add-file": "\t{th_added}{pm_file}",
 }
 
