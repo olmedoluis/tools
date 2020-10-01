@@ -47,7 +47,7 @@ MESSAGES = {
     "modified-title": "\n {th_normal}Modified files:\n",
     "modified": "\t{th_modified}{ic_modified} {pm_change}",
     "operation-cancel": "\n {th_error}{ic_success} Operation cancelled successfully\n",
-    "patch-success": "\n {th_success}{ic_success} You have added the selected parts of the files\n",
+    "patch-success": "\n {th_success}{ic_success} Examination completed successfully\n",
     "preview": "\n\t{th_normal}Preview: {th_keyword}{pm_preview}\n",
     "remove-all-success": "\n {th_success}{ic_success} All files has been removed\n",
     "remove-success": "\n {th_success}{ic_success} Selected files has been removed\n",
