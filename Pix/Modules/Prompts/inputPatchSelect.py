@@ -180,9 +180,19 @@ class PatchControl:
             current_file.is_file_removed = False
 
             if not was_file_removed or force_transition:
-                self.add_index_selected_to_patch()
+                if self.get_is_patch_selected():
+                    self.add_patches()
+                else:
+                    self.add_index_selected_to_patch()
 
         self._update_state_color()
+
+    def add_patches(self):
+        current_file = self._get_current_file()
+
+        for index in range(len(self._patches)):
+            if not (index in current_file.patches_selected_add):
+                current_file.patches_selected_add.append(index)
 
     def get_styled_patch_line(self, lineNumber):
         index = lineNumber + self._offset - 5
