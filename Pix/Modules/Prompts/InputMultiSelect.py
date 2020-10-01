@@ -84,7 +84,7 @@ class _MultiSelectControl:
         is_selected = self.get_is_option_selected(index_in_range)
 
         font_mod = self._COLORS["slight"] if offset else self._COLORS["bold"]
-        font_color = self._COLORS["selection"] if is_selected else ""
+        font_color = self._COLORS["selection"] if is_selected else self._COLORS["file"]
         icon = self._ICONS["selection"] if is_selected else self._ICONS["normal"]
 
         return f"{font_mod}{font_color}{option}{self._RESET}"
