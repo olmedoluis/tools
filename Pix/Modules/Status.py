@@ -60,7 +60,7 @@ def get_status_paths(
     return file_paths
 
 
-def parse_change(status, change_id, change_name, path, THEME):
+def parse_change(status, change_id, change_name, path, THEME, ignoreColors):
     carried_change = status[change_name] if change_name in status else []
 
     if change_id == "R":
@@ -71,12 +71,16 @@ def parse_change(status, change_id, change_name, path, THEME):
         for index in range(len(oldFilePaths)):
             if not oldFilePaths[index] == newFilePaths[index]:
                 path = (
-                    oldFilePaths[:index]
-                    + [THEME["th_modified"] + newFilePaths[index]]
-                    + newFilePaths[index + 1 :]
+                    (oldFilePaths[:index] + newFilePaths[index:])
+                    if ignoreColors
+                    else (
+                        oldFilePaths[:index]
+                        + [THEME["th_modified"] + newFilePaths[index]]
+                        + newFilePaths[index + 1 :]
+                    )
                 )
 
-                path[-1] += THEME["th_reset"]
+                path[-1] += "" if ignoreColors else THEME["th_reset"]
 
                 path = "/".join(path)
                 break
@@ -86,7 +90,7 @@ def parse_change(status, change_id, change_name, path, THEME):
     return status
 
 
-def get_status():
+def get_status(ignoreColors=False):
     from .Helpers import run
     from Configuration.Theme import THEME
 
@@ -100,15 +104,29 @@ def get_status():
         first_letter, second_letter = change_id
 
         if change_id in STATUS_MATCHES:
-            parse_change(status, change_id, STATUS_MATCHES[change_id], change, THEME)
+            parse_change(
+                status,
+                change_id,
+                STATUS_MATCHES[change_id],
+                change,
+                THEME,
+                ignoreColors,
+            )
             continue
 
         if first_letter != " ":
-            parse_change(status, first_letter, STATUS_MATCHES["A"], change, THEME)
+            parse_change(
+                status, first_letter, STATUS_MATCHES["A"], change, THEME, ignoreColors
+            )
 
         if second_letter != " ":
             parse_change(
-                status, second_letter, STATUS_MATCHES[second_letter], change, THEME
+                status,
+                second_letter,
+                STATUS_MATCHES[second_letter],
+                change,
+                THEME,
+                ignoreColors,
             )
 
     return status

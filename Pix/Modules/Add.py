@@ -5,7 +5,7 @@ def add(file_paths=[], use_availables=False, messages=""):
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
-    status = get_status()
+    status = get_status(ignoreColors=True)
 
     is_individual_path = len(file_paths) == 1
     file_paths = (
@@ -36,11 +36,7 @@ def add(file_paths=[], use_availables=False, messages=""):
     if len(answers) == 0:
         return m.log("error-files_selected_not_found")
 
-    choices = []
-    for answer in answers:
-        choices.append(removeColors(answer))
-
-    run(["git", "add"] + choices)
+    run(["git", "add"] + answers)
     m.log("add-success")
 
 
