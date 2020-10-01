@@ -18,7 +18,7 @@ def remove(file_paths=[], use_availables=False, messages=""):
         m.log("error-remove-files_not_found")
         exit()
     elif use_availables:
-        run(["git", "reset"] +file_paths )
+        run(["git", "reset"] + file_paths)
         return m.log("remove-all-success")
     elif is_individual_path and len(file_paths) == 1:
         return run(["git", "reset"] + file_paths)
