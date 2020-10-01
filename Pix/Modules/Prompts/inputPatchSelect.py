@@ -222,7 +222,7 @@ class PatchControl:
 
             if patch.is_file_removed:
                 color = self._COLORS["deletation"]
-                icon = self._ICONS["selection"]
+                icon = self._ICONS["-"]
             elif index in patch.patches_selected_add:
                 color = self._COLORS["indexSel"]
                 icon = self._ICONS["selection"]
