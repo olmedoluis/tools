@@ -36,9 +36,9 @@ def patch_select(error_message="", files=[], colors={}, icons={}):
         elif state == "UP":
             patch_control.decrease_offset()
         elif state == "RIGHT":
-            patch_control.change_page(1)
+            patch_control.change_patch_page(1)
         elif state == "LEFT":
-            patch_control.change_page(-1)
+            patch_control.change_patch_page(-1)
         elif state == "EXTENDED_RIGHT":
             patch_control.change_selected_patch_state(transition="add")
         elif state == "EXTENDED_LEFT":
@@ -47,12 +47,12 @@ def patch_select(error_message="", files=[], colors={}, icons={}):
             patch_control.change_selected_patch_state(
                 transition="add", force_transition=True
             )
-            patch_control.change_page(1)
+            patch_control.change_patch_page(1)
         elif state == "NO":
             patch_control.change_selected_patch_state(
                 transition="remove", force_transition=True
             )
-            patch_control.change_page(1)
+            patch_control.change_file_page(1)
         elif state == "FINISH":
             break
         elif state == "BREAK_CHAR":
@@ -124,13 +124,17 @@ class PatchControl:
             else self._COLORS["border"]
         )
 
-    def change_page(self, times):
+    def change_file_page(self, times):
+        self._file_name_index = (self._file_name_index + times) % len(self.files)
+        self.set_patches_of_file(times)
+        self._update_state_color()
+
+    def change_patch_page(self, times):
         newIndex = self._patch_index_selected + times
         self._patch_index_selected = newIndex % len(self._patches)
 
         if not (newIndex in range(len(self._patches))) and len(self.files) > 1:
-            self._file_name_index = (self._file_name_index + times) % len(self.files)
-            self.set_patches_of_file(times)
+            self.change_file_page(times)
 
         self.set_patch_showing(self._patch_index_selected)
         self._offset = 0
@@ -176,9 +180,19 @@ class PatchControl:
             current_file.is_file_removed = False
 
             if not was_file_removed or force_transition:
-                self.add_index_selected_to_patch()
+                if self.get_is_patch_selected():
+                    self.add_patches()
+                else:
+                    self.add_index_selected_to_patch()
 
         self._update_state_color()
+
+    def add_patches(self):
+        current_file = self._get_current_file()
+
+        for index in range(len(self._patches)):
+            if not (index in current_file.patches_selected_add):
+                current_file.patches_selected_add.append(index)
 
     def get_styled_patch_line(self, lineNumber):
         index = lineNumber + self._offset - 5
