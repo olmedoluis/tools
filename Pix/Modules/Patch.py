@@ -5,11 +5,10 @@ def add_to_file(text, file_path):
 
 
 def parse_patch(indexes, meta_data, carried_values, values):
-    if len(indexes):
-        carried_values = carried_values + meta_data
+    carried_values = carried_values + meta_data
 
-        for index in indexes:
-            carried_values = carried_values + values[index]
+    for index in indexes:
+        carried_values = carried_values + values[index]
 
     return carried_values
 
@@ -24,20 +23,24 @@ def set_last_space(patches):
 def parse_files(files):
     parsed_patches_add = []
     files_to_remove = []
+    files_to_add = []
 
     for file in files:
         if file.is_file_removed:
             files_to_remove = files_to_remove + [file.file_name_raw]
             continue
 
-        parsed_patches_add = parse_patch(
-            indexes=file.patches_selected_add,
-            meta_data=file.meta_data,
-            carried_values=parsed_patches_add,
-            values=file.patches,
-        )
+        if len(file.patches_selected_add):
+            files_to_add.append(file.file_name_raw)
 
-    return set_last_space(parsed_patches_add), files_to_remove
+            parsed_patches_add = parse_patch(
+                indexes=file.patches_selected_add,
+                meta_data=file.meta_data,
+                carried_values=parsed_patches_add,
+                values=file.patches,
+            )
+
+    return set_last_space(parsed_patches_add), files_to_remove, files_to_add
 
 
 def parse_differences(differences_raw, files, get_message):
@@ -114,9 +117,9 @@ def patch(files, messages=""):
         icons=INPUT_ICONS,
     )
 
-    patch_generated_add, files_generated_remove = parse_files(selected_patches)
+    patch_generated_add, files_removed, files_added = parse_files(selected_patches)
 
-    if len(files_generated_remove) == 1 and len(patch_generated_add) == 0:
+    if len(files_removed) == 1 and len(patch_generated_add) == 0:
         return m.log("error-empty")
 
     if len(patch_generated_add) != 1:
@@ -124,10 +127,13 @@ def patch(files, messages=""):
         run(["git", "apply", "--cached", file_path])
         run(["rm", file_path])
 
-    if len(files_generated_remove) != 0:
-        run(["git", "checkout"] + files_generated_remove)
+    if len(files_removed) != 0:
+        run(["git", "checkout"] + files_removed)
 
     m.log("patch-success")
+    m.logMany(message_id="add-file", param_name="pm_file", contents=files_added)
+    m.logMany(message_id="reset-file", param_name="pm_file", contents=files_removed)
+    print()
 
 
 def patch_all(file_search):
