@@ -105,11 +105,11 @@ def patch(files, messages=""):
     file_path = f"{cwd}/changes.patch"
 
     differences_raw = run(["git", "diff-files", "-p"] + files)
-    patches = parse_differences(differences_raw, files, m.getMessage)
+    patches = parse_differences(differences_raw, files, m.get_message)
 
     selected_patches = patch_select(
         files=patches,
-        error_message=m.getMessage("error-files_selected_not_found"),
+        error_message=m.get_message("error-files_selected_not_found"),
         colors=INPUT_THEME["PATCH_SELECTION"],
         icons=INPUT_ICONS,
     )

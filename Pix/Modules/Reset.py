@@ -58,9 +58,9 @@ def reset(file_paths=[], use_availables=False, messages=""):
 
     print()
     answers = multi_select(
-        title=m.getMessage("reset-title"),
-        final_title=m.getMessage("file-selection-finaltitle"),
-        error_message=m.getMessage("error-files_selected_not_found"),
+        title=m.get_message("reset-title"),
+        final_title=m.get_message("file-selection-finaltitle"),
+        error_message=m.get_message("error-files_selected_not_found"),
         options=file_paths,
         colors=INPUT_THEME["RESET_SELECTION"],
         icons=INPUT_ICONS,
