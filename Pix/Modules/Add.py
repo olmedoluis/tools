@@ -18,7 +18,7 @@ def add(file_paths=[], use_availables=False, messages=""):
         m.log("error-add-files_not_found")
         exit()
     elif use_availables:
-        run(["git", "add", "."])
+        run(["git", "add"] + file_paths)
         return m.log("add-all-success")
     elif is_individual_path and len(file_paths) == 1:
         return run(["git", "add"] + file_paths)
