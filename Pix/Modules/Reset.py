@@ -52,7 +52,9 @@ def reset(file_paths=[], use_availables=False, messages=""):
         exit()
     elif use_availables:
         executeReset(file_paths, status)
-        return m.log("reset-all-success")
+        m.log("reset-all-success")
+        m.logMany(message_id="reset-file", param_name="pm_file", contents=file_paths)
+        return
     elif is_individual_path and len(file_paths) == 1:
         return executeReset(file_paths, status)
 
@@ -71,6 +73,7 @@ def reset(file_paths=[], use_availables=False, messages=""):
 
     executeReset(answers, status)
     m.log("reset-success")
+    m.logMany(message_id="reset-file", param_name="pm_file", contents=answers)
 
 
 def reset_individually(file_paths):
@@ -82,7 +85,9 @@ def reset_individually(file_paths):
         for file_path in file_paths:
             reset(file_paths=[file_path], messages=m)
 
-        return m.log("reset-success")
+        m.log("reset-success")
+        m.logMany(message_id="reset-file", param_name="pm_file", contents=file_paths)
+        return
 
     reset(messages=m)
 
