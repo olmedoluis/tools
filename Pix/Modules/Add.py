@@ -17,9 +17,13 @@ def add(file_paths=[], use_availables=False, messages=""):
     if len(file_paths) == 0:
         m.log("error-add-files_not_found")
         exit()
+
     elif use_availables:
         run(["git", "add"] + file_paths)
-        return m.log("add-all-success")
+        m.log("add-all-success")
+        m.logMany(message_id="add-file", param_name="pm_file", contents=file_paths)
+        return
+
     elif is_individual_path and len(file_paths) == 1:
         return run(["git", "add"] + file_paths)
 
@@ -38,6 +42,8 @@ def add(file_paths=[], use_availables=False, messages=""):
 
     run(["git", "add"] + answers)
     m.log("add-success")
+    m.logMany(message_id="add-file", param_name="pm_file", contents=file_paths)
+    print()
 
 
 def add_individually(file_paths):
@@ -49,7 +55,9 @@ def add_individually(file_paths):
         for file_path in file_paths:
             add(file_paths=[file_path], messages=m)
 
-        return m.log("add-success")
+        m.log("add-success")
+        m.logMany(message_id="add-file", param_name="pm_file", contents=file_paths)
+        return
 
     add(messages=m)
 
