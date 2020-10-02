@@ -128,7 +128,9 @@ def patch(files, messages=""):
         icons=INPUT_ICONS,
     )
 
-    parsed_patches, parsed_files, files_added, files_removed = parse_files(selected_patches)
+    parsed_patches, parsed_files, files_added, files_removed = parse_files(
+        selected_patches
+    )
 
     if len(parsed_files) == 1 and len(parsed_patches) == 0:
         return m.log("error-empty")
@@ -143,9 +145,13 @@ def patch(files, messages=""):
         pass
 
     m.log("patch-success")
-    m.logMany(message_id="add-file", param_name="pm_file", contents=files_added)
+    m.logMany(
+        message_id="add-file",
+        param_name="pm_file",
+        contents=files_added,
+        show_last_line=False,
+    )
     m.logMany(message_id="reset-file", param_name="pm_file", contents=files_removed)
-    print()
 
 
 def patch_all(file_search):
