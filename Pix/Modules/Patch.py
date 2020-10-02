@@ -27,11 +27,15 @@ def parse_files(files):
 
     for file in files:
         if file.is_file_removed:
-            files_to_remove = files_to_remove + [file.file_name_raw]
+            patches_number = len(file.patches)
+            files_to_remove = files_to_remove + [
+                f"⟱ {patches_number} {file.file_name_raw}"
+            ]
             continue
 
         if len(file.patches_selected_add):
-            files_to_add.append(file.file_name_raw)
+            patches_number = len(file.patches_selected_add)
+            files_to_add.append(f"⟰ {patches_number} {file.file_name_raw}")
 
             parsed_patches_add = parse_patch(
                 indexes=file.patches_selected_add,
