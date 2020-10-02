@@ -43,7 +43,6 @@ def add(file_paths=[], use_availables=False, messages=""):
     run(["git", "add"] + answers)
     m.log("add-success")
     m.logMany(message_id="add-file", param_name="pm_file", contents=file_paths)
-    print()
 
 
 def add_individually(file_paths):
