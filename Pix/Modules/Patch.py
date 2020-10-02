@@ -22,8 +22,9 @@ def set_last_space(patches):
 
 def parse_files(files):
     parsed_patches_add = []
-    files_to_remove = []
+    parsed_files_remove = []
     files_to_add = []
+    files_to_remove = []
 
     for file in files:
         if file.is_file_removed:
@@ -31,6 +32,7 @@ def parse_files(files):
             files_to_remove = files_to_remove + [
                 f"⟱ {patches_number} {file.file_name_raw}"
             ]
+            parsed_files_remove = parsed_files_remove + [file.file_name_raw]
             continue
 
         if len(file.patches_selected_add):
@@ -44,7 +46,12 @@ def parse_files(files):
                 values=file.patches,
             )
 
-    return set_last_space(parsed_patches_add), files_to_remove, files_to_add
+    return (
+        set_last_space(parsed_patches_add),
+        parsed_files_remove,
+        files_to_add,
+        files_to_remove,
+    )
 
 
 def parse_differences(differences_raw, files, get_message):
@@ -121,18 +128,19 @@ def patch(files, messages=""):
         icons=INPUT_ICONS,
     )
 
-    patch_generated_add, files_removed, files_added = parse_files(selected_patches)
+    parsed_patches, parsed_files, files_added, files_removed = parse_files(selected_patches)
 
-    if len(files_removed) == 1 and len(patch_generated_add) == 0:
+    if len(parsed_files) == 1 and len(parsed_patches) == 0:
         return m.log("error-empty")
 
-    if len(patch_generated_add) != 1:
-        add_to_file("\n".join(patch_generated_add), file_path)
+    if len(parsed_patches) != 1:
+        add_to_file("\n".join(parsed_patches), file_path)
         run(["git", "apply", "--cached", file_path])
         run(["rm", file_path])
 
-    if len(files_removed) != 0:
-        run(["git", "checkout"] + files_removed)
+    if len(parsed_files) != 0:
+        run(["git", "checkout"] + parsed_files)
+        pass
 
     m.log("patch-success")
     m.logMany(message_id="add-file", param_name="pm_file", contents=files_added)
