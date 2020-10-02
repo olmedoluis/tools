@@ -79,8 +79,12 @@ class MessageControl:
     def log(self, message_id, params={}):
         print(self.get_message(message_id, params))
 
-    def logMany(self, contents, param_name, message_id):
+    def logMany(self, contents, param_name, message_id, show_last_line=True):
         param = {}
+
         for content in contents:
             param[param_name] = content
             self.log(message_id=message_id, params=param)
+
+        if show_last_line:
+            print()
