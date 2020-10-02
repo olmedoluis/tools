@@ -65,4 +65,5 @@ MESSAGES = {
     "untracked": "\t{th_untracked}{ic_untracked} {pm_change}",
     "reset-file": "\t{th_deleted}{pm_file}",
     "add-file": "\t{th_added}{pm_file}",
+    "remove-file": "\t{th_deleted}{pm_file}",
 }
