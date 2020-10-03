@@ -30,14 +30,14 @@ def parse_files(files):
         if file.is_file_removed:
             patches_number = len(file.patches)
             files_to_remove = files_to_remove + [
-                f"⟱ {patches_number} {file.file_name_raw}"
+                f"{patches_number} {file.file_name_raw}"
             ]
             parsed_files_remove = parsed_files_remove + [file.file_name_raw]
             continue
 
         if len(file.patches_selected_add):
             patches_number = len(file.patches_selected_add)
-            files_to_add.append(f"⟰ {patches_number} {file.file_name_raw}")
+            files_to_add.append(f"{patches_number} {file.file_name_raw}")
 
             parsed_patches_add = parse_patch(
                 indexes=file.patches_selected_add,
@@ -146,12 +146,14 @@ def patch(files, messages=""):
 
     m.log("patch-success")
     m.logMany(
-        message_id="add-file",
+        message_id="patch-added_file",
         param_name="pm_file",
         contents=files_added,
         show_last_line=False,
     )
-    m.logMany(message_id="reset-file", param_name="pm_file", contents=files_removed)
+    m.logMany(
+        message_id="patch-resetted_file", param_name="pm_file", contents=files_removed
+    )
 
 
 def patch_all(file_search):
