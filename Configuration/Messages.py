@@ -61,7 +61,9 @@ MESSAGES = {
     "stash-list_item": "{pm_stashid} - {pm_stashname} {th_dim}{pm_stashbranch}",
     "untracked-title": "\n {th_normal}Untracked files:\n",
     "untracked": "\t{th_untracked}{ic_untracked} {pm_change}",
-    "reset-file": "\t{th_deleted}{ic_error} {pm_file}",
+    "reset-file": "\t{th_deleted}{ic_resetted} {pm_file}",
+    "patch-resetted_file": "\t{th_deleted}{ic_patch_remove} {pm_file}",
+    "patch-added_file": "\t{th_added}{ic_patch_add} {pm_file}",
     "add-file": "\t{th_added}{ic_added} {pm_file}",
-    "remove-file": "\t{th_deleted}- {pm_file}",
+    "remove-file": "\t{th_deleted}{ic_removed} {pm_file}",
 }
