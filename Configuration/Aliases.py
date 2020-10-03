@@ -38,4 +38,7 @@ ALIASES = {
             "RESET_ALL": ["."]
         }
     },
+    "LOG": {
+        "ALIASES": ["l"],
+    },
 }

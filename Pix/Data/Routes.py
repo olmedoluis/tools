@@ -38,4 +38,7 @@ KEYS = {
             "RESET_ALL": ["all"]
         }
     },
+    "LOG": {
+        "KEYS": ["log", "history"],
+    },
 }
