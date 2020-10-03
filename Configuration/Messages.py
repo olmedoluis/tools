@@ -1,6 +1,5 @@
 MESSAGES = {
-    "add-all-success": "\n {th_success}{ic_success} All files has been added\n",
-    "add-success": "\n {th_success}{ic_success} Selected files has been added\n",
+    "add-success": "\n {th_success}{ic_success} The following files has been added successfully!\n",
     "add-title": "{th_normal}Select files to add:",
     "added-title": "\n {th_normal}Added files:\n",
     "added": "\t{th_added}{ic_added} {pm_change}",
@@ -49,8 +48,7 @@ MESSAGES = {
     "operation-cancel": "\n {th_error}{ic_success} Operation cancelled successfully\n",
     "patch-success": "\n {th_success}{ic_success} The following files has been successfully examinated!\n",
     "preview": "\n\t{th_normal}Preview: {th_keyword}{pm_preview}\n",
-    "remove-all-success": "\n {th_success}{ic_success} All files has been removed\n",
-    "remove-success": "\n {th_success}{ic_success} Selected files has been removed\n",
+    "remove-success": "\n {th_success}{ic_success} The following files has been removed successfully!\n",
     "remove-title": "{th_normal}Select files to remove:",
     "renamed-title": "\n {th_normal}Renamed files:\n",
     "renamed": "\t{th_renamed}{ic_renamed} {pm_change}",
@@ -63,7 +61,7 @@ MESSAGES = {
     "stash-list_item": "{pm_stashid} - {pm_stashname} {th_dim}{pm_stashbranch}",
     "untracked-title": "\n {th_normal}Untracked files:\n",
     "untracked": "\t{th_untracked}{ic_untracked} {pm_change}",
-    "reset-file": "\t{th_deleted}{pm_file}",
-    "add-file": "\t{th_added}{pm_file}",
-    "remove-file": "\t{th_deleted}{pm_file}",
+    "reset-file": "\t{th_deleted}{ic_error} {pm_file}",
+    "add-file": "\t{th_added}{ic_added} {pm_file}",
+    "remove-file": "\t{th_deleted}- {pm_file}",
 }
