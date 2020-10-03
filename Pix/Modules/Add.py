@@ -20,7 +20,7 @@ def add(file_paths=[], use_availables=False, messages=""):
 
     elif use_availables:
         run(["git", "add"] + file_paths)
-        m.log("add-all-success")
+        m.log("add-success")
         m.logMany(message_id="add-file", param_name="pm_file", contents=file_paths)
         return
 
