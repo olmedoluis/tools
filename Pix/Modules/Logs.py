@@ -17,7 +17,7 @@ def get_logs(logs_data):
                 hash=log_array[0],
                 author=log_array[1],
                 time=log_array[2],
-                commit=log_array[3],
+                commit=log_array[3][:-1],
             )
         )
 
@@ -27,6 +27,7 @@ def get_logs(logs_data):
 def log():
     from .Helpers import run
     from .Branch import get_branch_creator
+    from .Prompts import logger
 
     branch_creator = get_branch_creator()
     logs_raw = run(
@@ -41,6 +42,8 @@ def log():
     )
 
     logs = get_logs(logs_raw.split("\n"))
+
+    logger(error_message="wea", logs=logs, branch=branch_creator)
 
 
 def router(argument_parser, sub_route):
