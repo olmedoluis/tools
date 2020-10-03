@@ -1,4 +1,4 @@
-def remove(file_paths=[], use_availables=False, messages=""):
+def remove(file_paths=[], use_availables=False, messages="", show_logs=True):
     from .Prompts import multi_select
     from .Helpers import run, MessageControl
     from .Status import get_status, search_in_status, get_status_paths
@@ -39,24 +39,23 @@ def remove(file_paths=[], use_availables=False, messages=""):
         return m.log("error-files_selected_not_found")
 
     run(["git", "reset"] + answers)
-    m.log("remove-success")
-    m.logMany(message_id="remove-file", param_name="pm_file", contents=answers)
+    if show_logs:
+        m.log("remove-success")
+        m.logMany(message_id="remove-file", param_name="pm_file", contents=answers)
 
 
 def remove_individually(file_paths):
-    from .Helpers import MessageControl
-
-    m = MessageControl()
-
     if len(file_paths):
-        for file_path in file_paths:
-            remove(file_paths=[file_path], messages=m)
+        index = 1
 
-        m.log("remove-success")
-        m.logMany(message_id="remove-file", param_name="pm_file", contents=answers)
+        for file_path in file_paths:
+            remove(file_paths=[file_path], show_logs=len(file_paths) == index)
+
+            index = index + 1
+
         return
 
-    remove(messages=m)
+    remove()
 
 
 def router(argument_manager, sub_route):
