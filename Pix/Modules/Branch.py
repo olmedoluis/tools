@@ -6,6 +6,15 @@ def get_has_changes(change=""):
     return len(status.keys()) > 1 if change == "" else change in status
 
 
+def get_branch_creator():
+    from .Helpers import run
+
+    current_branch = run(["git", "branch", "--show-current"])[:-1]
+    creation_raw = run([f"git", "reflog", current_branch]).split(" ")[-1]
+
+    return creation_raw
+
+
 def branchSelection(branch_search):
     from .Prompts import select
     from .Helpers import run, MessageControl
