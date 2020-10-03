@@ -17,31 +17,30 @@ def remove(file_paths=[], use_availables=False, messages="", show_logs=True):
     if len(file_paths) == 0:
         m.log("error-remove-files_not_found")
         exit()
+
     elif use_availables:
-        run(["git", "reset"] + file_paths)
-        m.log("remove-success")
-        m.logMany(message_id="remove-file", param_name="pm_file", contents=file_paths)
-        return
-    elif is_individual_path and len(file_paths) == 1:
-        return run(["git", "reset"] + file_paths)
+        pass
 
-    print()
-    answers = multi_select(
-        title=m.get_message("remove-title"),
-        final_title=m.get_message("file-selection-finaltitle"),
-        error_message=m.get_message("error-files_selected_not_found"),
-        options=file_paths,
-        colors=INPUT_THEME["REMOVE_SELECTION"],
-        icons=INPUT_ICONS,
-    )
+    elif len(file_paths) != 1:
+        print()
+        answers = multi_select(
+            title=m.get_message("remove-title"),
+            final_title=m.get_message("file-selection-finaltitle"),
+            error_message=m.get_message("error-files_selected_not_found"),
+            options=file_paths,
+            colors=INPUT_THEME["REMOVE_SELECTION"],
+            icons=INPUT_ICONS,
+        )
 
-    if len(answers) == 0:
-        return m.log("error-files_selected_not_found")
+        if len(answers) == 0:
+            return m.log("error-files_selected_not_found")
 
-    run(["git", "reset"] + answers)
+        file_paths = answers
+
+    run(["git", "reset"] + file_paths)
     if show_logs:
         m.log("remove-success")
-        m.logMany(message_id="remove-file", param_name="pm_file", contents=answers)
+        m.logMany(message_id="remove-file", param_name="pm_file", contents=file_paths)
 
 
 def remove_individually(file_paths):
