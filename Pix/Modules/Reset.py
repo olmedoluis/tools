@@ -52,7 +52,7 @@ def reset(file_paths=[], use_availables=False, messages="", show_logs=True):
         exit()
     elif use_availables:
         executeReset(file_paths, status)
-        m.log("reset-all-success")
+        m.log("reset-success")
         m.logMany(message_id="reset-file", param_name="pm_file", contents=file_paths)
         return
     elif is_individual_path and len(file_paths) == 1:
