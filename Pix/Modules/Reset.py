@@ -31,7 +31,7 @@ def executeReset(file_paths, status):
     runAll(commands)
 
 
-def reset(file_paths=[], use_availables=False, messages=""):
+def reset(file_paths=[], use_availables=False, messages="", show_logs=True):
     from .Prompts import multi_select
     from .Helpers import MessageControl
     from .Status import get_status, search_in_status, get_status_paths
@@ -72,24 +72,23 @@ def reset(file_paths=[], use_availables=False, messages=""):
         return m.log("error-files_selected_not_found")
 
     executeReset(answers, status)
-    m.log("reset-success")
-    m.logMany(message_id="reset-file", param_name="pm_file", contents=answers)
+
+    if show_logs:
+        m.log("reset-success")
+        m.logMany(message_id="reset-file", param_name="pm_file", contents=answers)
 
 
 def reset_individually(file_paths):
-    from .Helpers import MessageControl
-
-    m = MessageControl()
-
     if len(file_paths):
-        for file_path in file_paths:
-            reset(file_paths=[file_path], messages=m)
+        index = 1
 
-        m.log("reset-success")
-        m.logMany(message_id="reset-file", param_name="pm_file", contents=file_paths)
+        for file_path in file_paths:
+            reset(file_paths=[file_path], show_logs=len(file_paths) == index)
+            index = index + 1
+
         return
 
-    reset(messages=m)
+    reset()
 
 
 def router(argument_manager, sub_route):
