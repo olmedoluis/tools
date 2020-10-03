@@ -19,8 +19,8 @@ def remove(file_paths=[], use_availables=False, messages=""):
         exit()
     elif use_availables:
         run(["git", "reset"] + file_paths)
-        m.log("remove-all-success")
-        m.logMany(message_id="reset-file", param_name="pm_file", contents=file_paths)
+        m.log("remove-success")
+        m.logMany(message_id="remove-file", param_name="pm_file", contents=file_paths)
         return
     elif is_individual_path and len(file_paths) == 1:
         return run(["git", "reset"] + file_paths)
@@ -40,7 +40,7 @@ def remove(file_paths=[], use_availables=False, messages=""):
 
     run(["git", "reset"] + answers)
     m.log("remove-success")
-    m.logMany(message_id="reset-file", param_name="pm_file", contents=answers)
+    m.logMany(message_id="remove-file", param_name="pm_file", contents=answers)
 
 
 def remove_individually(file_paths):
@@ -53,7 +53,7 @@ def remove_individually(file_paths):
             remove(file_paths=[file_path], messages=m)
 
         m.log("remove-success")
-        m.logMany(message_id="reset-file", param_name="pm_file", contents=answers)
+        m.logMany(message_id="remove-file", param_name="pm_file", contents=answers)
         return
 
     remove(messages=m)
