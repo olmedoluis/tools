@@ -41,7 +41,7 @@ def save():
         m.log("added", {"pm_change": added_file})
 
     options = ["feat", "refactor", "fix", "style"]
-    scape_error = m.getMessage("operation-cancel")
+    scape_error = m.get_message("operation-cancel")
     common_dir = get_common_directory(added_files)
 
     print()
@@ -49,7 +49,7 @@ def save():
         [
             {
                 "type": "select",
-                "title": m.getMessage("commit-creation-type_title"),
+                "title": m.get_message("commit-creation-type_title"),
                 "options": options,
                 "error_message": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_TYPE"],
@@ -57,14 +57,14 @@ def save():
             },
             {
                 "type": "text",
-                "title": m.getMessage("commit-creation-scope_title"),
+                "title": m.get_message("commit-creation-scope_title"),
                 "place_holder": removeColors(common_dir),
                 "error_message": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_SCOPE"],
             },
             {
                 "type": "text",
-                "title": m.getMessage("commit-creation-about_title"),
+                "title": m.get_message("commit-creation-about_title"),
                 "error_message": scape_error,
                 "colors": INPUT_THEME["COMMIT_CREATION_ABOUT"],
             },
@@ -78,7 +78,7 @@ def save():
     m.log("preview", {"pm_preview": commit})
 
     should_commit = confirm(
-        title=m.getMessage("confirmation"),
+        title=m.get_message("confirmation"),
         colors=INPUT_THEME["COMMIT_CREATION_CONFIRM"],
     )
 

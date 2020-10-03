@@ -1,4 +1,4 @@
-def remove(file_paths=[], use_availables=False, messages=""):
+def remove(file_paths=[], use_availables=False, messages="", show_logs=True):
     from .Prompts import multi_select
     from .Helpers import run, MessageControl
     from .Status import get_status, search_in_status, get_status_paths
@@ -19,15 +19,17 @@ def remove(file_paths=[], use_availables=False, messages=""):
         exit()
     elif use_availables:
         run(["git", "reset"] + file_paths)
-        return m.log("remove-all-success")
+        m.log("remove-success")
+        m.logMany(message_id="remove-file", param_name="pm_file", contents=file_paths)
+        return
     elif is_individual_path and len(file_paths) == 1:
         return run(["git", "reset"] + file_paths)
 
     print()
     answers = multi_select(
-        title=m.getMessage("remove-title"),
-        final_title=m.getMessage("file-selection-finaltitle"),
-        error_message=m.getMessage("error-files_selected_not_found"),
+        title=m.get_message("remove-title"),
+        final_title=m.get_message("file-selection-finaltitle"),
+        error_message=m.get_message("error-files_selected_not_found"),
         options=file_paths,
         colors=INPUT_THEME["REMOVE_SELECTION"],
         icons=INPUT_ICONS,
@@ -37,21 +39,23 @@ def remove(file_paths=[], use_availables=False, messages=""):
         return m.log("error-files_selected_not_found")
 
     run(["git", "reset"] + answers)
-    m.log("remove-success")
+    if show_logs:
+        m.log("remove-success")
+        m.logMany(message_id="remove-file", param_name="pm_file", contents=answers)
 
 
 def remove_individually(file_paths):
-    from .Helpers import MessageControl
-
-    m = MessageControl()
-
     if len(file_paths):
+        index = 1
+
         for file_path in file_paths:
-            remove(file_paths=[file_path], messages=m)
+            remove(file_paths=[file_path], show_logs=len(file_paths) == index)
 
-        return m.log("remove-success")
+            index = index + 1
 
-    remove(messages=m)
+        return
+
+    remove()
 
 
 def router(argument_manager, sub_route):

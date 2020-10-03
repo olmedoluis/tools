@@ -5,11 +5,10 @@ def add_to_file(text, file_path):
 
 
 def parse_patch(indexes, meta_data, carried_values, values):
-    if len(indexes):
-        carried_values = carried_values + meta_data
+    carried_values = carried_values + meta_data
 
-        for index in indexes:
-            carried_values = carried_values + values[index]
+    for index in indexes:
+        carried_values = carried_values + values[index]
 
     return carried_values
 
@@ -23,21 +22,36 @@ def set_last_space(patches):
 
 def parse_files(files):
     parsed_patches_add = []
+    parsed_files_remove = []
+    files_to_add = []
     files_to_remove = []
 
     for file in files:
         if file.is_file_removed:
-            files_to_remove = files_to_remove + [file.file_name_raw]
+            patches_number = len(file.patches)
+            files_to_remove = files_to_remove + [
+                f"{patches_number} {file.file_name_raw}"
+            ]
+            parsed_files_remove = parsed_files_remove + [file.file_name_raw]
             continue
 
-        parsed_patches_add = parse_patch(
-            indexes=file.patches_selected_add,
-            meta_data=file.meta_data,
-            carried_values=parsed_patches_add,
-            values=file.patches,
-        )
+        if len(file.patches_selected_add):
+            patches_number = len(file.patches_selected_add)
+            files_to_add.append(f"{patches_number} {file.file_name_raw}")
 
-    return set_last_space(parsed_patches_add), files_to_remove
+            parsed_patches_add = parse_patch(
+                indexes=file.patches_selected_add,
+                meta_data=file.meta_data,
+                carried_values=parsed_patches_add,
+                values=file.patches,
+            )
+
+    return (
+        set_last_space(parsed_patches_add),
+        parsed_files_remove,
+        files_to_add,
+        files_to_remove,
+    )
 
 
 def parse_differences(differences_raw, files, get_message):
@@ -105,29 +119,41 @@ def patch(files, messages=""):
     file_path = f"{cwd}/changes.patch"
 
     differences_raw = run(["git", "diff-files", "-p"] + files)
-    patches = parse_differences(differences_raw, files, m.getMessage)
+    patches = parse_differences(differences_raw, files, m.get_message)
 
     selected_patches = patch_select(
         files=patches,
-        error_message=m.getMessage("error-files_selected_not_found"),
+        error_message=m.get_message("error-files_selected_not_found"),
         colors=INPUT_THEME["PATCH_SELECTION"],
         icons=INPUT_ICONS,
     )
 
-    patch_generated_add, files_generated_remove = parse_files(selected_patches)
+    parsed_patches, parsed_files, files_added, files_removed = parse_files(
+        selected_patches
+    )
 
-    if len(files_generated_remove) == 1 and len(patch_generated_add) == 0:
+    if len(parsed_files) == 1 and len(parsed_patches) == 0:
         return m.log("error-empty")
 
-    if len(patch_generated_add) != 1:
-        add_to_file("\n".join(patch_generated_add), file_path)
+    if len(parsed_patches) != 1:
+        add_to_file("\n".join(parsed_patches), file_path)
         run(["git", "apply", "--cached", file_path])
         run(["rm", file_path])
 
-    if len(files_generated_remove) != 0:
-        run(["git", "checkout"] + files_generated_remove)
+    if len(parsed_files) != 0:
+        run(["git", "checkout"] + parsed_files)
+        pass
 
     m.log("patch-success")
+    m.logMany(
+        message_id="patch-added_file",
+        param_name="pm_file",
+        contents=files_added,
+        show_last_line=False,
+    )
+    m.logMany(
+        message_id="patch-resetted_file", param_name="pm_file", contents=files_removed
+    )
 
 
 def patch_all(file_search):

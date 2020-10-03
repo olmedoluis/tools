@@ -1,4 +1,4 @@
-def add(file_paths=[], use_availables=False, messages=""):
+def add(file_paths=[], use_availables=False, messages="", show_logs=True):
     from .Prompts import multi_select
     from .Helpers import run, removeColors, MessageControl
     from .Status import get_status, search_in_status, get_status_paths
@@ -17,17 +17,21 @@ def add(file_paths=[], use_availables=False, messages=""):
     if len(file_paths) == 0:
         m.log("error-add-files_not_found")
         exit()
+
     elif use_availables:
         run(["git", "add"] + file_paths)
-        return m.log("add-all-success")
+        m.log("add-success")
+        m.logMany(message_id="add-file", param_name="pm_file", contents=file_paths)
+        return
+
     elif is_individual_path and len(file_paths) == 1:
         return run(["git", "add"] + file_paths)
 
     print()
     answers = multi_select(
-        title=m.getMessage("add-title"),
-        final_title=m.getMessage("file-selection-finaltitle"),
-        error_message=m.getMessage("error-files_selected_not_found"),
+        title=m.get_message("add-title"),
+        final_title=m.get_message("file-selection-finaltitle"),
+        error_message=m.get_message("error-files_selected_not_found"),
         options=file_paths,
         colors=INPUT_THEME["ADD_SELECTION"],
         icons=INPUT_ICONS,
@@ -37,21 +41,23 @@ def add(file_paths=[], use_availables=False, messages=""):
         return m.log("error-files_selected_not_found")
 
     run(["git", "add"] + answers)
-    m.log("add-success")
+    if show_logs:
+        m.log("add-success")
+        m.logMany(message_id="add-file", param_name="pm_file", contents=answers)
 
 
 def add_individually(file_paths):
-    from .Helpers import MessageControl
-
-    m = MessageControl()
-
     if len(file_paths):
+        index = 1
+
         for file_path in file_paths:
-            add(file_paths=[file_path], messages=m)
+            add(file_paths=[file_path], show_logs=len(file_paths) == index)
 
-        return m.log("add-success")
+            index = index + 1
 
-    add(messages=m)
+        return
+
+    add()
 
 
 def router(argument_manager, sub_route):

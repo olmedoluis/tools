@@ -49,9 +49,9 @@ def branchSelection(branch_search):
 
         print()
         branch_selected = select(
-            title=m.getMessage("branch-selection-title"),
+            title=m.get_message("branch-selection-title"),
             options=branches,
-            error_message=m.getMessage("operation-cancel"),
+            error_message=m.get_message("operation-cancel"),
             colors=INPUT_THEME["BRANCH_SELECTION"],
             icons=INPUT_ICONS,
         )
@@ -78,14 +78,14 @@ def branchCreation():
         return m.log("error-haschanges")
 
     options = ["feature", "refactor", "bugfix", "style"]
-    scape_error = m.getMessage("operation-cancel")
+    scape_error = m.get_message("operation-cancel")
 
     print()
     answers = many(
         [
             {
                 "type": "select",
-                "title": m.getMessage("branch-creation-type_title"),
+                "title": m.get_message("branch-creation-type_title"),
                 "options": options,
                 "error_message": scape_error,
                 "colors": INPUT_THEME["BRANCH_CREATION_TYPE"],
@@ -93,13 +93,13 @@ def branchCreation():
             },
             {
                 "type": "text",
-                "title": m.getMessage("branch-creation-id_title"),
+                "title": m.get_message("branch-creation-id_title"),
                 "error_message": scape_error,
                 "colors": INPUT_THEME["BRANCH_CREATION_ID"],
             },
             {
                 "type": "text",
-                "title": m.getMessage("branch-creation-about_title"),
+                "title": m.get_message("branch-creation-about_title"),
                 "error_message": scape_error,
                 "colors": INPUT_THEME["BRANCH_CREATION_ABOUT"],
             },
@@ -118,7 +118,7 @@ def branchCreation():
     m.log("preview", {"pm_preview": branch})
 
     should_create_branch = confirm(
-        title=m.getMessage("confirmation"),
+        title=m.get_message("confirmation"),
         colors=INPUT_THEME["BRANCH_CREATION_CONFIRM"],
     )
 
@@ -129,7 +129,7 @@ def branchCreation():
         return m.log("operation-cancel")
 
     should_switch = confirm(
-        title=m.getMessage("branch-creation-shouldswitch"),
+        title=m.get_message("branch-creation-shouldswitch"),
         colors=INPUT_THEME["BRANCH_CREATION_SWITCH"],
     )
 

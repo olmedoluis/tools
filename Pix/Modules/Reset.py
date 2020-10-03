@@ -31,14 +31,14 @@ def executeReset(file_paths, status):
     runAll(commands)
 
 
-def reset(file_paths=[], use_availables=False, messages=""):
+def reset(file_paths=[], use_availables=False, messages="", show_logs=True):
     from .Prompts import multi_select
-    from .Helpers import removeColors, MessageControl
+    from .Helpers import MessageControl
     from .Status import get_status, search_in_status, get_status_paths
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl() if messages == "" else messages
-    status = get_status()
+    status = get_status(ignoreColors=True)
 
     is_individual_path = len(file_paths) == 1
     file_paths = (
@@ -52,15 +52,17 @@ def reset(file_paths=[], use_availables=False, messages=""):
         exit()
     elif use_availables:
         executeReset(file_paths, status)
-        return m.log("reset-all-success")
+        m.log("reset-success")
+        m.logMany(message_id="reset-file", param_name="pm_file", contents=file_paths)
+        return
     elif is_individual_path and len(file_paths) == 1:
         return executeReset(file_paths, status)
 
     print()
     answers = multi_select(
-        title=m.getMessage("reset-title"),
-        final_title=m.getMessage("file-selection-finaltitle"),
-        error_message=m.getMessage("error-files_selected_not_found"),
+        title=m.get_message("reset-title"),
+        final_title=m.get_message("file-selection-finaltitle"),
+        error_message=m.get_message("error-files_selected_not_found"),
         options=file_paths,
         colors=INPUT_THEME["RESET_SELECTION"],
         icons=INPUT_ICONS,
@@ -69,26 +71,24 @@ def reset(file_paths=[], use_availables=False, messages=""):
     if len(answers) == 0:
         return m.log("error-files_selected_not_found")
 
-    choices = []
-    for answer in answers:
-        choices.append(removeColors(answer))
+    executeReset(answers, status)
 
-    executeReset(choices, status)
-    m.log("reset-success")
+    if show_logs:
+        m.log("reset-success")
+        m.logMany(message_id="reset-file", param_name="pm_file", contents=answers)
 
 
 def reset_individually(file_paths):
-    from .Helpers import MessageControl
-
-    m = MessageControl()
-
     if len(file_paths):
+        index = 1
+
         for file_path in file_paths:
-            reset(file_paths=[file_path], messages=m)
+            reset(file_paths=[file_path], show_logs=len(file_paths) == index)
+            index = index + 1
 
-        return m.log("reset-success")
+        return
 
-    reset(messages=m)
+    reset()
 
 
 def router(argument_manager, sub_route):

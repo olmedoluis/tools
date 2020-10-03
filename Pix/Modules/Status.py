@@ -30,18 +30,21 @@ def search_in_status(
 
         for change in changes:
             for file in files_searching:
-                if file.lower() in change.lower():
-                    if get_original_structure:
+                if get_original_structure:
+                    if file in change:
                         carriedMatches = (
                             matches[status_id] if status_id in matches else []
                         )
+
                         matches[status_id] = (
                             carriedMatches
                             if change in carriedMatches
                             else [*carriedMatches, change]
                         )
-                    else:
-                        matches.append(change)
+
+                        return matches
+                elif file.lower() in change.lower():
+                    matches.append(change)
 
     return matches
 
