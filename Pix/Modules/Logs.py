@@ -30,20 +30,27 @@ def log():
     from .Prompts import logger
 
     branch_creator = get_branch_creator()
+    is_from_remote = "git@github.com:" in branch_creator
+    specification = [] if is_from_remote else [f"{branch_creator}.."]
+
     logs_raw = run(
         [
             "git",
             "log",
             "--first-parent",
             "--oneline",
-            f"{branch_creator}..",
+            *specification,
             '--pretty=format:"%h/*/%an/*/%ar/*/%s"',
         ]
     )
 
     logs = get_logs(logs_raw.split("\n"))
 
-    logger(error_message="wea", logs=logs, branch=branch_creator)
+    logger(
+        error_message="error message",
+        logs=logs,
+        branch=branch_creator,
+    )
 
 
 def router(argument_parser, sub_route):
