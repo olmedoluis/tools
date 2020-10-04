@@ -28,13 +28,18 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
 
         if state == "FINISH":
             break
+        if state == "UP":
+            log_control.add_to_index(-1)
+        if state == "DOWN":
+            log_control.add_to_index(1)
         elif state == "BREAK_CHAR":
-            input_console.deleteLastLines(input_console.terminalHeight + 4)
+            input_console.deleteLastLines(input_console.terminalHeight)
             input_console.finish()
             print(error_message)
+            print(log_control.index)
             exit()
 
-    input_console.deleteLastLines(input_console.terminalHeight + 4)
+    input_console.deleteLastLines(input_console.terminalHeight)
     input_console.finish()
 
     return log_control.logs
@@ -51,8 +56,17 @@ class LogControl:
         self._term_size_y = term_size_y
         self.logs = logs
         self.offset = 0
+        self.index = 0
 
     def get_styled_line(self, line_number):
         log = self.logs[line_number]
+        color = (
+            self._COLORS["selection"]
+            if line_number == self.index
+            else self._COLORS["slight"]
+        )
 
-        return f"* {log.commit}"
+        return f"{color}* {log.commit}{self._RESET}"
+
+    def add_to_index(self, number):
+        self.index = (self.index + number) % len(self.logs)
