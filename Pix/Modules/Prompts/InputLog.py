@@ -97,7 +97,6 @@ class LogControl:
         ]
 
     def get_index(self, index):
-        # return index % self.logs_size
         if index > self.logs_size - 1:
             return self.logs_size - 1
         elif index < 0:
