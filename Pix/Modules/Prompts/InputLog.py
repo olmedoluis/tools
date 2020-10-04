@@ -16,9 +16,8 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
     input_console.setConsoleLine(1, 2, branch)
 
     while True:
-        for line_number in range(3, len(logs) + 3):
+        for line_number in range(3, input_console.terminalHeight):
             text_to_show = log_control.get_styled_line(line_number - 3)
-
             input_console.setConsoleLine(line_number, 1, text_to_show)
 
         input_console.refresh()
@@ -36,7 +35,6 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
             input_console.deleteLastLines(input_console.terminalHeight)
             input_console.finish()
             print(error_message)
-            print(log_control.index)
             exit()
 
     input_console.deleteLastLines(input_console.terminalHeight)
@@ -56,17 +54,49 @@ class LogControl:
         self._term_size_y = term_size_y
         self.logs = logs
         self.offset = 0
-        self.index = 0
+        self.log_number_hovered = 0
 
     def get_styled_line(self, line_number):
-        log = self.logs[line_number]
+
         color = (
             self._COLORS["selection"]
-            if line_number == self.index
+            if (line_number + self.offset) == self.log_number_hovered
             else self._COLORS["slight"]
         )
 
-        return f"{color}* {log.commit}{self._RESET}"
+        if (line_number + self.offset) in range(len(self.logs)):
+            log = self.logs[line_number + self.offset]
+
+            return f"{color}* {log.commit}{self._RESET}"
+
+        return ""
+
+    def get_index(self, index):
+        # return index % len(self.logs)
+        if index > len(self.logs) - 1:
+            return len(self.logs) - 1
+        elif index < 0:
+            return 0
+        else:
+            return index
 
     def add_to_index(self, number):
-        self.index = (self.index + number) % len(self.logs)
+        self.log_number_hovered = self.get_index(self.log_number_hovered + number)
+
+        is_up_half_window = self.log_number_hovered >= (self._term_size_y / 2)
+        is_down_half_window = self.log_number_hovered <= (
+            len(self.logs) - (self._term_size_y / 2)
+        )
+
+        is_half_window = is_up_half_window
+        has_scrollable_logs = (len(self.logs) - self.offset) > self._term_size_y
+
+        if number < 0:
+            is_half_window = is_down_half_window
+            has_scrollable_logs = self.offset > 0
+
+        if is_half_window and has_scrollable_logs:
+            self.increase_offset(number)
+
+    def increase_offset(self, number):
+        self.offset = self.offset + number
