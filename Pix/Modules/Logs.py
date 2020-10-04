@@ -31,7 +31,7 @@ def log():
     from .Branch import get_branch_creator
     from .Prompts import logger
 
-    branch_creator = get_branch_creator()
+    branch_creator, current_branch = get_branch_creator()
     is_from_remote = "git@github.com:" in branch_creator
     specification = [] if is_from_remote else [f"{branch_creator}.."]
 
@@ -51,7 +51,7 @@ def log():
     logger(
         error_message="error message",
         logs=logs,
-        branch=branch_creator,
+        branch=current_branch,
     )
 
 
