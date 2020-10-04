@@ -32,6 +32,8 @@ ICONS = {
     "ic_normal": "•",
     "ic_success": "⚑",
     "ic_branch": "⚲",
+    "ic_log_selected": "⋄",
+    "ic_log": "⋅",
 }
 
 EMPTY = {}
@@ -59,6 +61,6 @@ INPUT_ICONS = {
     "-": ICONS["ic_error"],
     "selection": ICONS["ic_selection"],
     "normal": ICONS["ic_normal"],
-    "log_selection": "⋄",
-    "log_normal": "⋅",
+    "log_selection": ICONS["ic_log_selected"],
+    "log_normal": ICONS["ic_log"],
 }
