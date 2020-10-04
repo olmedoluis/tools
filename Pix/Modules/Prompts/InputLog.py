@@ -92,7 +92,7 @@ class LogControl:
         return [
             f"{border_color}{border}{self._RESET}",
             "",
-            f"{color}Time: {log.time}{self._RESET}",
+            f"{color}Relative Time: {log.time} | Date: {log.date}{self._RESET}",
             f"{color}Author: {log.author}{self._RESET}",
         ]
 
