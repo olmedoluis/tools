@@ -65,16 +65,21 @@ class LogControl:
         self.log_number_hovered = 0
 
     def get_styled_line(self, line_number):
-        color = (
-            self._COLORS["selection"]
-            if (line_number + self.offset) == self.log_number_hovered
-            else self._COLORS["slight"]
-        )
-
         if (line_number + self.offset) in range(self.logs_size):
+            color = (
+                self._COLORS["selection"]
+                if (line_number + self.offset) == self.log_number_hovered
+                else self._COLORS["slight"]
+            )
+            icon = (
+                self._ICONS["log_selection"]
+                if (line_number + self.offset) == self.log_number_hovered
+                else self._ICONS["log_normal"]
+            )
+
             log = self.logs[line_number + self.offset]
 
-            return f"{color}* {log.commit}{self._RESET}"
+            return f"{color}{icon} {log.commit}{self._RESET}"
 
         return ""
 
