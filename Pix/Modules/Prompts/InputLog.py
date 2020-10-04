@@ -7,7 +7,7 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
     log_control = LogControl(
         offset=0,
         term_size_x=input_console.terminalWidth,
-        term_size_y=input_console.terminalHeight - 6,
+        term_size_y=input_console.terminalHeight - 7,
         logs=logs,
         colors=colors,
         icons=icons,
@@ -16,14 +16,16 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
     input_console.setConsoleLine(1, 2, branch)
 
     while True:
-        point = input_console.terminalHeight - 4
+        point = input_console.terminalHeight - 5
         for line_number in range(3, point):
             text_to_show = log_control.get_styled_line(line_number - 3)
             input_console.setConsoleLine(line_number, 1, text_to_show)
 
         log_info = log_control.get_styled_info()
-        for line_number in range(3):
-            input_console.setConsoleLine(point + line_number, 1, log_info[line_number])
+        for line_number in range(4):
+            input_console.setConsoleLine(
+                point + line_number + 1, 1, log_info[line_number]
+            )
 
         input_console.refresh()
 
@@ -78,11 +80,15 @@ class LogControl:
 
     def get_styled_info(self):
         log = self.logs[self.log_number_hovered]
+        border = "−" * (self._term_size_x - 2)
+        color = self._COLORS["font"]
+        border_color = self._COLORS["border"]
 
         return [
+            f"{border_color}{border}{self._RESET}",
             "",
-            log.time,
-            log.author,
+            f"{color}Time: {log.time}{self._RESET}",
+            f"{color}Author: {log.author}{self._RESET}",
         ]
 
     def get_index(self, index):
