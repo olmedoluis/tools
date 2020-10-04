@@ -1,8 +1,9 @@
 class Log:
-    def __init__(self, hash, author, time, commit):
+    def __init__(self, hash, author, time, commit, date):
         self.hash = hash
         self.author = author
         self.time = time
+        self.date = date
         self.commit = commit
 
 
@@ -17,7 +18,8 @@ def get_logs(logs_data):
                 hash=log_array[0],
                 author=log_array[1],
                 time=log_array[2],
-                commit=log_array[3][:-1],
+                date=log_array[3],
+                commit=log_array[4][:-1],
             )
         )
 
@@ -40,7 +42,7 @@ def log():
             "--first-parent",
             "--oneline",
             *specification,
-            '--pretty=format:"%h/*/%an/*/%ar/*/%s"',
+            '--pretty=format:"%h/*/%an/*/%cr/*/%ci/*/%s"',
         ]
     )
 
