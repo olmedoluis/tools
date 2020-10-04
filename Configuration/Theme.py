@@ -59,4 +59,6 @@ INPUT_ICONS = {
     "-": ICONS["ic_error"],
     "selection": ICONS["ic_selection"],
     "normal": ICONS["ic_normal"],
+    "log_selection": "⋄",
+    "log_normal": "⋅",
 }
