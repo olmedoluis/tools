@@ -7,7 +7,7 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
     log_control = LogControl(
         offset=0,
         term_size_x=input_console.terminalWidth,
-        term_size_y=input_console.terminalHeight,
+        term_size_y=input_console.terminalHeight - 2,
         logs=logs,
         colors=colors,
         icons=icons,
@@ -53,6 +53,7 @@ class LogControl:
         self._term_size_x = term_size_x
         self._term_size_y = term_size_y
         self.logs = logs
+        self.logs_size = len(logs)
         self.offset = 0
         self.log_number_hovered = 0
 
@@ -64,7 +65,7 @@ class LogControl:
             else self._COLORS["slight"]
         )
 
-        if (line_number + self.offset) in range(len(self.logs)):
+        if (line_number + self.offset) in range(self.logs_size):
             log = self.logs[line_number + self.offset]
 
             return f"{color}* {log.commit}{self._RESET}"
@@ -72,9 +73,9 @@ class LogControl:
         return ""
 
     def get_index(self, index):
-        # return index % len(self.logs)
-        if index > len(self.logs) - 1:
-            return len(self.logs) - 1
+        # return index % self.logs_size
+        if index > self.logs_size - 1:
+            return self.logs_size - 1
         elif index < 0:
             return 0
         else:
@@ -85,15 +86,17 @@ class LogControl:
 
         is_up_half_window = self.log_number_hovered >= (self._term_size_y / 2)
         is_down_half_window = self.log_number_hovered <= (
-            len(self.logs) - (self._term_size_y / 2)
+            self.logs_size - (self._term_size_y / 2)
         )
 
         is_half_window = is_up_half_window
-        has_scrollable_logs = (len(self.logs) - self.offset) > self._term_size_y
+        has_scrollable_logs = (self.logs_size - self.offset) >= self._term_size_y
 
         if number < 0:
             is_half_window = is_down_half_window
-            has_scrollable_logs = self.offset > 0
+            has_scrollable_logs = (
+                self.offset > 0 and self.logs_size >= self._term_size_y
+            )
 
         if is_half_window and has_scrollable_logs:
             self.increase_offset(number)
