@@ -43,6 +43,7 @@ MESSAGES = {
     "error-unknown": "\n {th_error}{ic_error} Error: Something went wrong\n",
     "file-selection-finaltitle": "{th_normal}Files selected:",
     "file-title": " {th_normal}On {th_keyword}{pm_file}",
+    "branch-title": "{th_normal}On {th_keyword}{pm_branch}",
     "modified-title": "\n {th_normal}Modified files:\n",
     "modified": "\t{th_modified}{ic_modified} {pm_change}",
     "operation-cancel": "\n {th_error}{ic_success} Operation cancelled successfully\n",
