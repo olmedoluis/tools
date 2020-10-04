@@ -12,7 +12,7 @@ def get_branch_creator():
     current_branch = run(["git", "branch", "--show-current"])[:-1]
     creation_raw = run([f"git", "reflog", current_branch]).split(" ")[-1]
 
-    return creation_raw[:-1]
+    return creation_raw[:-1], current_branch
 
 
 def branchSelection(branch_search):
