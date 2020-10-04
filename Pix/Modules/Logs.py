@@ -27,9 +27,12 @@ def get_logs(logs_data):
 
 
 def log():
-    from .Helpers import run
+    from .Helpers import run, MessageControl
     from .Branch import get_branch_creator
     from .Prompts import logger
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
+
+    m = MessageControl()
 
     branch_creator, current_branch = get_branch_creator()
     is_from_remote = "git@github.com:" in branch_creator
@@ -49,10 +52,14 @@ def log():
     logs = get_logs(logs_raw.split("\n"))
 
     logger(
-        error_message="error message",
         logs=logs,
-        branch=current_branch,
+        branch=m.get_message("branch-title", {"pm_branch": current_branch}),
+        error_message=m.get_message("log-exit"),
+        colors=INPUT_THEME["LOG_LOG"],
+        icons=INPUT_ICONS,
     )
+
+    m.log("log-exit")
 
 
 def router(argument_parser, sub_route):
