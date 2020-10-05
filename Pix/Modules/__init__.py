@@ -1,19 +1,21 @@
-from .Status import router as StatusRouter
-from .Add import router as AddRouter
-from .Branch import router as BranchRouter
-from .Commit import router as CommitRouter
-from .Remove import router as RemoveRouter
-from .Stash import router as StashRouter
-from .Patch import router as PatchRouter
-from .Reset import router as ResetRouter
+from .Status import router as status_router
+from .Add import router as add_router
+from .Branch import router as branch_router
+from .Commit import router as commit_router
+from .Remove import router as remove_router
+from .Stash import router as stash_router
+from .Patch import router as patch_router
+from .Reset import router as reset_router
+from .Logs import router as log_router
 
 PIX_STORE = {
-    "STATUS": StatusRouter,
-    "ADD": AddRouter,
-    "REMOVE": RemoveRouter,
-    "COMMIT": CommitRouter,
-    "BRANCH": BranchRouter,
-    "STASH": StashRouter,
-    "PATCH": PatchRouter,
-    "RESET": ResetRouter,
+    "STATUS": status_router,
+    "ADD": add_router,
+    "REMOVE": remove_router,
+    "COMMIT": commit_router,
+    "BRANCH": branch_router,
+    "STASH": stash_router,
+    "PATCH": patch_router,
+    "RESET": reset_router,
+    "LOG": log_router,
 }

@@ -22,16 +22,18 @@ ICONS = {
     "ic_renamed": "✦",
     "ic_deleted": "✝",
     "ic_conflicted": "■",
-    "ic_resetted": "⧗",
+    "ic_resetted": "⟲",
     "ic_removed": "−",
-    "ic_patch_add": "⟰",
-    "ic_patch_remove": "⟱",
+    "ic_patch_add": "⤒",
+    "ic_patch_remove": "⤓",
     "ic_added": "✚",
     "ic_error": "✖",
     "ic_selection": "❤",
     "ic_normal": "•",
     "ic_success": "⚑",
     "ic_branch": "⚲",
+    "ic_log_selected": "⋄",
+    "ic_log": "⋅",
 }
 
 EMPTY = {}
@@ -47,6 +49,7 @@ INPUT_THEME = {
     "COMMIT_CREATION_CONFIRM": EMPTY,
     "COMMIT_CREATION_SCOPE": EMPTY,
     "COMMIT_CREATION_TYPE": {"selection": f"{CODE}221;1m"},
+    "LOG_LOG": EMPTY,
     "PATCH_SELECTION": EMPTY,
     "REMOVE_SELECTION": {"selection": f"{CODE}9;1m"},
     "RESET_SELECTION": {"selection": f"{CODE}48;1m"},
@@ -59,4 +62,6 @@ INPUT_ICONS = {
     "-": ICONS["ic_error"],
     "selection": ICONS["ic_selection"],
     "normal": ICONS["ic_normal"],
+    "log_selection": ICONS["ic_log_selected"],
+    "log_normal": ICONS["ic_log"],
 }

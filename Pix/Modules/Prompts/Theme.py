@@ -16,4 +16,11 @@ INPUT_THEME = {
     "reset": "\u001b[0m",
 }
 
-INPUT_ICONS = {"+": "☢", "-": "✖", "selection": "❤", "normal": "•"}
+INPUT_ICONS = {
+    "+": "☢",
+    "-": "✖",
+    "selection": "❤",
+    "normal": "•",
+    "log_selection": "⋄",
+    "log_normal": "⋅",
+}

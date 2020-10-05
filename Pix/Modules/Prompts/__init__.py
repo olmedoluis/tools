@@ -3,6 +3,7 @@ from .InputSelect import select
 from .InputConfirm import confirm
 from .InputMultiSelect import multi_select
 from .inputPatchSelect import patch_select
+from .InputLog import logger
 
 
 def many(selected_inputs_data):
@@ -12,6 +13,7 @@ def many(selected_inputs_data):
         "confirm": confirm,
         "multi_select": multi_select,
         "patch_select": patch_select,
+        "logger": logger,
     }
     responses = []
 
