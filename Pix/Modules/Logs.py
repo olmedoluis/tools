@@ -35,8 +35,7 @@ def log():
     m = MessageControl()
 
     branch_creator, current_branch = get_branch_creator()
-    is_from_remote = "git@github.com:" in branch_creator
-    specification = [] if is_from_remote else [f"{branch_creator}.."]
+    specification = [] if branch_creator == "" else [f"{branch_creator}.."]
 
     logs_raw = run(
         [
