@@ -10,9 +10,12 @@ def get_branch_creator():
     from .Helpers import run
 
     current_branch = run(["git", "branch", "--show-current"])[:-1]
-    creation_raw = run([f"git", "reflog", current_branch]).split(" ")[-1]
+    creation_raw = run([f"git", "reflog", current_branch]).strip().split("\n")
+    branch_creator = (
+        creation_raw[-1].split(" ")[-1] if "Created" in creation_raw[-1] else ""
+    )
 
-    return creation_raw[:-1], current_branch
+    return branch_creator, current_branch
 
 
 def branchSelection(branch_search):
