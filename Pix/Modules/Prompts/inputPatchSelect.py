@@ -1,6 +1,6 @@
 def patch_select(error_message="", files=[], colors={}, icons={}):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_movement
+    from .CharactersInterpreter import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(lines="default")
@@ -29,26 +29,26 @@ def patch_select(error_message="", files=[], colors={}, icons={}):
         input_console.refresh()
 
         char = getch()
-        state = get_movement(char, True)
+        state = get_parsed_char(char)
 
-        if state == "DOWN":
+        if state == "S":
             patch_control.increase_offset()
-        elif state == "UP":
+        elif state == "W":
             patch_control.decrease_offset()
-        elif state == "RIGHT":
+        elif state == "D":
             patch_control.change_patch_page(1)
-        elif state == "LEFT":
+        elif state == "A":
             patch_control.change_patch_page(-1)
-        elif state == "EXTENDED_RIGHT":
+        elif state == "E":
             patch_control.change_selected_patch_state(transition="add")
-        elif state == "EXTENDED_LEFT":
+        elif state == "Q":
             patch_control.change_selected_patch_state(transition="remove")
-        elif state == "YES":
+        elif state == "Y":
             patch_control.change_selected_patch_state(
                 transition="add", force_transition=True
             )
             patch_control.change_patch_page(1)
-        elif state == "NO":
+        elif state == "N":
             patch_control.change_selected_patch_state(
                 transition="remove", force_transition=True
             )

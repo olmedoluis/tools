@@ -2,7 +2,7 @@ def text(
     title="", content="", place_holder="", final_title="", error_message="", colors={}
 ):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import merge
+    from .CharactersInterpreter import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(1)
@@ -17,15 +17,21 @@ def text(
         input_console.refresh()
 
         char = getch()
-        new_text, state = merge(text_control.get_text(), char)
-        text_control.set_text(new_text)
+        state = get_parsed_char(char)
 
         if state == "FINISH":
             break
-        if state == "BREAK_CHAR":
+
+        elif state == "BREAK_CHAR":
             input_console.finish()
             print(error_message)
             exit()
+
+        elif state == "BACKSTAB":
+            text_control.set_text(text_control.get_text()[:-1])
+
+        else:
+            text_control.set_text(f"{text_control.get_text()}{char}")
 
     final_title = final_title if final_title != "" else title
     display_text = text_control.get_text_absolute()

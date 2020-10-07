@@ -1,6 +1,6 @@
 def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_movement
+    from .CharactersInterpreter import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(lines="default")
@@ -30,13 +30,13 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
         input_console.refresh()
 
         char = getch()
-        state = get_movement(char, True)
+        state = get_parsed_char(char)
 
         if state == "FINISH":
             break
-        if state == "UP":
+        elif state == "W":
             log_control.add_to_index(-1)
-        if state == "DOWN":
+        elif state == "S":
             log_control.add_to_index(1)
         elif state == "BREAK_CHAR":
             input_console.deleteLastLines(input_console.terminalHeight)

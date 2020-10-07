@@ -7,7 +7,7 @@ def multi_select(
     icons={},
 ):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_movement
+    from .CharactersInterpreter import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(5)
@@ -26,15 +26,15 @@ def multi_select(
         input_console.refresh()
 
         char = getch()
-        state = get_movement(char)
+        state = get_parsed_char(char)
 
-        if state == "DOWN":
+        if state == "S":
             multi_select_control.append_to_index(1)
-        elif state == "UP":
+        elif state == "W":
             multi_select_control.append_to_index(-1)
-        elif state == "RIGHT":
+        elif state == "D":
             multi_select_control.add_index_to_selected_options()
-        elif state == "LEFT":
+        elif state == "A":
             multi_select_control.remove_index_to_selected_options()
         elif state == "FINISH":
             break

@@ -1,6 +1,6 @@
 def confirm(title="", final_title="", colors={}, error_message=""):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_response
+    from .CharactersInterpreter import get_parsed_char
     from .Theme import INPUT_THEME
 
     FONT_COLOR = ({**INPUT_THEME, **colors})["font"]
@@ -14,12 +14,12 @@ def confirm(title="", final_title="", colors={}, error_message=""):
         input_console.refresh()
 
         char = getch()
-        state = get_response(char)
+        state = get_parsed_char(char)
 
-        if state == "YES":
+        if state == "Y":
             word = True
             break
-        elif state == "NO":
+        elif state == "N":
             word = False
             break
         elif state == "FINISH":

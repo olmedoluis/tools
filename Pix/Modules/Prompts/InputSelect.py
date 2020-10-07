@@ -7,7 +7,7 @@ def select(
     icons={},
 ):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_movement
+    from .CharactersInterpreter import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(5)
@@ -27,13 +27,13 @@ def select(
         input_console.refresh()
 
         char = getch()
-        state = get_movement(char)
+        state = get_parsed_char(char)
 
-        if state == "DOWN":
+        if state == "S":
             select_control.append_to_index(1)
-        elif state == "UP":
+        elif state == "W":
             select_control.append_to_index(-1)
-        elif state == "FINISH" or state == "RIGHT":
+        elif state == "FINISH" or state == "D":
             break
         elif state == "BREAK_CHAR":
             input_console.deleteLastLines(4)
