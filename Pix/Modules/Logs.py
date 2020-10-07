@@ -48,6 +48,9 @@ def log():
         ]
     )
 
+    if(logs_raw == ""):
+        return print("no logs")
+
     logs = get_logs(logs_raw.split("\n"))
 
     logger(
