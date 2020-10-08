@@ -34,10 +34,13 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
 
         if state == "FINISH":
             break
+
         elif state == "W":
             log_control.add_to_index(-1)
+
         elif state == "S":
             log_control.add_to_index(1)
+
         elif state == "BREAK_CHAR":
             input_console.deleteLastLines(input_console.terminalHeight)
             input_console.finish()
@@ -88,11 +91,13 @@ class LogControl:
         border = "−" * (self._term_size_x - 2)
         color = self._COLORS["font"]
         border_color = self._COLORS["border"]
+        time_line = f"{color}Relative Time: {log.time} | Date: {log.date}"
+        limit = 100
 
         return [
             f"{border_color}{border}{self._RESET}",
             "",
-            f"{color}Relative Time: {log.time} | Date: {log.date}{self._RESET}",
+            time_line[:limit] + f"Filters:{self._RESET}".rjust(limit - len(time_line)),
             f"{color}Author: {log.author}{self._RESET}",
         ]
 
