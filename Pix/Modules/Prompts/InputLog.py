@@ -32,8 +32,17 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
         char = getch()
         state = get_parsed_char(char)
 
-        if state == "FINISH":
-            break
+        if len(state) == 1 and log_control.is_filter_enabled:
+            log_control.set_filters({"date": log_control.filters["date"] + state})
+
+        elif state == "FINISH":
+            if not log_control.is_filter_enabled:
+                break
+
+            log_control.set_is_filter_enabled(False)
+
+        elif state == "F":
+            log_control.set_is_filter_enabled(True)
 
         elif state == "W":
             log_control.add_to_index(-1)
@@ -66,6 +75,14 @@ class LogControl:
         self.logs_size = len(logs)
         self.offset = 0
         self.log_number_hovered = 0
+        self.filters = {"date": ""}
+        self.is_filter_enabled = False
+
+    def set_filters(self, filters):
+        self.filters = filters
+
+    def set_is_filter_enabled(self, state):
+        self.is_filter_enabled = state
 
     def get_styled_line(self, line_number):
         if (line_number + self.offset) in range(self.logs_size):
@@ -91,14 +108,13 @@ class LogControl:
         border = "−" * (self._term_size_x - 2)
         color = self._COLORS["font"]
         border_color = self._COLORS["border"]
-        time_line = f"{color}Relative Time: {log.time} | Date: {log.date}"
-        limit = 100
+        date = self.filters["date"]
 
         return [
             f"{border_color}{border}{self._RESET}",
             "",
-            time_line[:limit] + f"Filters:{self._RESET}".rjust(limit - len(time_line)),
-            f"{color}Author: {log.author}{self._RESET}",
+            f"{color}Relative Time: {log.time} | Date: {log.date}{self._RESET}",
+            f"{color}Author: {log.author} | Filters: {date}{self._RESET}",
         ]
 
     def get_index(self, index):
