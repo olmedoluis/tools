@@ -1,4 +1,7 @@
-def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
+from pprint import pprint
+
+
+def logger(error_message="", logs=[], colors={}, icons={}, branch="master", fetch=""):
     from .Console import ConsoleControl, getGetch
     from .CharactersInterpreter import get_parsed_char
 
@@ -11,6 +14,7 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
         logs=logs,
         colors=colors,
         icons=icons,
+        fetch=fetch,
     )
 
     input_console.setConsoleLine(1, 2, branch)
@@ -33,12 +37,16 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
         state = get_parsed_char(char)
 
         if len(state) == 1 and log_control.is_filter_enabled:
-            log_control.set_filters({"date": log_control.filters["date"] + state})
+            log_control.set_filters({"date": log_control.filters["date"] + char})
+
+        elif state == "BACKSTAB":
+            log_control.set_filters({"date": log_control.filters["date"][:-1]})
 
         elif state == "FINISH":
             if not log_control.is_filter_enabled:
                 break
 
+            log_control.re_fetch()
             log_control.set_is_filter_enabled(False)
 
         elif state == "F":
@@ -63,7 +71,7 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master"):
 
 
 class LogControl:
-    def __init__(self, offset, term_size_x, term_size_y, logs, colors, icons):
+    def __init__(self, offset, term_size_x, term_size_y, logs, colors, icons, fetch):
         from .Theme import INPUT_THEME, INPUT_ICONS
 
         self._ICONS = {**INPUT_ICONS, **icons}
@@ -77,9 +85,23 @@ class LogControl:
         self.log_number_hovered = 0
         self.filters = {"date": ""}
         self.is_filter_enabled = False
+        self.fetch = fetch
 
     def set_filters(self, filters):
         self.filters = filters
+
+    def re_fetch(self):
+        date = self.filters["date"]
+        logs_backup = self.logs
+
+        self.logs = self.fetch(date=[f'--until="{date}"'])
+
+        if self.logs[0] == "":
+            self.logs = logs_backup
+        else:
+            self.logs_size = len(self.logs)
+            self.offset = 0
+            self.log_number_hovered = 0
 
     def set_is_filter_enabled(self, state):
         self.is_filter_enabled = state
@@ -109,12 +131,13 @@ class LogControl:
         color = self._COLORS["font"]
         border_color = self._COLORS["border"]
         date = self.filters["date"]
+        filters_section = f" | Filters: {date}" if self.is_filter_enabled else ""
 
         return [
             f"{border_color}{border}{self._RESET}",
             "",
             f"{color}Relative Time: {log.time} | Date: {log.date}{self._RESET}",
-            f"{color}Author: {log.author} | Filters: {date}{self._RESET}",
+            f"{color}Author: {log.author}{filters_section}{self._RESET}",
         ]
 
     def get_index(self, index):
