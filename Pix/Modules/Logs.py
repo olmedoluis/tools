@@ -26,6 +26,28 @@ def get_logs(logs_data):
     return logs
 
 
+def get_fetcher(run, branch=[]):
+    def fetcher(date=[]):
+        logs_raw = run(
+            [
+                "git",
+                "log",
+                "--first-parent",
+                "--oneline",
+                *date,
+                *branch,
+                '--pretty=format:"%h/*/%an/*/%cr/*/%ci/*/%s"',
+            ]
+        )
+
+        if logs_raw == "":
+            return [""]
+
+        return [""] if logs_raw == "" else get_logs(logs_raw.split("\n"))
+
+    return fetcher
+
+
 def log():
     from .Helpers import run, MessageControl
     from .Branch import get_branch_creator
@@ -48,7 +70,7 @@ def log():
         ]
     )
 
-    if(logs_raw == ""):
+    if logs_raw == "":
         return print("no logs")
 
     logs = get_logs(logs_raw.split("\n"))
@@ -59,6 +81,7 @@ def log():
         error_message=m.get_message("log-exit"),
         colors=INPUT_THEME["LOG_LOG"],
         icons=INPUT_ICONS,
+        fetch=get_fetcher(run, specification),
     )
 
     m.log("log-exit")
