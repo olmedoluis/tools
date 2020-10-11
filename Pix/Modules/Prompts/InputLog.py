@@ -192,12 +192,15 @@ class FiltersControl:
         return self.filters_raw
 
     def parse_filter_string(self, string):
-        # date_keys = "|".join(self.filter_keys["date"])
+        output = []
 
-        match = self.search(r"((date|d)\.(\S+))", string)
+        for filter_name in self.filter_keys:
+            keys = "|".join(self.filter_keys[filter_name])
 
-        if match:
-            key, value = match.group(2, 3)
-            return [self.filter_commands[key](value)]
+            match = self.search(f"(({keys})\.(\S+))", string)
 
-        return []
+            if match:
+                value = match.group(3)
+                output.append(self.filter_commands[filter_name](value))
+
+        return output
