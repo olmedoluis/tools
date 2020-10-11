@@ -174,7 +174,6 @@ class FiltersControl:
 
         self.search = search
         self.filter_commands = {"date": lambda date: f"--until={date}"}
-        self.filters = {"date": ""}
         self.filter_keys = {"date": ["date", "d"]}
         self.fetch = fetch
         self.filters_raw = ""
