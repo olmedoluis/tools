@@ -41,7 +41,7 @@ def get_fetcher(run, branch=[]):
             False,
         )
 
-        return [""] if logs_raw == "" else get_logs(logs_raw.split("\n"))
+        return [] if logs_raw == "" else get_logs(logs_raw.split("\n"))
 
     return fetcher
 
@@ -68,10 +68,7 @@ def log():
         ]
     )
 
-    if logs_raw == "":
-        return print("no logs")
-
-    logs = get_logs(logs_raw.split("\n"))
+    logs = [] if logs_raw == "" else get_logs(logs_raw.split("\n"))
 
     logger(
         logs=logs,

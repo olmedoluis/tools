@@ -87,6 +87,11 @@ class LogControl:
         self.log_number_hovered = 0
         self.is_filter_enabled = False
 
+        empty = "None"
+        self.default_log = Log(
+            hash=empty, author=empty, time=empty, commit=empty, date=empty
+        )
+
     def set_filters(self, filters):
         self.filters_control.set_filters(filters)
 
@@ -103,7 +108,7 @@ class LogControl:
         self.is_filter_enabled = state
 
     def get_styled_line(self, line_number):
-        if (line_number + self.offset) in range(self.logs_size):
+        if self.logs_size and (line_number + self.offset) in range(self.logs_size):
             color = (
                 self._COLORS["selection"]
                 if (line_number + self.offset) == self.log_number_hovered
@@ -122,7 +127,7 @@ class LogControl:
         return ""
 
     def get_styled_info(self):
-        log = self.logs[self.log_number_hovered]
+        log = self.logs[self.log_number_hovered] if self.logs_size else self.default_log
         border = "−" * (self._term_size_x - 2)
         color = self._COLORS["font"]
         border_color = self._COLORS["border"]
@@ -182,11 +187,7 @@ class FiltersControl:
         self.filters_raw = ""
 
     def get_updated_filters(self, default_value=[]):
-        filters_raw = self.filters_raw
-
-        data = self.fetch(filters=self.parse_filter_string(filters_raw))
-
-        return data if len(data) and data[0] != "" else default_value
+        return self.fetch(filters=self.parse_filter_string(self.filters_raw))
 
     def set_filters(self, filters):
         self.filters_raw = filters
@@ -207,3 +208,12 @@ class FiltersControl:
                 output.append(self.filter_commands[filter_name](value))
 
         return output
+
+
+class Log:
+    def __init__(self, hash="", author="", time="", commit="", date=""):
+        self.hash = hash
+        self.author = author
+        self.time = time
+        self.date = date
+        self.commit = commit
