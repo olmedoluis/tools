@@ -37,10 +37,10 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master", fetc
         state = get_parsed_char(char)
 
         if len(state) == 1 and log_control.is_filter_enabled:
-            log_control.set_filters({"date": log_control.get_filter("date") + char})
+            log_control.set_filters(log_control.get_filter() + char)
 
         elif state == "BACKSTAB":
-            log_control.set_filters({"date": log_control.get_filter("date")[:-1]})
+            log_control.set_filters(log_control.get_filter()[:-1])
 
         elif state == "FINISH":
             if not log_control.is_filter_enabled:
@@ -90,8 +90,8 @@ class LogControl:
     def set_filters(self, filters):
         self.filters_control.set_filters(filters)
 
-    def get_filter(self, filter_name):
-        return self.filters_control.get_filter(filter_name)
+    def get_filter(self):
+        return self.filters_control.get_filter()
 
     def re_fetch(self):
         self.logs = self.filters_control.get_updated_filters(self.logs)
@@ -126,8 +126,8 @@ class LogControl:
         border = "−" * (self._term_size_x - 2)
         color = self._COLORS["font"]
         border_color = self._COLORS["border"]
-        date = self.filters_control.get_filter("date")
-        filters_section = f" | Filters: {date}" if self.is_filter_enabled else ""
+        filters = self.filters_control.get_filter()
+        filters_section = f" | Filters: {filters}" if self.is_filter_enabled else ""
 
         return [
             f"{border_color}{border}{self._RESET}",
@@ -175,22 +175,26 @@ class FiltersControl:
         self.search = search
         self.filter_commands = {"date": lambda date: f"--until={date}"}
         self.filters = {"date": ""}
+        self.filter_keys = {"date": ["date", "d"]}
         self.fetch = fetch
+        self.filters_raw = ""
 
     def get_updated_filters(self, default_value=[]):
-        date = self.filters["date"]
+        filters_raw = self.filters_raw
 
-        data = self.fetch(filters=self.parse_filter_string(date))
+        data = self.fetch(filters=self.parse_filter_string(filters_raw))
 
         return data if len(data) and data[0] != "" else default_value
 
     def set_filters(self, filters):
-        self.filters = filters
+        self.filters_raw = filters
 
-    def get_filter(self, filter_name):
-        return self.filters[filter_name]
+    def get_filter(self):
+        return self.filters_raw
 
     def parse_filter_string(self, string):
+        # date_keys = "|".join(self.filter_keys["date"])
+
         match = self.search(r"((date|d)\.(\S+))", string)
 
         if match:
