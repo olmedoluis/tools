@@ -1,13 +1,6 @@
-class Log:
-    def __init__(self, hash, author, time, commit, date):
-        self.hash = hash
-        self.author = author
-        self.time = time
-        self.date = date
-        self.commit = commit
-
-
 def get_logs(logs_data):
+    from .Prompts.InputLog import Log
+
     logs = []
 
     for log_line in logs_data:
