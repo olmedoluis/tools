@@ -173,8 +173,11 @@ class FiltersControl:
         from re import search
 
         self.search = search
-        self.filter_commands = {"date": lambda date: f"--until={date}"}
-        self.filter_keys = {"date": ["date", "d"]}
+        self.filter_commands = {
+            "date_to": lambda date: f"--until={date}",
+            "date_from": lambda date: f"--after={date}",
+        }
+        self.filter_keys = {"date_to": ["date", "dt"], "date_from": ["df"]}
         self.fetch = fetch
         self.filters_raw = ""
 
