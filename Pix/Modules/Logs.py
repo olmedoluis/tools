@@ -27,21 +27,19 @@ def get_logs(logs_data):
 
 
 def get_fetcher(run, branch=[]):
-    def fetcher(date=[]):
+    def fetcher(filters=[]):
         logs_raw = run(
             [
                 "git",
                 "log",
                 "--first-parent",
                 "--oneline",
-                *date,
+                *filters,
                 *branch,
                 '--pretty=format:"%h/*/%an/*/%cr/*/%ci/*/%s"',
-            ]
+            ],
+            False,
         )
-
-        if logs_raw == "":
-            return [""]
 
         return [""] if logs_raw == "" else get_logs(logs_raw.split("\n"))
 
