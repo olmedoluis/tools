@@ -94,14 +94,14 @@ class LogControl:
         date = self.filters["date"]
         logs_backup = self.logs
 
-        self.logs = self.fetch(date=[f'--until="{date}"'])
+        self.logs = self.fetch(date=parse_filter_string(date))
 
-        if self.logs[0] == "":
-            self.logs = logs_backup
-        else:
+        if self.logs and len(self.logs) and self.logs[0] != "":
             self.logs_size = len(self.logs)
             self.offset = 0
             self.log_number_hovered = 0
+        else:
+            self.logs = logs_backup
 
     def set_is_filter_enabled(self, state):
         self.is_filter_enabled = state
@@ -170,3 +170,18 @@ class LogControl:
 
     def increase_offset(self, number):
         self.offset = self.offset + number
+
+
+def parse_filter_string(string):
+    from re import search
+
+    match = search(r"((date|d)\.(\S+))", string)
+
+    if match:
+        key, value = match.group(2, 3)
+        return [filter_commands[key](value)]
+
+    return []
+
+
+filter_commands = {"date": lambda date: f"--until={date}"}
