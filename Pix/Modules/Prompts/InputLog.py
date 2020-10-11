@@ -37,10 +37,10 @@ def logger(error_message="", logs=[], colors={}, icons={}, branch="master", fetc
         state = get_parsed_char(char)
 
         if len(state) == 1 and log_control.is_filter_enabled:
-            log_control.set_filters({"date": log_control.filters["date"] + char})
+            log_control.set_filters({"date": log_control.get_filter("date") + char})
 
         elif state == "BACKSTAB":
-            log_control.set_filters({"date": log_control.filters["date"][:-1]})
+            log_control.set_filters({"date": log_control.get_filter("date")[:-1]})
 
         elif state == "FINISH":
             if not log_control.is_filter_enabled:
@@ -77,31 +77,27 @@ class LogControl:
         self._ICONS = {**INPUT_ICONS, **icons}
         self._COLORS = {**INPUT_THEME, **colors}
         self._RESET = self._COLORS["reset"]
+        self.filters_control = FiltersControl(fetch=fetch)
+
         self._term_size_x = term_size_x
         self._term_size_y = term_size_y
         self.logs = logs
         self.logs_size = len(logs)
         self.offset = 0
         self.log_number_hovered = 0
-        self.filters = {"date": ""}
         self.is_filter_enabled = False
-        self.fetch = fetch
 
     def set_filters(self, filters):
-        self.filters = filters
+        self.filters_control.set_filters(filters)
+
+    def get_filter(self, filter_name):
+        return self.filters_control.get_filter(filter_name)
 
     def re_fetch(self):
-        date = self.filters["date"]
-        logs_backup = self.logs
-
-        self.logs = self.fetch(date=parse_filter_string(date))
-
-        if self.logs and len(self.logs) and self.logs[0] != "":
-            self.logs_size = len(self.logs)
-            self.offset = 0
-            self.log_number_hovered = 0
-        else:
-            self.logs = logs_backup
+        self.logs = self.filters_control.get_updated_filters(self.logs)
+        self.logs_size = len(self.logs)
+        self.offset = 0
+        self.log_number_hovered = 0
 
     def set_is_filter_enabled(self, state):
         self.is_filter_enabled = state
@@ -130,7 +126,7 @@ class LogControl:
         border = "−" * (self._term_size_x - 2)
         color = self._COLORS["font"]
         border_color = self._COLORS["border"]
-        date = self.filters["date"]
+        date = self.filters_control.get_filter("date")
         filters_section = f" | Filters: {date}" if self.is_filter_enabled else ""
 
         return [
@@ -172,16 +168,33 @@ class LogControl:
         self.offset = self.offset + number
 
 
-def parse_filter_string(string):
-    from re import search
+class FiltersControl:
+    def __init__(self, fetch):
+        from re import search
 
-    match = search(r"((date|d)\.(\S+))", string)
+        self.search = search
+        self.filter_commands = {"date": lambda date: f"--until={date}"}
+        self.filters = {"date": ""}
+        self.fetch = fetch
 
-    if match:
-        key, value = match.group(2, 3)
-        return [filter_commands[key](value)]
+    def get_updated_filters(self, default_value=[]):
+        date = self.filters["date"]
 
-    return []
+        data = self.fetch(filters=self.parse_filter_string(date))
 
+        return data if len(data) and data[0] != "" else default_value
 
-filter_commands = {"date": lambda date: f"--until={date}"}
+    def set_filters(self, filters):
+        self.filters = filters
+
+    def get_filter(self, filter_name):
+        return self.filters[filter_name]
+
+    def parse_filter_string(self, string):
+        match = self.search(r"((date|d)\.(\S+))", string)
+
+        if match:
+            key, value = match.group(2, 3)
+            return [self.filter_commands[key](value)]
+
+        return []
