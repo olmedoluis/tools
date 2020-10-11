@@ -211,7 +211,7 @@ class FiltersControl:
 
 
 class Log:
-    def __init__(self, hash="", author="", time="", commit="", date=""):
+    def __init__(self, hash, author, time, commit, date):
         self.hash = hash
         self.author = author
         self.time = time
