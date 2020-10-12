@@ -179,10 +179,11 @@ class FiltersControl:
 
         self.search = search
         self.filter_commands = {
-            "date_to": lambda date: f"--until={date}",
-            "date_from": lambda date: f"--after={date}",
+            "date_to": lambda date: [f"--until={date}"],
+            "date_from": lambda date: [f"--after={date}"],
+            "date": self.get_date_command,
         }
-        self.filter_keys = {"date_to": ["date", "dt"], "date_from": ["df"]}
+        self.filter_keys = {"date": ["d"], "date_to": ["dt"], "date_from": ["df"]}
         self.fetch = fetch
         self.filters_raw = ""
 
@@ -205,7 +206,23 @@ class FiltersControl:
 
             if match:
                 value = match.group(3)
-                output.append(self.filter_commands[filter_name](value))
+                output = output + self.filter_commands[filter_name](value)
+
+        return output
+
+    def get_date_command(self, dates_raw):
+        dates = dates_raw.split(".")
+        filter_format = [
+            self.filter_commands["date_from"],
+            self.filter_commands["date_to"],
+        ]
+        output = []
+
+        for index in range(2):
+            if index > len(dates) or dates[index] == "":
+                continue
+
+            output = output + filter_format[index](dates[index])
 
         return output
 
