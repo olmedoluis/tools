@@ -115,7 +115,7 @@ class LogControl:
                 else self._COLORS["slight"]
             )
             icon = (
-                self._ICONS["log_selection"]
+                self._ICONS["log_selection"] + " "
                 if (line_number + self.offset) == self.log_number_hovered
                 else self._ICONS["log_normal"]
             )
