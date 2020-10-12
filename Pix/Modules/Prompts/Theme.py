@@ -21,6 +21,6 @@ INPUT_ICONS = {
     "-": "✖",
     "selection": "❤",
     "normal": "•",
-    "log_selection": "⋄",
+    "log_selection": "♦ ",
     "log_normal": "⋅",
 }
