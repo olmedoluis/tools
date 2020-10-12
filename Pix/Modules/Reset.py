@@ -4,6 +4,9 @@ def parse_status(status):
     reset_commands = []
 
     for status_id in status:
+        if status_id == "branch":
+            continue
+
         for change in status[status_id]:
             if status_id == "untracked":
                 folder_delete = ["-r", "-f"] if isdir(change) else []
