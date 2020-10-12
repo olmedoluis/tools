@@ -180,10 +180,14 @@ class FiltersControl:
         self.search = search
         self.filter_commands = {
             "date_to": lambda date: [f"--until={date}"],
-            "date_from": lambda date: [f"--after={date}"],
+            "date_from": lambda date: [f"--since={date}"],
             "date": self.get_date_command,
         }
-        self.filter_keys = {"date": ["d"], "date_to": ["dt"], "date_from": ["df"]}
+        self.filter_keys = {
+            "date": ["d", "date"],
+            "date_to": ["dt", "until", "to"],
+            "date_from": ["df", "from"],
+        }
         self.fetch = fetch
         self.filters_raw = ""
 
@@ -217,6 +221,10 @@ class FiltersControl:
             self.filter_commands["date_to"],
         ]
         output = []
+
+        if len(dates) == 1:
+            dates.append(dates[0] + " 23:59")
+            dates[0] = dates[0] + " 00:00"
 
         for index in range(2):
             if index >= len(dates) or dates[index] == "":
