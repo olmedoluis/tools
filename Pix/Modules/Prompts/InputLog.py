@@ -219,7 +219,7 @@ class FiltersControl:
         output = []
 
         for index in range(2):
-            if index > len(dates) or dates[index] == "":
+            if index >= len(dates) or dates[index] == "":
                 continue
 
             output = output + filter_format[index](dates[index])
