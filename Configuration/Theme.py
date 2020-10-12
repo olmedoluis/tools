@@ -32,7 +32,7 @@ ICONS = {
     "ic_normal": "•",
     "ic_success": "⚑",
     "ic_branch": "⚲",
-    "ic_log_selected": "⋄",
+    "ic_log_selected": "♦",
     "ic_log": "⋅",
 }
 
