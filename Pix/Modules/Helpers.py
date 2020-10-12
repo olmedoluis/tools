@@ -16,14 +16,14 @@ def _errorRunValidator(error):
         m.log("error-unknown")
 
 
-def run(command=[]):
+def run(command=[], should_expect_error=True):
     from subprocess import Popen, PIPE
 
     process = Popen(command, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
     output, error = process.communicate()
 
-    if process.returncode != 0:
+    if should_expect_error and process.returncode != 0:
         _errorRunValidator(error)
         exit()
 

@@ -6,14 +6,30 @@ def get_has_changes(change=""):
     return len(status.keys()) > 1 if change == "" else change in status
 
 
+def get_remote_origin_name(string):
+    start = string.find("/remotes/")
+    end = string.find("/", start + 9)
+
+    return string[start + 9 : end]
+
+
 def get_branch_creator():
     from .Helpers import run
 
+    branch_creator = ""
     current_branch = run(["git", "branch", "--show-current"])[:-1]
-    creation_raw = run([f"git", "reflog", current_branch]).strip().split("\n")
-    branch_creator = (
-        creation_raw[-1].split(" ")[-1] if "Created" in creation_raw[-1] else ""
+    creation_raw = (
+        run([f"git", "log", "--walk-reflogs", "--oneline", current_branch])
+        .strip()
+        .split("\n")
     )
+
+    if "Created" in creation_raw[-1]:
+        branch_creator = (
+            creation_raw[-1].split(" ")[-1]
+            if not "/remotes/" in creation_raw[-1]
+            else get_remote_origin_name(creation_raw[-1])
+        )
 
     return branch_creator, current_branch
 

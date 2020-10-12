@@ -1,13 +1,6 @@
-class Log:
-    def __init__(self, hash, author, time, commit, date):
-        self.hash = hash
-        self.author = author
-        self.time = time
-        self.date = date
-        self.commit = commit
-
-
 def get_logs(logs_data):
+    from .Prompts.InputLog import Log
+
     logs = []
 
     for log_line in logs_data:
@@ -24,6 +17,26 @@ def get_logs(logs_data):
         )
 
     return logs
+
+
+def get_fetcher(run, branch=[]):
+    def fetcher(filters=[]):
+        logs_raw = run(
+            [
+                "git",
+                "log",
+                "--first-parent",
+                "--oneline",
+                *filters,
+                *branch,
+                '--pretty=format:"%h/*/%an/*/%cr/*/%ci/*/%s"',
+            ],
+            False,
+        )
+
+        return [] if logs_raw == "" else get_logs(logs_raw.split("\n"))
+
+    return fetcher
 
 
 def log():
@@ -48,7 +61,7 @@ def log():
         ]
     )
 
-    logs = get_logs(logs_raw.split("\n"))
+    logs = [] if logs_raw == "" else get_logs(logs_raw.split("\n"))
 
     logger(
         logs=logs,
@@ -56,6 +69,7 @@ def log():
         error_message=m.get_message("log-exit"),
         colors=INPUT_THEME["LOG_LOG"],
         icons=INPUT_ICONS,
+        fetch=get_fetcher(run, specification),
     )
 
     m.log("log-exit")
