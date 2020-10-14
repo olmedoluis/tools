@@ -181,6 +181,7 @@ class FiltersControl:
         self.filter_commands = {
             "date_to": lambda date: [f"--until={date}"],
             "date_from": lambda date: [f"--since={date}"],
+            "contains": lambda text: [f"--grep={text}"],
             "date": self.get_date_command,
             "author": self.get_author_command,
             "show": self.get_show_command,
@@ -189,6 +190,7 @@ class FiltersControl:
             "date": ["d", "date"],
             "date_to": ["dt", "until", "to"],
             "date_from": ["df", "from"],
+            "contains": ["c", "contains"],
             "author": ["a", "author"],
             "show": ["s", "show"],
         }
