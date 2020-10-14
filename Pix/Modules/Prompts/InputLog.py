@@ -181,12 +181,18 @@ class FiltersControl:
         self.filter_commands = {
             "date_to": lambda date: [f"--until={date}"],
             "date_from": lambda date: [f"--since={date}"],
+            "contains": lambda text: [f"--grep={text}"],
             "date": self.get_date_command,
+            "author": self.get_author_command,
+            "show": self.get_show_command,
         }
         self.filter_keys = {
             "date": ["d", "date"],
             "date_to": ["dt", "until", "to"],
             "date_from": ["df", "from"],
+            "contains": ["c", "contains"],
+            "author": ["a", "author"],
+            "show": ["s", "show"],
         }
         self.fetch = fetch
         self.filters_raw = ""
@@ -231,6 +237,24 @@ class FiltersControl:
                 continue
 
             output = output + filter_format[index](dates[index])
+
+        return output
+
+    def get_author_command(self, authors_raw):
+        authors = authors_raw.split(".")
+        authors_formatted = "\|".join(authors)
+
+        return [f"--author={authors_formatted}"]
+
+    def get_show_command(self, shows_raw):
+        shows = shows_raw.split(".")
+        output = []
+
+        for show in shows:
+            if show == "all":
+                output.append("--all")
+            elif show == "current":
+                output.append("--first-parent")
 
         return output
 
