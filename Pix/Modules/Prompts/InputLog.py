@@ -182,11 +182,13 @@ class FiltersControl:
             "date_to": lambda date: [f"--until={date}"],
             "date_from": lambda date: [f"--since={date}"],
             "date": self.get_date_command,
+            "author": self.get_author_command,
         }
         self.filter_keys = {
             "date": ["d", "date"],
             "date_to": ["dt", "until", "to"],
             "date_from": ["df", "from"],
+            "author": ["a", "author"],
         }
         self.fetch = fetch
         self.filters_raw = ""
@@ -233,6 +235,12 @@ class FiltersControl:
             output = output + filter_format[index](dates[index])
 
         return output
+
+    def get_author_command(self, authors_raw):
+        authors = authors_raw.split(".")
+        authors_formatted = "\|".join(authors)
+
+        return [f'--author={authors_formatted}']
 
 
 class Log:
