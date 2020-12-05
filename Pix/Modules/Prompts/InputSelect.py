@@ -33,18 +33,25 @@ def select(
 
         if is_filter_enabled and state == "FINISH":
             select_control.toggle_filtering_mode()
+
         elif is_filter_enabled and len(state) == 1:
             select_control.set_filtering(select_control.get_filtering() + char)
+
         elif is_filter_enabled and state == "BACKSTAB":
             select_control.set_filtering(select_control.get_filtering()[:-1])
+
         elif state == "F":
             select_control.toggle_filtering_mode()
+
         elif state == "S":
             select_control.append_to_index(1)
+
         elif state == "W":
             select_control.append_to_index(-1)
+
         elif state == "FINISH" or state == "D":
             break
+
         elif state == "BREAK_CHAR":
             input_console.deleteLastLines(4)
             input_console.finish()
