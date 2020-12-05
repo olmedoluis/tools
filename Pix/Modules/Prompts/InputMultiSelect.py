@@ -82,6 +82,7 @@ class _MultiSelectControl:
 
         self._options_size = len(options)
         self._options_raw = options
+        self._options_filtered = options
         self._option_index = 0
         self._options_selected = []
 
@@ -110,10 +111,14 @@ class _MultiSelectControl:
         self._option_index = self._option_index + number
 
     def get_index_in_range(self, index):
-        return index % self._options_size
+        return index % self._options_size if self._options_size else 0
 
     def get_option(self, offset=0):
-        return self._options_raw[self.get_index_in_range(self._option_index + offset)]
+        return (
+            self._options_filtered[self.get_index_in_range(self._option_index + offset)]
+            if self._options_size
+            else "None"
+        )
 
     def add_index_to_selected_options(self):
         if not self.get_is_option_selected():
@@ -140,6 +145,12 @@ class _MultiSelectControl:
     def set_filtering(self, new_value):
         new_filter_options = []
 
+        for option in self._options_raw:
+            if new_value in option:
+                new_filter_options.append(option)
+
+        self._options_size = len(new_filter_options)
+        self._options_filtered = new_filter_options
         self.filtersControl.set_filter(new_value)
 
     def get_is_filter_enabled(self):
