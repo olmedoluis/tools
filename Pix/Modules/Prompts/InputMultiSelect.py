@@ -31,26 +31,35 @@ def multi_select(
 
         if is_filter_enabled and state == "FINISH":
             multi_select_control.toggle_filtering_mode()
+
         elif is_filter_enabled and len(state) == 1:
             multi_select_control.set_filtering(
                 multi_select_control.get_filtering() + char
             )
+
         elif is_filter_enabled and state == "BACKSTAB":
             multi_select_control.set_filtering(
                 multi_select_control.get_filtering()[:-1]
             )
+
         elif state == "F":
             multi_select_control.toggle_filtering_mode()
+
         elif state == "S":
             multi_select_control.append_to_index(1)
+
         elif state == "W":
             multi_select_control.append_to_index(-1)
+
         elif state == "D":
             multi_select_control.add_index_to_selected_options()
+
         elif state == "A":
             multi_select_control.remove_index_to_selected_options()
+
         elif state == "FINISH":
             break
+
         elif state == "BREAK_CHAR":
             input_console.deleteLastLines(4)
             input_console.finish()
