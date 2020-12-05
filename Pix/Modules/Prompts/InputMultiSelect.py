@@ -11,11 +11,11 @@ def multi_select(
 
     getch = getGetch()
     input_console = ConsoleControl(5)
-    multi_select_control = _MultiSelectControl(colors, icons, options)
-
-    input_console.setConsoleLine(0, 1, title)
+    multi_select_control = _MultiSelectControl(colors, icons, options, title)
 
     while True:
+        input_console.setConsoleLine(0, 1, multi_select_control.get_display_title())
+
         option_above = multi_select_control.get_display_option(-1)
         option_selected = multi_select_control.get_display_option(0)
         option_down = multi_select_control.get_display_option(1)
@@ -59,7 +59,7 @@ def multi_select(
 
 
 class _MultiSelectControl:
-    def __init__(self, colors, icons, options):
+    def __init__(self, colors, icons, options, title):
         from .Theme import INPUT_THEME, INPUT_ICONS
 
         self._ICONS = {**INPUT_ICONS, **icons}
@@ -70,6 +70,8 @@ class _MultiSelectControl:
         self._options_raw = options
         self._option_index = 0
         self._options_selected = []
+
+        self.title = title
 
     def get_options_selected(self):
         output = []
@@ -111,3 +113,6 @@ class _MultiSelectControl:
             index = self.get_index_in_range(self._option_index)
 
         return index in self._options_selected
+
+    def get_display_title(self):
+        return self.title
