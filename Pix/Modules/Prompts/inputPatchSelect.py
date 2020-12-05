@@ -173,7 +173,6 @@ class PatchControl:
 
             if not has_removed_from_added or force_transition:
                 current_file.is_file_removed = True
-                current_file.patches_selected_add = []
 
         elif transition == "add":
             was_file_removed = current_file.is_file_removed
@@ -226,7 +225,7 @@ class PatchControl:
     def get_patch_index_shown(self):
         output = ""
 
-        for index in range(0, len(self._patches)):
+        for index in range(len(self._patches)):
             active = (
                 self._COLORS["selection"] if index == self._patch_index_selected else ""
             )
@@ -234,12 +233,12 @@ class PatchControl:
             icon = self._ICONS["normal"]
             patch = self.files[self._file_name_index]
 
-            if patch.is_file_removed:
-                color = self._COLORS["deletation"]
-                icon = self._ICONS["-"]
-            elif index in patch.patches_selected_add:
+            if index in patch.patches_selected_add:
                 color = self._COLORS["indexSel"]
                 icon = self._ICONS["selection"]
+            elif patch.is_file_removed:
+                color = self._COLORS["deletation"]
+                icon = self._ICONS["-"]
 
             output = f"{output}{color}{active} {icon}{self._RESET}"
 
