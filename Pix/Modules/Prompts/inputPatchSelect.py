@@ -225,7 +225,7 @@ class PatchControl:
     def get_patch_index_shown(self):
         output = ""
 
-        for index in range(0, len(self._patches)):
+        for index in range(len(self._patches)):
             active = (
                 self._COLORS["selection"] if index == self._patch_index_selected else ""
             )
