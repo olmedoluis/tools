@@ -29,7 +29,9 @@ def select(
         char = getch()
         state = get_parsed_char(char)
 
-        if select_control.is_filter_enabled and len(state) == 1:
+        if select_control.is_filter_enabled and state == "FINISH":
+            select_control.toggleFilteringMode()
+        elif select_control.is_filter_enabled and len(state) == 1:
             select_control.set_filtering(select_control.filtering + char)
         elif select_control.is_filter_enabled and state == "BACKSTAB":
             select_control.set_filtering(select_control.filtering[:-1])
@@ -70,8 +72,8 @@ class _SelectControl:
         self._options_size = len(options)
         self._option_index = 0
 
-        self._options_filtered = options
         self.filtering = ""
+        self._options_filtered = options
         self.is_filter_enabled = False
         self.title = title
 
@@ -83,7 +85,12 @@ class _SelectControl:
         return f"{font_color}{icon}{option}{self._RESET}"
 
     def get_option(self, offset=0):
-        return self._options[(self._option_index + offset) % self._options_size]
+
+        return (
+            self._options_filtered[(self._option_index + offset) % self._options_size]
+            if self._options_size
+            else "None"
+        )
 
     def append_to_index(self, number):
         self._option_index = self._option_index + number
@@ -92,9 +99,28 @@ class _SelectControl:
         self.is_filter_enabled = not self.is_filter_enabled
 
     def get_display_title(self):
-        filter_value = self.filtering if self.is_filter_enabled else ""
+        slight = self._COLORS["slight"]
+        color = self._COLORS["modification"] if self.is_filter_enabled else slight
+        place_holder = (
+            f"{slight}Write something here"
+            if self.is_filter_enabled
+            else 'Press "F" to filter'
+        )
+        filter_value = (
+            f"{color}{self.filtering}{self._RESET}"
+            if self.filtering != ""
+            else f"{color}{place_holder}{self._RESET}"
+        )
 
         return f"{self.title} {filter_value}"
 
     def set_filtering(self, new_value):
+        new_filter_options = []
+
+        for option in self._options:
+            if new_value in option:
+                new_filter_options.append(option)
+
+        self._options_size = len(new_filter_options)
+        self._options_filtered = new_filter_options
         self.filtering = new_value
