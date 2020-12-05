@@ -27,8 +27,21 @@ def multi_select(
 
         char = getch()
         state = get_parsed_char(char)
+        is_filter_enabled = multi_select_control.get_is_filter_enabled()
 
-        if state == "S":
+        if is_filter_enabled and state == "FINISH":
+            multi_select_control.toggle_filtering_mode()
+        elif is_filter_enabled and len(state) == 1:
+            multi_select_control.set_filtering(
+                multi_select_control.get_filtering() + char
+            )
+        elif is_filter_enabled and state == "BACKSTAB":
+            multi_select_control.set_filtering(
+                multi_select_control.get_filtering()[:-1]
+            )
+        elif state == "F":
+            multi_select_control.toggle_filtering_mode()
+        elif state == "S":
             multi_select_control.append_to_index(1)
         elif state == "W":
             multi_select_control.append_to_index(-1)
@@ -61,6 +74,7 @@ def multi_select(
 class _MultiSelectControl:
     def __init__(self, colors, icons, options, title):
         from .Theme import INPUT_THEME, INPUT_ICONS
+        from .CharactersInterpreter import FiltersControl
 
         self._ICONS = {**INPUT_ICONS, **icons}
         self._COLORS = {**INPUT_THEME, **colors}
@@ -72,6 +86,7 @@ class _MultiSelectControl:
         self._options_selected = []
 
         self.title = title
+        self.filtersControl = FiltersControl(self._COLORS)
 
     def get_options_selected(self):
         output = []
@@ -114,5 +129,21 @@ class _MultiSelectControl:
 
         return index in self._options_selected
 
+    def toggle_filtering_mode(self):
+        self.filtersControl.toggle_filtering_mode()
+
     def get_display_title(self):
-        return self.title
+        filter_value = self.filtersControl.get_filter_value()
+
+        return f"{self.title} {filter_value}"
+
+    def set_filtering(self, new_value):
+        new_filter_options = []
+
+        self.filtersControl.set_filter(new_value)
+
+    def get_is_filter_enabled(self):
+        return self.filtersControl.is_filter_enabled
+
+    def get_filtering(self):
+        return self.filtersControl.filtering
