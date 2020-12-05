@@ -1,6 +1,6 @@
 def confirm(title="", final_title="", colors={}, error_message=""):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_parsed_char
+    from .Tools import get_parsed_char
     from .Theme import INPUT_THEME
 
     FONT_COLOR = ({**INPUT_THEME, **colors})["font"]

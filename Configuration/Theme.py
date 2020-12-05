@@ -22,7 +22,7 @@ ICONS = {
     "ic_renamed": "✦",
     "ic_deleted": "✝",
     "ic_conflicted": "■",
-    "ic_resetted": "⟲",
+    "ic_resetted": "⧗",
     "ic_removed": "−",
     "ic_patch_add": "⤒",
     "ic_patch_remove": "⤓",
