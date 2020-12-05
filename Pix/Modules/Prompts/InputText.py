@@ -2,7 +2,7 @@ def text(
     title="", content="", place_holder="", final_title="", error_message="", colors={}
 ):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_parsed_char
+    from .Tools import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(1)

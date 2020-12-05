@@ -7,7 +7,7 @@ def multi_select(
     icons={},
 ):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_parsed_char
+    from .Tools import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(5)
@@ -83,7 +83,7 @@ def multi_select(
 class _MultiSelectControl:
     def __init__(self, colors, icons, options, title):
         from .Theme import INPUT_THEME, INPUT_ICONS
-        from .CharactersInterpreter import FiltersControl
+        from .Tools import FiltersControl
 
         self._ICONS = {**INPUT_ICONS, **icons}
         self._COLORS = {**INPUT_THEME, **colors}

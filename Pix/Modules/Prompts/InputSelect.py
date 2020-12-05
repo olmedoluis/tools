@@ -7,7 +7,7 @@ def select(
     icons={},
 ):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_parsed_char
+    from .Tools import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(5)
@@ -72,7 +72,7 @@ def select(
 class _SelectControl:
     def __init__(self, colors, icons, options, title):
         from .Theme import INPUT_THEME, INPUT_ICONS
-        from .CharactersInterpreter import FiltersControl
+        from .Tools import FiltersControl
 
         self._SELECTION_ICON = ({**INPUT_ICONS, **icons})["selection"]
         self._COLORS = {**INPUT_THEME, **colors}

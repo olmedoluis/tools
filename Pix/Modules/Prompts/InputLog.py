@@ -3,7 +3,7 @@ from pprint import pprint
 
 def logger(error_message="", logs=[], colors={}, icons={}, branch="master", fetch=""):
     from .Console import ConsoleControl, getGetch
-    from .CharactersInterpreter import get_parsed_char
+    from .Tools import get_parsed_char
 
     getch = getGetch()
     input_console = ConsoleControl(lines="default")
