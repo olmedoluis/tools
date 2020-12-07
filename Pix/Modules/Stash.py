@@ -6,8 +6,13 @@ def add_to_stash():
 
     m = MessageControl()
 
-    if not "added" in get_status():
+    status = get_status()
+
+    if len(status) > 1:
         return m.log("error-stash-addedfiles")
+
+    if "conflicted" in status:
+        return print("Error: There is conflicted files!")
 
     print()
     title = text(
