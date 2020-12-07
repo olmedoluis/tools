@@ -2,6 +2,7 @@ def add_to_stash():
     from .Prompts import text
     from .Helpers import run, MessageControl
     from .Status import get_status
+    from .Add import add
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
@@ -13,6 +14,9 @@ def add_to_stash():
 
     if "conflicted" in status:
         return print("Error: There is conflicted files!")
+
+    if not "added" in status:
+        add(use_availables=True)
 
     print()
     title = text(
