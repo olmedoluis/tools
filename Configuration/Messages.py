@@ -64,7 +64,7 @@ MESSAGES = {
     "stash-back-success": "\n {th_success}{ic_success} You bringed {th_keyword}{pm_stash} {th_success}back\n",
     "stash-in-success": "\n {th_success}{ic_success} You have stashed added files\n",
     "stash-in-title": "{th_normal}A name for what you are trying to stash?",
-    "stash-list_item": "{pm_stashid} - {pm_stashname} {th_dim}{pm_stashbranch}",
+    "stash-list_item": "{pm_stashname} {th_keyword}{pm_stashbranch}",
     "untracked-title": "\n {th_normal}Untracked files:\n",
     "untracked": "\t{th_untracked}{ic_untracked} {pm_change}",
 }
