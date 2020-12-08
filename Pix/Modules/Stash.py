@@ -33,7 +33,7 @@ def add_to_stash():
 
 
 def stash_selection():
-    from .Prompts import select
+    from .Prompts import multi_select
     from .Helpers import run, MessageControl
     from .Status import get_status
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
@@ -74,7 +74,7 @@ def stash_selection():
         )
 
     print()
-    stash_selected = select(
+    stash_selected = multi_select(
         title=m.get_message("branch-selection-title"),
         options=stash_list,
         error_message=m.get_message("operation-cancel"),
