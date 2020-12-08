@@ -9,13 +9,13 @@ def add_to_stash():
 
     status = get_status()
 
-    if len(status) > 1:
+    if len(status) == 1:
         return m.log("error-stash-addedfiles")
 
     if "conflicted" in status:
         return print("Error: There is conflicted files!")
 
-    if not "added" in status:
+    if not "added" in status or len(status) > 2:
         add(use_availables=True)
 
     print()
