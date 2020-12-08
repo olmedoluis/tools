@@ -14,6 +14,7 @@ THEME = {
     "th_reset": f"{ANSI}0m",
     "th_success": f"{CODE}47;1m",
     "th_untracked": f"{CODE}69;1m",
+    "th_stash": f"{CODE}69;1m",
 }
 
 ICONS = {
@@ -28,6 +29,7 @@ ICONS = {
     "ic_patch_remove": "⤓",
     "ic_added": "✚",
     "ic_error": "✖",
+    "ic_stash": "⛁",
     "ic_selection": "❤",
     "ic_normal": "•",
     "ic_success": "⚑",
