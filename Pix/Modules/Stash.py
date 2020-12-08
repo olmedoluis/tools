@@ -83,8 +83,7 @@ def stash_selection():
         return m.log("error-empty")
 
     for stash_id in stashes_selected:
-        # run(["git", "stash", "apply", "stash@{" + stash_id + "}"])
-        pass
+        run(["git", "stash", "apply", "stash@{" + stash_id + "}"])
 
     stashes_selected_from_list = []
     for stash_id in stashes_selected:
