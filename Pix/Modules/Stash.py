@@ -40,9 +40,6 @@ def stash_selection():
 
     m = MessageControl()
 
-    if len(get_status()) > 1:
-        return m.log("error-haschanges")
-
     stashes_raw = run(["git", "stash", "list"])
     stashes_spaced = stashes_raw.rstrip().split("\n")
 
@@ -61,16 +58,18 @@ def stash_selection():
         branch = stash[branch_start_index:branch_end_index]
 
         name = stash[branch_end_index + 2 :]
-
-        stash_list.append(
+        display_name = (
             m.get_message(
                 "stash-list_item",
                 {
-                    "pm_stashid": stash_id,
                     "pm_stashname": name,
                     "pm_stashbranch": branch,
                 },
-            )
+            ),
+        )
+
+        stash_list.append(
+            {"value": stash_id, "id": stash_id, "display_name": display_name}
         )
 
     print()
