@@ -64,6 +64,7 @@ MESSAGES = {
     "reset-success": "\n {th_success}{ic_success} The following files has been resetted successfully!\n",
     "reset-title": "{th_normal}Select files to reset:",
     "stash-back-success": "\n {th_success}{ic_success} The following stashes are back successfully! \n",
+    "stash-remove-success": "\n {th_success}{ic_success} The following stashes has been removed successfully! \n",
     "stash-in-success": "\n {th_success}{ic_success} You have stashed added files\n",
     "stash-in-title": "{th_normal}A name for what you are trying to stash?",
     "stash-list_item": "{pm_stashname} {th_keyword}{pm_stashbranch}",
