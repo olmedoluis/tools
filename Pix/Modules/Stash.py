@@ -2,21 +2,14 @@ def add_to_stash():
     from .Prompts import text
     from .Helpers import run, MessageControl
     from .Status import get_status
-    from .Add import add
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
     status = get_status()
 
-    if len(status) == 1:
+    if not "added" in status:
         return m.log("error-stash-files_not_found")
-
-    if "conflicted" in status:
-        return m.log("error-stash_in_conflicted")
-
-    if not "added" in status or len(status) > 2:
-        add(use_availables=True)
 
     print()
     title = text(
@@ -28,7 +21,7 @@ def add_to_stash():
     if title == "":
         return m.log("error-empty")
 
-    run(["git", "stash", "push", "-m", title])
+    run(["git", "stash", "push", "-m", title, "--", *status["added"]])
     m.log("stash-in-success")
 
 
