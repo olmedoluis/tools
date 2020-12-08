@@ -62,6 +62,17 @@ def check_pix_shortcut(keyword, outsideKeys, outsideAliases):
     return False
 
 
+def parse_for_select_options(options):
+    parsed_options = []
+    index_id = 0
+
+    for option in options:
+        parsed_options.append({"value": option, "display_name": option, "id": index_id})
+        index_id += 1
+
+    return parsed_options
+
+
 class MessageControl:
     def __init__(self):
         from Configuration.Theme import THEME, ICONS
