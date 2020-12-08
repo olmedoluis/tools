@@ -10,10 +10,10 @@ def add_to_stash():
     status = get_status()
 
     if len(status) == 1:
-        return m.log("error-stash-addedfiles")
+        return m.log("error-stash-files_not_found")
 
     if "conflicted" in status:
-        return print("Error: There is conflicted files!")
+        return m.log("error-stash_in_conflicted")
 
     if not "added" in status or len(status) > 2:
         add(use_availables=True)

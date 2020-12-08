@@ -40,7 +40,7 @@ MESSAGES = {
     "error-remove-files_not_found": "\n {th_error}{ic_error} Error: Files to remove not found\n",
     "error-reset-files_not_found": "\n {th_error}{ic_error} Error: Files to reset not found\n",
     "error-stash_in_conflicted": "\n {th_error}{ic_error} Error: Conflicted files can not be stashed\n",
-    "error-stash-addedfiles": "\n {th_error}{ic_error} Error: Added files to stash not found\n",
+    "error-stash-files_not_found": "\n {th_error}{ic_error} Error: Added files to stash not found\n",
     "error-stash-stashes_not_found": "\n {th_error}{ic_error} Error: Stashes not found\n",
     "error-unknown_route": "\n {th_error}{ic_error} Error: Command not found {th_success}{pm_goodRoutes}{th_error}{pm_wrongRoutes}\n",
     "error-unknown": "\n {th_error}{ic_error} Error: Something went wrong\n",
