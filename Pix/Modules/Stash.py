@@ -82,16 +82,23 @@ def stash_selection():
     if len(stashes_selected) == 0:
         return m.log("error-empty")
 
+    show_success_title = True
     for stash_id in stashes_selected:
         run(["git", "stash", "apply", "stash@{" + stash_id + "}"])
 
-    stashes_selected_from_list = []
-    for stash_id in stashes_selected:
+        stash_display_name = ""
         for stash in stash_list:
             if stash["id"] == stash_id:
-                stashes_selected_from_list.append(stash["display_name"])
+                stash_display_name = stash["display_name"]
 
-    m.log("stash-back-success")
+        if show_success_title:
+            m.log("stash-back-success")
+
+        m.log("stash-name", {"pm_name": stash_display_name})
+        show_success_title = False
+
+    stashes_selected_from_list = []
+
     m.logMany(
         message_id="stash-name",
         param_name="pm_name",
