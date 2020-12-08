@@ -27,14 +27,6 @@ def parse_files(files):
     files_to_remove = []
 
     for file in files:
-        if file.is_file_removed:
-            patches_number = len(file.patches)
-            files_to_remove = files_to_remove + [
-                f"{patches_number} {file.file_name_raw}"
-            ]
-            parsed_files_remove = parsed_files_remove + [file.file_name_raw]
-            continue
-
         if len(file.patches_selected_add):
             patches_number = len(file.patches_selected_add)
             files_to_add.append(f"{patches_number} {file.file_name_raw}")
@@ -45,6 +37,14 @@ def parse_files(files):
                 carried_values=parsed_patches_add,
                 values=file.patches,
             )
+
+        if file.is_file_removed:
+            patches_number = len(file.patches) - len(file.patches_selected_add)
+            files_to_remove = files_to_remove + [
+                f"{patches_number} {file.file_name_raw}"
+            ]
+            parsed_files_remove = parsed_files_remove + [file.file_name_raw]
+            continue
 
     return (
         set_last_space(parsed_patches_add),
@@ -142,7 +142,6 @@ def patch(files, messages=""):
 
     if len(parsed_files) != 0:
         run(["git", "checkout"] + parsed_files)
-        pass
 
     m.log("patch-success")
     m.logMany(
