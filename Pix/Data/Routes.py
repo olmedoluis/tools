@@ -26,7 +26,8 @@ KEYS = {
     "STASH": {
         "KEYS": ["stash"],
         "CHILD_KEYS": {
-            "ADD_STASH": ["add", "in"]
+            "ADD_STASH": ["add", "in"],
+            "REMOVE_STASH": ["remove"],
         }
     },
     "PATCH": {
