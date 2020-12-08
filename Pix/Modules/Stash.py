@@ -82,9 +82,8 @@ def stash_selection():
     if len(stashes_selected) == 0:
         return m.log("error-empty")
 
-    print("stashes_selected", stashes_selected)
-    # stash_id = stash_selected[0]
-    # run(["git", "stash", "pop", stash_id])
+    for stash_id in stashes_selected:
+        run(["git", "stash", "apply", "stash@{" + stash_id + "}"])
     # m.log("stash-back-success", {"pm_stash": stash_selected})
 
 
