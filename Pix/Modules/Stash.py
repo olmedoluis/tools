@@ -48,7 +48,8 @@ def get_stashes_list(messages):
         stash = stash_with_spaces.lstrip()
 
         id_start_index = stash.find("{") + 1
-        stash_id = stash[id_start_index : id_start_index + 1]
+        id_end_index = stash.find("}")
+        stash_id = stash[id_start_index:id_end_index]
 
         branch_start_index = stash.find("On") + 3
         branch_end_index = stash.find(" ", branch_start_index) - 1
