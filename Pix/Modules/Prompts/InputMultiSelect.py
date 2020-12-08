@@ -67,8 +67,9 @@ def multi_select(
             print(error_message)
             exit()
 
-    selected_options = multi_select_control.get_options_selected()
-    selected_options_string = ", ".join(selected_options)
+    options_values, options_display = multi_select_control.get_options_selected()
+    selected_options_string = ", ".join(options_display)
+
     final_title = final_title if final_title != "" else title
 
     input_console.setConsoleLine(0, 1, f"{final_title} {selected_options_string}")
@@ -77,7 +78,7 @@ def multi_select(
     input_console.deleteLastLines(4)
     input_console.finish()
 
-    return selected_options
+    return options_values
 
 
 class _MultiSelectControl:
@@ -99,11 +100,17 @@ class _MultiSelectControl:
         self.filtersControl = FiltersControl(self._COLORS)
 
     def get_options_selected(self):
-        output = []
-        for index in self._options_selected:
-            output.append(self._options_raw[index])
+        options_selected_values = []
+        options_selected_display = []
 
-        return output
+        for selected_option_id in self._options_selected:
+            for option in self._options_raw:
+                if option["id"] == selected_option_id:
+                    options_selected_values.append(option["value"])
+                    options_selected_display.append(option["display_name"])
+                    break
+
+        return options_selected_values, options_selected_display
 
     def get_display_option(self, offset=0):
         option = self.get_option(offset)
@@ -124,24 +131,35 @@ class _MultiSelectControl:
 
     def get_option(self, offset=0):
         return (
-            self._options_filtered[self.get_index_in_range(self._option_index + offset)]
+            self._options_filtered[
+                self.get_index_in_range(self._option_index + offset)
+            ]["display_name"]
             if self._options_size
             else "None"
         )
 
+    def _get_option_id_from_index(self, index):
+        return self._options_filtered[index]["id"]
+
     def add_index_to_selected_options(self):
         if not self.get_is_option_selected():
-            self._options_selected.append(self.get_index_in_range(self._option_index))
+            index = self.get_index_in_range(self._option_index)
+
+            self._options_selected.append(self._get_option_id_from_index(index))
 
     def remove_index_to_selected_options(self):
         if self.get_is_option_selected():
-            self._options_selected.remove(self.get_index_in_range(self._option_index))
+            index = self.get_index_in_range(self._option_index)
+
+            self._options_selected.remove(self._get_option_id_from_index(index))
 
     def get_is_option_selected(self, index=None):
         if index == None:
             index = self.get_index_in_range(self._option_index)
 
-        return index in self._options_selected
+        option_id = self._get_option_id_from_index(index)
+
+        return option_id in self._options_selected
 
     def toggle_filtering_mode(self):
         self.filtersControl.toggle_filtering_mode()
@@ -155,7 +173,7 @@ class _MultiSelectControl:
         new_filter_options = []
 
         for option in self._options_raw:
-            if new_value in option:
+            if new_value in option["display_name"]:
                 new_filter_options.append(option)
 
         self._options_size = len(new_filter_options)

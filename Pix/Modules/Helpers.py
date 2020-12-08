@@ -12,6 +12,10 @@ def _errorRunValidator(error):
 
     if error.find("not a git repository") != -1:
         m.log("error-not_git_repository")
+
+    if error.find("files would be overwritten by merge") != -1:
+        m.log("error-conflicting_files_by_merge")
+
     else:
         m.log("error-unknown")
 
@@ -60,6 +64,17 @@ def check_pix_shortcut(keyword, outsideKeys, outsideAliases):
             return entityId
 
     return False
+
+
+def parse_selection_options(options):
+    parsed_options = []
+    index_id = 0
+
+    for option in options:
+        parsed_options.append({"value": option, "display_name": option, "id": index_id})
+        index_id += 1
+
+    return parsed_options
 
 
 class MessageControl:
