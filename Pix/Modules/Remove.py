@@ -43,7 +43,7 @@ def remove(
 
         file_paths = answers
 
-    run(["git", "reset"] + file_paths)
+    run(["git", "reset", "--"] + file_paths)
     if show_logs:
         m.log("remove-success")
         m.logMany(
@@ -51,7 +51,7 @@ def remove(
             param_name="pm_file",
             contents=files_shown + file_paths,
         )
-    
+
     return file_paths
 
 
