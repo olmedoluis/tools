@@ -58,14 +58,12 @@ def stash_selection():
         branch = stash[branch_start_index:branch_end_index]
 
         name = stash[branch_end_index + 2 :]
-        display_name = (
-            m.get_message(
-                "stash-list_item",
-                {
-                    "pm_stashname": name,
-                    "pm_stashbranch": branch,
-                },
-            ),
+        display_name = m.get_message(
+            "stash-list_item",
+            {
+                "pm_stashname": name,
+                "pm_stashbranch": branch,
+            },
         )
 
         stash_list.append(
@@ -73,7 +71,7 @@ def stash_selection():
         )
 
     print()
-    stash_selected = multi_select(
+    stashes_selected = multi_select(
         title=m.get_message("branch-selection-title"),
         options=stash_list,
         error_message=m.get_message("operation-cancel"),
@@ -81,12 +79,13 @@ def stash_selection():
         icons=INPUT_ICONS,
     )
 
-    if stash_selected == "":
+    if len(stashes_selected) == 0:
         return m.log("error-empty")
 
-    stash_id = stash_selected[0]
-    run(["git", "stash", "pop", stash_id])
-    m.log("stash-back-success", {"pm_stash": stash_selected})
+    print("stashes_selected", stashes_selected)
+    # stash_id = stash_selected[0]
+    # run(["git", "stash", "pop", stash_id])
+    # m.log("stash-back-success", {"pm_stash": stash_selected})
 
 
 def router(argument_manager, sub_route):
