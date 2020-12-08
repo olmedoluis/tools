@@ -62,7 +62,7 @@ def check_pix_shortcut(keyword, outsideKeys, outsideAliases):
     return False
 
 
-def parse_for_select_options(options):
+def parse_selection_options(options):
     parsed_options = []
     index_id = 0
 

@@ -42,7 +42,7 @@ def reset(
     files_shown=[],
 ):
     from .Prompts import multi_select
-    from .Helpers import parse_for_select_options, MessageControl
+    from .Helpers import parse_selection_options, MessageControl
     from .Status import get_status, search_in_status, get_status_paths
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
@@ -68,7 +68,7 @@ def reset(
             title=m.get_message("reset-title"),
             final_title=m.get_message("file-selection-finaltitle"),
             error_message=m.get_message("error-files_selected_not_found"),
-            options=parse_for_select_options(file_paths),
+            options=parse_selection_options(file_paths),
             colors=INPUT_THEME["RESET_SELECTION"],
             icons=INPUT_ICONS,
         )
