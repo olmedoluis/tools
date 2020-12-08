@@ -27,7 +27,7 @@ ALIASES = {
         "ALIASES": ["b"],
         "CHILD_ALIASES": {
             "ADD_STASH": ["a", "i"],
-            "DELETE_STASH": ["rm"]
+            "REMOVE_STASH": ["rm"]
         }
     },
     "PATCH": {

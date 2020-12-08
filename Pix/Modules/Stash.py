@@ -32,7 +32,7 @@ def add_to_stash():
     m.log("stash-in-success")
 
 
-def delete_stash():
+def remove_stash():
     print("deleting branches...")
 
 
