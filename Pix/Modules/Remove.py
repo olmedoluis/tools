@@ -6,7 +6,7 @@ def remove(
     files_shown=[],
 ):
     from .Prompts import multi_select
-    from .Helpers import run, MessageControl
+    from .Helpers import run, parse_for_select_options, MessageControl
     from .Status import get_status, search_in_status, get_status_paths
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
@@ -33,7 +33,7 @@ def remove(
             title=m.get_message("remove-title"),
             final_title=m.get_message("file-selection-finaltitle"),
             error_message=m.get_message("error-files_selected_not_found"),
-            options=file_paths,
+            options=parse_for_select_options(file_paths),
             colors=INPUT_THEME["REMOVE_SELECTION"],
             icons=INPUT_ICONS,
         )
