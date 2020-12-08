@@ -31,6 +31,7 @@ MESSAGES = {
     "error-branch-branches_not_found": "\n {th_error}{ic_error} Error: Branches not found\n",
     "error-branch-match_not_found": "\n {th_error}{ic_error} Error: Branch match not found for {th_keyword}{pm_branch}\n",
     "error-commit-files_not_found": "\n {th_error}{ic_error} Error: Files to commit not found\n",
+    "error-conflicting_files_by_merge": "\n {th_error}{ic_error} Error: You need to commit the files before\n",
     "error-empty": "\n {th_error}{ic_error} Error: Empty field entered\n",
     "error-file_match_not_found": "\n {th_error}{ic_error} Error: File match not found\n",
     "error-files_selected_not_found": "\n {th_error}{ic_error} Error: Files selected not found\n",

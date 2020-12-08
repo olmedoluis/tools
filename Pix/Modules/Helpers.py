@@ -12,6 +12,10 @@ def _errorRunValidator(error):
 
     if error.find("not a git repository") != -1:
         m.log("error-not_git_repository")
+
+    if error.find("files would be overwritten by merge") != -1:
+        m.log("error-conflicting_files_by_merge")
+
     else:
         m.log("error-unknown")
 
