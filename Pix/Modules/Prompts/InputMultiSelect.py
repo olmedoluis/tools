@@ -67,8 +67,9 @@ def multi_select(
             print(error_message)
             exit()
 
-    selected_options = multi_select_control.get_options_selected()
-    selected_options_string = ", ".join(selected_options)
+    options_values, options_display = multi_select_control.get_options_selected()
+    selected_options_string = ", ".join(options_display)
+
     final_title = final_title if final_title != "" else title
 
     input_console.setConsoleLine(0, 1, f"{final_title} {selected_options_string}")
@@ -77,7 +78,7 @@ def multi_select(
     input_console.deleteLastLines(4)
     input_console.finish()
 
-    return selected_options
+    return options_values
 
 
 class _MultiSelectControl:
@@ -99,11 +100,17 @@ class _MultiSelectControl:
         self.filtersControl = FiltersControl(self._COLORS)
 
     def get_options_selected(self):
-        output = []
-        for index in self._options_selected:
-            output.append(self._options_raw[index])
+        options_selected_values = []
+        options_selected_display = []
 
-        return output
+        for selected_option_id in self._options_selected:
+            for option in self._options_raw:
+                if option["id"] == selected_option_id:
+                    options_selected_values.append(option["value"])
+                    options_selected_display.append(option["display_name"])
+                    break
+
+        return options_selected_values, options_selected_display
 
     def get_display_option(self, offset=0):
         option = self.get_option(offset)
