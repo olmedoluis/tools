@@ -32,6 +32,44 @@ def add_to_stash():
     m.log("stash-in-success")
 
 
+def get_stashes_list(messages):
+    from .Helpers import run
+
+    stashes_raw = run(["git", "stash", "list"])
+    stashes_spaced = stashes_raw.rstrip().split("\n")
+
+    if stashes_spaced[0] == "":
+        return messages.log("error-stash-stashes_not_found")
+
+    stash_list = []
+
+    for stash_with_spaces in stashes_spaced:
+        stash = stash_with_spaces.lstrip()
+
+        id_start_index = stash.find("{") + 1
+        stash_id = stash[id_start_index : id_start_index + 1]
+
+        branch_start_index = stash.find("On") + 3
+        branch_end_index = stash.find(" ", branch_start_index) - 1
+        branch = stash[branch_start_index:branch_end_index]
+
+        name = stash[branch_end_index + 2 :]
+
+        display_name = messages.get_message(
+            "stash-list_item",
+            {
+                "pm_stashname": name,
+                "pm_stashbranch": branch,
+            },
+        )
+
+        stash_list.append(
+            {"value": stash_id, "id": stash_id, "display_name": display_name}
+        )
+
+    return stash_list
+
+
 def remove_stash():
     print("deleting branches...")
 
@@ -44,35 +82,7 @@ def stash_selection():
 
     m = MessageControl()
 
-    stashes_raw = run(["git", "stash", "list"])
-    stashes_spaced = stashes_raw.rstrip().split("\n")
-
-    if stashes_spaced[0] == "":
-        return m.log("error-stash-stashes_not_found")
-
-    stash_list = []
-    for stash_with_spaces in stashes_spaced:
-        stash = stash_with_spaces.lstrip()
-
-        id_start_index = stash.find("{") + 1
-        stash_id = stash[id_start_index : id_start_index + 1]
-
-        branch_start_index = stash.find("On") + 3
-        branch_end_index = stash.find(" ", branch_start_index) - 1
-        branch = stash[branch_start_index:branch_end_index]
-
-        name = stash[branch_end_index + 2 :]
-        display_name = m.get_message(
-            "stash-list_item",
-            {
-                "pm_stashname": name,
-                "pm_stashbranch": branch,
-            },
-        )
-
-        stash_list.append(
-            {"value": stash_id, "id": stash_id, "display_name": display_name}
-        )
+    stash_list = get_stashes_list(messages=m)
 
     print()
     stashes_selected = multi_select(
@@ -101,6 +111,8 @@ def stash_selection():
 
         m.log("stash-name", {"pm_name": stash_display_name})
         show_success_title = False
+
+    print()
 
 
 def router(argument_manager, sub_route):
