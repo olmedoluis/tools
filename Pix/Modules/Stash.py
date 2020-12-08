@@ -39,7 +39,8 @@ def get_stashes_list(messages):
     stashes_spaced = stashes_raw.rstrip().split("\n")
 
     if stashes_spaced[0] == "":
-        return messages.log("error-stash-stashes_not_found")
+        messages.log("error-stash-stashes_not_found")
+        exit()
 
     stash_list = []
 
@@ -71,7 +72,46 @@ def get_stashes_list(messages):
 
 
 def remove_stash():
-    print("deleting branches...")
+    from .Prompts import multi_select
+    from .Helpers import run, MessageControl
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
+
+    m = MessageControl()
+
+    stash_list = get_stashes_list(messages=m)
+
+    print()
+    stashes_selected = multi_select(
+        title=m.get_message("branch-selection-title"),
+        options=stash_list,
+        error_message=m.get_message("operation-cancel"),
+        colors=INPUT_THEME["STASH_SELECTION"],
+        icons=INPUT_ICONS,
+    )
+
+    if len(stashes_selected) == 0:
+        return m.log("error-empty")
+
+    show_success_title = True
+    stash_id_offset = 0
+    for stash_id in stashes_selected:
+        stash_id_formatted = str(int(stash_id) - stash_id_offset)
+        run(["git", "stash", "drop", "stash@{" + stash_id_formatted + "}"])
+
+        stash_display_name = ""
+        for stash in stash_list:
+            if stash["id"] == stash_id:
+                stash_display_name = stash["display_name"]
+                break
+
+        if show_success_title:
+            m.log("stash-remove-success")
+
+        m.log("stash-name", {"pm_name": stash_display_name})
+        show_success_title = False
+        stash_id_offset += 1
+
+    print()
 
 
 def stash_selection():
