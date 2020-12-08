@@ -32,6 +32,10 @@ def add_to_stash():
     m.log("stash-in-success")
 
 
+def delete_stash():
+    print("deleting branches...")
+
+
 def stash_selection():
     from .Prompts import multi_select
     from .Helpers import run, MessageControl
@@ -102,5 +106,7 @@ def stash_selection():
 def router(argument_manager, sub_route):
     if sub_route == "ADD_STASH":
         add_to_stash()
+    if sub_route == "DELETE_STASH":
+        delete_stash()
     if sub_route == "DEFAULT":
         stash_selection()
