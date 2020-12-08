@@ -83,8 +83,21 @@ def stash_selection():
         return m.log("error-empty")
 
     for stash_id in stashes_selected:
-        run(["git", "stash", "apply", "stash@{" + stash_id + "}"])
-    # m.log("stash-back-success", {"pm_stash": stash_selected})
+        # run(["git", "stash", "apply", "stash@{" + stash_id + "}"])
+        pass
+
+    stashes_selected_from_list = []
+    for stash_id in stashes_selected:
+        for stash in stash_list:
+            if stash["id"] == stash_id:
+                stashes_selected_from_list.append(stash["display_name"])
+
+    m.log("stash-back-success")
+    m.logMany(
+        message_id="stash-name",
+        param_name="pm_name",
+        contents=stashes_selected_from_list,
+    )
 
 
 def router(argument_manager, sub_route):
