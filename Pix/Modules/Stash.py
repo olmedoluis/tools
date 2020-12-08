@@ -106,7 +106,7 @@ def stash_selection():
 def router(argument_manager, sub_route):
     if sub_route == "ADD_STASH":
         add_to_stash()
-    if sub_route == "DELETE_STASH":
-        delete_stash()
+    if sub_route == "REMOVE_STASH":
+        remove_stash()
     if sub_route == "DEFAULT":
         stash_selection()
