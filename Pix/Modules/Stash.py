@@ -90,20 +90,13 @@ def stash_selection():
         for stash in stash_list:
             if stash["id"] == stash_id:
                 stash_display_name = stash["display_name"]
+                break
 
         if show_success_title:
             m.log("stash-back-success")
 
         m.log("stash-name", {"pm_name": stash_display_name})
         show_success_title = False
-
-    stashes_selected_from_list = []
-
-    m.logMany(
-        message_id="stash-name",
-        param_name="pm_name",
-        contents=stashes_selected_from_list,
-    )
 
 
 def router(argument_manager, sub_route):
