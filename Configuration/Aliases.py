@@ -20,7 +20,8 @@ ALIASES = {
     "BRANCH": {
         "ALIASES": ["br"],
         "CHILD_ALIASES": {
-            "BRANCH_CREATION": ["cr"]
+            "BRANCH_CREATION": ["cr"],
+            "BRANCH_RENAME": ["rn"]
         }
     },
     "STASH": {
