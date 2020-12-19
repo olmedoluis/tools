@@ -176,12 +176,12 @@ def rename_branch():
     m = MessageControl()
     current_branch = run(["git", "branch", "--show-current"])[:-1]
 
-    print("renaming current branch", current_branch)
-
     new_branch_name = text(
         title=m.get_message("stash-in-title"),
         error_message=m.get_message("operation-cancel"),
         colors=INPUT_THEME["BRANCH_RENAME"],
+        content=current_branch,
+        place_holder="Write here the new name for the current branch",
     )
 
     if new_branch_name == "":
