@@ -176,12 +176,13 @@ def rename_branch():
     m = MessageControl()
     current_branch = run(["git", "branch", "--show-current"])[:-1]
 
+    print()
     new_branch_name = text(
-        title=m.get_message("stash-in-title"),
+        title=m.get_message("branch-rename-title"),
         error_message=m.get_message("operation-cancel"),
+        place_holder=m.get_message("branch-rename-place_holder"),
         colors=INPUT_THEME["BRANCH_RENAME"],
         content=current_branch,
-        place_holder="Write here the new name for the current branch",
     )
 
     if new_branch_name == "":
@@ -189,7 +190,10 @@ def rename_branch():
 
     run(["git", "branch", "-m", new_branch_name])
 
-    print("new_branch_name", new_branch_name)
+    m.log(
+        "branch-rename-success",
+        {"pm_old_name": current_branch, "pm_new_name": new_branch_name},
+    )
 
 
 def router(argument_manager, sub_route):
