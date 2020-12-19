@@ -62,6 +62,8 @@ def get_stashes_list(messages):
             {"value": stash_id, "id": stash_id, "display_name": display_name}
         )
 
+    stash_list.sort(key=lambda stash: stash["display_name"])
+
     return stash_list
 
 
