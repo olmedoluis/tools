@@ -34,7 +34,7 @@ def get_branch_creator():
     return branch_creator, current_branch
 
 
-def branchSelection(branch_search):
+def branch_switch(branch_search):
     from .Prompts import select
     from .Helpers import run, MessageControl
 
@@ -168,8 +168,38 @@ def branchCreation():
         m.log("branch-creation-switch_cancel")
 
 
+def rename_branch():
+    from .Helpers import run, MessageControl
+    from .Prompts import text
+    from Configuration.Theme import INPUT_THEME, INPUT_ICONS
+
+    m = MessageControl()
+    current_branch = run(["git", "branch", "--show-current"])[:-1]
+
+    print()
+    new_branch_name = text(
+        title=m.get_message("branch-rename-title"),
+        error_message=m.get_message("operation-cancel"),
+        place_holder=m.get_message("branch-rename-place_holder"),
+        colors=INPUT_THEME["BRANCH_RENAME"],
+        content=current_branch,
+    )
+
+    if new_branch_name == "":
+        return print("branch name not valid")
+
+    run(["git", "branch", "-m", new_branch_name])
+
+    m.log(
+        "branch-rename-success",
+        {"pm_old_name": current_branch, "pm_new_name": new_branch_name},
+    )
+
+
 def router(argument_manager, sub_route):
     if sub_route == "BRANCH_CREATION":
         branchCreation()
+    elif sub_route == "BRANCH_RENAME":
+        rename_branch()
     elif sub_route == "DEFAULT":
-        branchSelection(argument_manager.get_next_route())
+        branch_switch(argument_manager.get_next_route())

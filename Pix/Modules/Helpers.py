@@ -16,6 +16,12 @@ def _errorRunValidator(error):
     elif error.find("files would be overwritten by merge") != -1:
         m.log("error-conflicting_files_by_merge")
 
+    elif error.find("already exists") != -1:
+        m.log("error-branch-rename-repeated_name")
+
+    elif error.find("is not a valid branch name") != -1:
+        m.log("error-branch-rename-not_valid")
+
     else:
         m.log("error-unknown")
 

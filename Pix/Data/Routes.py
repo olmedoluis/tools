@@ -20,7 +20,8 @@ KEYS = {
     "BRANCH": {
         "KEYS": ["branch"],
         "CHILD_KEYS": {
-            "BRANCH_CREATION": ["create", "new"]
+            "BRANCH_CREATION": ["create", "new"],
+            "BRANCH_RENAME": ["rename"]
         }
     },
     "STASH": {
