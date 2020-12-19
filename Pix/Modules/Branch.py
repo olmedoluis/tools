@@ -184,6 +184,11 @@ def rename_branch():
         colors=INPUT_THEME["BRANCH_RENAME"],
     )
 
+    if new_branch_name == "":
+        return print("branch name not valid")
+
+    run(["git", "branch", "-m", new_branch_name])
+
     print("new_branch_name", new_branch_name)
 
 
