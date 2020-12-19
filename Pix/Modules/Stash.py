@@ -86,7 +86,7 @@ def remove_stash():
     if len(stashes_selected) == 0:
         return m.log("error-empty")
 
-    stashes_selected.sort(key=lambda stash: stash, reverse=True)
+    stashes_selected.sort(reverse=True)
 
     m.log("stash-remove-success")
     for stash_id in stashes_selected:
