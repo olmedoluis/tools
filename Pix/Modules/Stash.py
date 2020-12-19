@@ -25,7 +25,7 @@ def add_to_stash():
     m.log("stash-in-success")
 
 
-def get_stashes_list(messages):
+def get_stashes_list(messages, should_sort_list=False):
     from .Helpers import run
 
     stashes_raw = run(["git", "stash", "list"])
@@ -61,6 +61,9 @@ def get_stashes_list(messages):
         stash_list.append(
             {"value": stash_id, "id": stash_id, "display_name": display_name}
         )
+
+    if should_sort_list:
+        stash_list.sort(key=lambda stash: stash["display_name"])
 
     return stash_list
 
@@ -111,7 +114,7 @@ def stash_selection():
 
     m = MessageControl()
 
-    stash_list = get_stashes_list(messages=m)
+    stash_list = get_stashes_list(messages=m, should_sort_list=True)
 
     print()
     stashes_selected = multi_select(
