@@ -203,14 +203,16 @@ class PatchControl:
 
         if len(lineText):
             firstChar = lineText[0]
-            icon = self._ICONS[firstChar] if firstChar in self._ICONS else firstChar
+            icon = (
+                self._ICONS[firstChar] if firstChar in self._ICONS else f"  {firstChar}"
+            )
             color = (
                 self._COLORS[self._KEYWORDS[firstChar]]
                 if firstChar in self._KEYWORDS
                 else self._COLORS["slight"]
             )
 
-            lineText = color + icon + lineText[1:] + self._RESET
+            lineText = color + f"{icon} " + lineText[1:] + self._RESET
 
         return f"{self._state_color}❚{self._RESET}   {lineText}"
 
@@ -258,3 +260,6 @@ class PatchControl:
             output = f"{output}{color}|{self._RESET}{extra}"
 
         return output
+
+
+print()
