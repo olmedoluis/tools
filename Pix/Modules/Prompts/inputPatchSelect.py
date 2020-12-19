@@ -260,6 +260,3 @@ class PatchControl:
             output = f"{output}{color}|{self._RESET}{extra}"
 
         return output
-
-
-print()
