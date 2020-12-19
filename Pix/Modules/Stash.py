@@ -86,11 +86,11 @@ def remove_stash():
     if len(stashes_selected) == 0:
         return m.log("error-empty")
 
-    show_success_title = True
-    stash_id_offset = 0
+    stashes_selected.sort(key=lambda stash: stash, reverse=True)
+
+    m.log("stash-remove-success")
     for stash_id in stashes_selected:
-        stash_id_formatted = str(int(stash_id) - stash_id_offset)
-        run(["git", "stash", "drop", "stash@{" + stash_id_formatted + "}"])
+        run(["git", "stash", "drop", "stash@{" + stash_id + "}"])
 
         stash_display_name = ""
         for stash in stash_list:
@@ -98,12 +98,7 @@ def remove_stash():
                 stash_display_name = stash["display_name"]
                 break
 
-        if show_success_title:
-            m.log("stash-remove-success")
-
         m.log("stash-name", {"pm_name": stash_display_name})
-        show_success_title = False
-        stash_id_offset += 1
 
     print()
 
