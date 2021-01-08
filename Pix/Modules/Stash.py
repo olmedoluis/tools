@@ -145,11 +145,15 @@ def stash_selection():
 
     print()
 
+def pop_stash():
+    print("poping stashes")
 
 def router(argument_manager, sub_route):
     if sub_route == "ADD_STASH":
         add_to_stash()
     if sub_route == "REMOVE_STASH":
         remove_stash()
+    if sub_route == "POP_STASH":
+        pop_stash()
     if sub_route == "DEFAULT":
         stash_selection()
