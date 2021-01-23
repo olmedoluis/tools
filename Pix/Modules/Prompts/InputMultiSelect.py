@@ -74,10 +74,12 @@ def multi_select(
     input_console.setConsoleLine(0, 1, final_title)
     input_console.refresh()
 
-    input_console.deleteLastLines(3)
+    input_console.deleteLastLines(4)
     input_console.finish()
 
     font_color = multi_select_control._COLORS["font"]
+
+    print()
     for option in options_display:
         print(f"\t{font_color}{option}")
 
