@@ -68,15 +68,18 @@ def multi_select(
             exit()
 
     options_values, options_display = multi_select_control.get_options_selected()
-    selected_options_string = ", ".join(options_display)
 
     final_title = final_title if final_title != "" else title
 
-    input_console.setConsoleLine(0, 1, f"{final_title} {selected_options_string}")
+    input_console.setConsoleLine(0, 1, final_title)
     input_console.refresh()
 
-    input_console.deleteLastLines(4)
+    input_console.deleteLastLines(3)
     input_console.finish()
+
+    font_color = multi_select_control._COLORS["font"]
+    for option in options_display:
+        print(f"\t{font_color}{option}")
 
     return options_values
 
