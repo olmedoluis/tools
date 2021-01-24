@@ -80,14 +80,14 @@ def get_stashes_list(messages, stash_search):
     return stash_list
 
 
-def remove_stash():
+def remove_stash(stash_search=[]):
     from .Prompts import multi_select
     from .Helpers import run, MessageControl
     from Configuration.Theme import INPUT_THEME, INPUT_ICONS
 
     m = MessageControl()
 
-    stash_list = get_stashes_list(messages=m)
+    stash_list = get_stashes_list(messages=m, stash_search=stash_search)
 
     print()
     stashes_selected = multi_select(
@@ -164,7 +164,7 @@ def router(argument_manager, sub_route):
     if sub_route == "ADD_STASH":
         add_to_stash()
     if sub_route == "REMOVE_STASH":
-        remove_stash()
+        remove_stash(stash_search=argument_manager.left_keys[1:])
     if sub_route == "POP_STASH":
         stash_selection(
             stash_search=argument_manager.left_keys[1:], should_delete_selected=True
