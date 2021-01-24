@@ -29,6 +29,7 @@ KEYS = {
         "CHILD_KEYS": {
             "ADD_STASH": ["add", "in"],
             "REMOVE_STASH": ["remove"],
+            "POP_STASH": ["pop", "out"],
         }
     },
     "PATCH": {

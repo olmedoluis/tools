@@ -105,7 +105,7 @@ def remove_stash():
     print()
 
 
-def stash_selection():
+def stash_selection(should_delete_selected=False):
     from .Prompts import multi_select
     from .Helpers import run, MessageControl
     from .Status import get_status
@@ -128,8 +128,9 @@ def stash_selection():
         return m.log("error-empty")
 
     show_success_title = True
+    stash_action = "pop" if should_delete_selected else "apply"
     for stash_id in stashes_selected:
-        run(["git", "stash", "apply", "stash@{" + stash_id + "}"])
+        run(["git", "stash", stash_action, "stash@{" + stash_id + "}"])
 
         stash_display_name = ""
         for stash in stash_list:
@@ -145,11 +146,12 @@ def stash_selection():
 
     print()
 
-
 def router(argument_manager, sub_route):
     if sub_route == "ADD_STASH":
         add_to_stash()
     if sub_route == "REMOVE_STASH":
         remove_stash()
+    if sub_route == "POP_STASH":
+        stash_selection(should_delete_selected=True)
     if sub_route == "DEFAULT":
         stash_selection()
