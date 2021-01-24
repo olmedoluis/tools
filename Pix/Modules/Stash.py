@@ -25,17 +25,25 @@ def add_to_stash():
     m.log("stash-in-success")
 
 
-def get_stashes_list(messages):
+def does_list_includes(text_list, text):
+    for item in text_list:
+        if item in text:
+            return True
+
+    return False
+
+
+def get_stashes_list(messages, stash_search):
     from .Helpers import run
 
     stashes_raw = run(["git", "stash", "list"])
     stashes_spaced = stashes_raw.rstrip().split("\n")
 
     if stashes_spaced[0] == "":
-        messages.log("error-stash-stashes_not_found")
-        exit()
+        stashes_spaced = []
 
     stash_list = []
+    should_add_all = not len(stash_search)
 
     for stash_with_spaces in stashes_spaced:
         stash = stash_with_spaces.lstrip()
@@ -58,9 +66,14 @@ def get_stashes_list(messages):
             },
         )
 
-        stash_list.append(
-            {"value": stash_id, "id": stash_id, "display_name": display_name}
-        )
+        if should_add_all or does_list_includes(stash_search, f"{name}{branch}"):
+            stash_list.append(
+                {"value": stash_id, "id": stash_id, "display_name": display_name}
+            )
+
+    if not len(stash_list):
+        messages.log("error-stash-stashes_not_found")
+        exit()
 
     stash_list.sort(key=lambda stash: stash["display_name"])
 
@@ -105,7 +118,7 @@ def remove_stash():
     print()
 
 
-def stash_selection(should_delete_selected=False):
+def stash_selection(stash_search=[], should_delete_selected=False):
     from .Prompts import multi_select
     from .Helpers import run, MessageControl
     from .Status import get_status
@@ -113,7 +126,7 @@ def stash_selection(should_delete_selected=False):
 
     m = MessageControl()
 
-    stash_list = get_stashes_list(messages=m)
+    stash_list = get_stashes_list(messages=m, stash_search=stash_search)
 
     print()
     stashes_selected = multi_select(
@@ -146,12 +159,15 @@ def stash_selection(should_delete_selected=False):
 
     print()
 
+
 def router(argument_manager, sub_route):
     if sub_route == "ADD_STASH":
         add_to_stash()
     if sub_route == "REMOVE_STASH":
         remove_stash()
     if sub_route == "POP_STASH":
-        stash_selection(should_delete_selected=True)
+        stash_selection(
+            stash_search=argument_manager.left_keys[1:], should_delete_selected=True
+        )
     if sub_route == "DEFAULT":
-        stash_selection()
+        stash_selection(stash_search=argument_manager.left_keys)
