@@ -8,10 +8,6 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/olmedoluis/pix">
-    <img src="images/jpt-icon.png" alt="Logo" width="80" height="80">
-  </a>
-
   <p align="center">
     Pix is a Command Line Interpreter app to use as git in a simple way
     <br />
