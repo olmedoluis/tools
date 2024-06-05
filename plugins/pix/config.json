@@ -1,0 +1,36 @@
+{
+  "name": "pix",
+  "version": "0.0.0",
+  "commit_rules": {
+    "pattern": "{type}: {description}",
+    "form": {
+      "type": {
+        "title": "Please choose a commit type ([number]):",
+        "error": "Commit type is not expected",
+        "type": "selection",
+        "values": ["feat", "refactor", "style", "fix"]
+      },
+      "description": {
+        "title": "Please write the Description (string):",
+        "error": "Commit Description is not expected",
+        "type": "text"
+      }
+    }
+  },
+  "branch_rules": {
+    "pattern": "{type}/{description}",
+    "form": {
+      "type": {
+        "title": "Please choose a branch type ([number]):",
+        "error": "Branch type is not expected",
+        "type": "selection",
+        "values": ["feature", "bugfix", "hotfix"]
+      },
+      "description": {
+        "title": "Please write the Description ([string]):",
+        "error": "Branch Description is not expected",
+        "type": "text"
+      }
+    }
+  }
+}
