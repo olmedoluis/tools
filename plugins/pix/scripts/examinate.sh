@@ -10,7 +10,6 @@ function examinate() {
         return 1
     fi
     
-    
     local file_paths=()
     local start_lines=()
     local code_blocks=()
