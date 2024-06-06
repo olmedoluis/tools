@@ -33,7 +33,7 @@ function add-plugin() {
         mkdir -p "$TOOLS_PATH/plugins/$plugin_name"
     fi
     
-    cp "$PLUGIN_DIRECTORY" "$TOOLS_PATH/plugins"
+    cp -r "$PLUGIN_DIRECTORY" "$TOOLS_PATH/plugins"
     mv "$TOOLS_PATH/plugins/$PLUGIN_BASENAME" "$TOOLS_PATH/plugins/$plugin_name"
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin is ready.${END_COLOR}"
     
