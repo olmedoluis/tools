@@ -46,7 +46,6 @@ function add-plugin() {
     for plugin in "${plugins[@]}"; do
         echo -e "source \"\$TOOLS_PATH/plugins/$plugin/main.sh\"" >> "$TOOLS_PATH/plugins/init.sh"
     done
-    echo -e "" >> "$TOOLS_PATH/plugins/init.sh"
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin initialization is ready.${END_COLOR}"
     
     
