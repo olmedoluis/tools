@@ -47,7 +47,7 @@ function pix() {
         examinate)
             source "$PLUGIN_PATH/scripts/examinate.sh"
             
-            examinate ${@:2}
+            examinate $PLUGIN_TEMP_PATH ${@:2}
         ;;
         
         commit)

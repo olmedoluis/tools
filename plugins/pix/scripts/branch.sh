@@ -2,8 +2,8 @@
 
 function branch() {
     source "$TOOLS_PATH/constants/colors.sh"
-    source $TOOLS_PATH/lib/user-interaction.sh
-    source $TOOLS_PATH/lib/json.sh
+    source "$TOOLS_PATH/lib/user-interaction.sh"
+    source "$TOOLS_PATH/lib/json.sh"
     
     if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         echo -e "${RED}${IERR}Not a git repository.${END_COLOR}"
