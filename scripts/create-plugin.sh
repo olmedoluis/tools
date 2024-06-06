@@ -23,6 +23,7 @@ function create-plugin() {
     
     local plugin_json_path="$plugin_dir/config.json"
     local plugin_main_path="$plugin_dir/main.sh"
+    local plugin_script_test_path="$plugin_scripts_dir/test.sh"
     
     mkdir -p "$plugin_dir"
     mkdir -p "$plugin_scripts_dir"
@@ -36,4 +37,6 @@ function create-plugin() {
     sed -i "s/{plugin_dir}/$plugin_dir/g" "$plugin_main_path"
     sed -i "s/{plugin_temp_dir}/$plugin_temp_dir/g" "$plugin_main_path"
     sed -i "s/{plugin_json_path}/$plugin_json_path/g" "$plugin_main_path"
+    
+    cp "$TOOLS_PATH/templates/script_test.template" "$plugin_script_test_path"
 }
