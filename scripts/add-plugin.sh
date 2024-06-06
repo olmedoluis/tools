@@ -76,9 +76,6 @@ function add-plugin() {
     done
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin paths are ready.${END_COLOR}"
     
-    if ! [[ -d "$TOOLS_PATH/temp" ]]; then
-        mkdir "$TOOLS_PATH/temp"
-    fi
     if ! [[ -d "$TOOLS_PATH/temp/$plugin_name" ]]; then
         mkdir "$TOOLS_PATH/temp/$plugin_name"
     fi
