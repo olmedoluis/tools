@@ -76,6 +76,9 @@ function add-plugin() {
     if ! [[ -d "$TOOLS_PATH/temp" ]]; then
         mkdir "$TOOLS_PATH/temp"
     fi
+    if ! [[ -d "$TOOLS_PATH/temp/$plugin_name" ]]; then
+        mkdir "$TOOLS_PATH/temp/$plugin_name"
+    fi
     
     if [[ -d "$TOOLS_PATH/plugins/$plugin_name/temp" ]]; then
         rm -rf "$TOOLS_PATH/plugins/$plugin_name/temp"

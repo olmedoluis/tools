@@ -35,11 +35,7 @@ function tools-init () {
     
     local built_in_plugins=$( ls -l "$TOOLS_PATH/plugins" | grep "^d" | awk '{print $NF}')
     for plugin_name in "${built_in_plugins[@]}"; do
-        if ! [[ -d "$TOOLS_PATH/temp/$plugin_name" ]]; then
-            mkdir "$TOOLS_PATH/temp/$plugin_name"
-        fi
-        
-        cp -r "$TOOLS_PATH/plugins/$plugin_name" "$TOOLS_PATH/temp/tools"
+        mv "$TOOLS_PATH/plugins/$plugin_name" "$TOOLS_PATH/temp/tools"
         tools add-plugin "$TOOLS_PATH/temp/tools/$plugin_name"
         rm -rf "$TOOLS_PATH/temp/tools/$plugin_name"
     done
