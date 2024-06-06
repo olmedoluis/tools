@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function add-plugin() {
     source $TOOLS_PATH/constants/colors.sh
     source $TOOLS_PATH/lib/string.sh
@@ -39,10 +41,11 @@ function add-plugin() {
     local plugins=($(ls -l "$TOOLS_PATH/plugins" | grep '^d' | awk '{print $NF}'))
     
     > "$TOOLS_PATH/plugins/init.sh"
+    echo -e "#!/bin/bash" >> "$TOOLS_PATH/plugins/init.sh"
+    echo -e "" >> "$TOOLS_PATH/plugins/init.sh"
     for plugin in "${plugins[@]}"; do
         echo -e "source \"\$TOOLS_PATH/plugins/$plugin/main.sh\"" >> "$TOOLS_PATH/plugins/init.sh"
     done
-    echo -e "" >> "$TOOLS_PATH/plugins/init.sh"
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin initialization is ready.${END_COLOR}"
     
     
@@ -73,6 +76,9 @@ function add-plugin() {
     done
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin paths are ready.${END_COLOR}"
     
+    if ! [[ -d "$TOOLS_PATH/temp/$plugin_name" ]]; then
+        mkdir "$TOOLS_PATH/temp/$plugin_name"
+    fi
     
     if [[ -d "$TOOLS_PATH/plugins/$plugin_name/temp" ]]; then
         rm -rf "$TOOLS_PATH/plugins/$plugin_name/temp"
@@ -81,6 +87,7 @@ function add-plugin() {
     if [[ -d "$TOOLS_PATH/temp/$plugin_name" ]]; then
         rm -rf "$TOOLS_PATH/temp/$plugin_name"
     fi
+    
     mkdir "$TOOLS_PATH/temp/$plugin_name"
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin temp folder is ready.${END_COLOR}"
     
