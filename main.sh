@@ -12,6 +12,12 @@ function tools() {
             add-plugin ${@:2}
         ;;
         
+        create-plugin)
+            source $TOOLS_PATH/scripts/create-plugin.sh
+            
+            create-plugin ${@:2}
+        ;;
+        
         *)
             source $TOOLS_PATH/constants/colors.sh
             
