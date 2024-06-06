@@ -29,10 +29,19 @@ function tools-init () {
     if ! [[ -d "$TOOLS_PATH/temp" ]]; then
         mkdir "$TOOLS_PATH/temp"
     fi
+    if ! [[ -d "$TOOLS_PATH/temp/tools" ]]; then
+        mkdir "$TOOLS_PATH/temp/tools"
+    fi
     
     local built_in_plugins=$( ls -l "$TOOLS_PATH/plugins" | grep "^d" | awk '{print $NF}')
     for plugin_name in "${built_in_plugins[@]}"; do
-        tools add-plugin "$TOOLS_PATH/plugins/$plugin_name"
+        if ! [[ -d "$TOOLS_PATH/temp/$plugin_name" ]]; then
+            mkdir "$TOOLS_PATH/temp/$plugin_name"
+        fi
+        
+        cp -r "$TOOLS_PATH/plugins/$plugin_name" "$TOOLS_PATH/temp/tools"
+        tools add-plugin "$TOOLS_PATH/temp/tools/$plugin_name"
+        rm -rf "$TOOLS_PATH/temp/tools/$plugin_name"
     done
     
     source "$BASH_PROFILE"
