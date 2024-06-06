@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function tools-init () {
-    local BASH_PROFILE="$HOME/.bash_profile"
+    local BASHRC="$HOME/.bashrc"
     
     local INSTALL_SCRIPT_PATH=$(readlink -f "$0")
     local TOOLS_PATH=$(dirname "$INSTALL_SCRIPT_PATH")
@@ -11,19 +11,19 @@ function tools-init () {
     echo -e "${IINFO}Setting up path variables."
     local line_to_add="source \"$TOOLS_PATH/main.sh\""
     
-    if ! grep -q "TOOLS VARIABLES" "$BASH_PROFILE"; then
-        echo -e "" >> "$BASH_PROFILE"
-        echo -e "# [TOOLS VARIABLES]" >> "$BASH_PROFILE"
-        echo -e "TOOLS_PATH=\"$TOOLS_PATH\"" >> "$BASH_PROFILE"
-        echo -e "source \"$TOOLS_PATH/main.sh\"" >> "$BASH_PROFILE"
-        echo -e "# [TOOLS VARIABLES]" >> "$BASH_PROFILE"
+    if ! grep -q "TOOLS VARIABLES" "$BASHRC"; then
+        echo -e "" >> "$BASHRC"
+        echo -e "# [TOOLS VARIABLES]" >> "$BASHRC"
+        echo -e "TOOLS_PATH=\"$TOOLS_PATH\"" >> "$BASHRC"
+        echo -e "source \"$TOOLS_PATH/main.sh\"" >> "$BASHRC"
+        echo -e "# [TOOLS VARIABLES]" >> "$BASHRC"
         
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}Tools variables added.${END_COLOR}"
     else
         echo -e "${TAB}${ISTAR}${YELLOW}${IWARN}Tools variables already exist.${END_COLOR}"I
     fi
     
-    source "$BASH_PROFILE"
+    source "$BASHRC"
     
     
     if ! [[ -d "$TOOLS_PATH/temp" ]]; then
@@ -40,7 +40,7 @@ function tools-init () {
         rm -rf "$TOOLS_PATH/temp/tools/$plugin_name"
     done
     
-    source "$BASH_PROFILE"
+    source "$BASHRC"
     
     return 0
 }

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function add-plugin() {
     source $TOOLS_PATH/constants/colors.sh
     source $TOOLS_PATH/lib/string.sh

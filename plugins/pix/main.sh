@@ -1,5 +1,6 @@
+#!/bin/bash
+
 function pix() {
-    
     local PLUGIN_PATH="$TOOLS_PATH/plugins/pix"
     local PLUGIN_TEMP_PATH="$TOOLS_PATH/temp/pix"
     local PLUGIN_CONFIG_PATH=$PLUGIN_PATH/config.json
