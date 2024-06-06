@@ -29,23 +29,22 @@ function create-plugin() {
     local slash="/"
     local normal_slash="\/"
     
+    echo -e "${TAB}${IDOT}${IINFO}Creating folders."
     mkdir -p "$plugin_dir"
     mkdir -p "$plugin_scripts_dir"
     mkdir -p "$plugin_temp_dir"
-    echo -e "${TAB}${IDOT}${GREEN}${IOK}Folders are ready.${END_COLOR}"
     
+    echo -e "${TAB}${IDOT}${IINFO}Copying templates."
     cat "$TOOLS_PATH/templates/config_json.template" > "$plugin_json_path"
     cat "$TOOLS_PATH/templates/main_sh.template" > "$plugin_main_path"
     cat "$TOOLS_PATH/templates/script_test.template" > "$plugin_script_test_path"
-    echo -e "${TAB}${IDOT}${GREEN}${IOK}Templates are copy-pasted.${END_COLOR}"
     
+    echo -e "${TAB}${IDOT}${IINFO}Completing templates."
     sed -i "s/{plugin_name}/$(replace "$plugin_name" $slash  $normal_slash)/g" "$plugin_json_path"
     sed -i "s/{plugin_name}/$(replace "$plugin_name" $slash  $normal_slash)/g" "$plugin_main_path"
     sed -i "s/{plugin_dir}/$(replace "$plugin_dir" $slash  $normal_slash)/g" "$plugin_main_path"
     sed -i "s/{plugin_temp_dir}/$(replace "$plugin_temp_dir" $slash  $normal_slash)/g" "$plugin_main_path"
     sed -i "s/{plugin_json_path}/$(replace "$plugin_json_path" $slash  $normal_slash)/g" "$plugin_main_path"
-    echo -e "${TAB}${IDOT}${GREEN}${IOK}Templates are completed.${END_COLOR}"
     
     echo -e "${TAB}${ISTAR}${GREEN}${IOK}Plugin created.${END_COLOR}"
-    
 }
