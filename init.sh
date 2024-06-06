@@ -37,8 +37,8 @@ function tools-init () {
     for plugin_name in "${built_in_plugins[@]}"; do
         mv "$TOOLS_PATH/plugins/$plugin_name" "$TOOLS_PATH/temp/tools"
         tools add-plugin "$TOOLS_PATH/temp/tools/$plugin_name"
-        rm -rf "$TOOLS_PATH/temp/tools/$plugin_name"
     done
+    rm -rf "$TOOLS_PATH/temp/tools/*"
     
     source "$BASHRC"
     
