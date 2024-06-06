@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function {plugin_name}() {
+    local PLUGIN_PATH="{plugin_dir}"
+    local PLUGIN_TEMP_PATH="{plugin_temp_dir}"
+    local PLUGIN_CONFIG_PATH={plugin_json_path}
+    
+    local sub_command=$1
+    
+    case $sub_command in
+        test)
+            source "$PLUGIN_PATH/scripts/test.sh"
+            
+            test ${@:2}
+        ;;
+        
+        *)
+            source "$TOOLS_PATH/constants/colors.sh"
+            
+            echo -e "${RED}${IERR}Unknown route.${END_COLOR}"
+        ;;
+    esac
+}
