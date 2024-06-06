@@ -3,7 +3,7 @@
 function {plugin_name}() {
     local PLUGIN_PATH="{plugin_dir}"
     local PLUGIN_TEMP_PATH="{plugin_temp_dir}"
-    local PLUGIN_CONFIG_PATH={plugin_json_path}
+    local PLUGIN_CONFIG_PATH="{plugin_json_path}"
     
     local sub_command=$1
     

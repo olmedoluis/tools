@@ -1,6 +1,7 @@
 function create-plugin() {
     source "$TOOLS_PATH/constants/colors.sh"
     source "$TOOLS_PATH/lib/array.sh"
+    source "$TOOLS_PATH/lib/string.sh"
     
     local plugin_names_taken=$(ls -l "$TOOLS_PATH/plugins" | grep "^d" | awk '{print $NF}')
     local plugin_name=""
@@ -25,18 +26,21 @@ function create-plugin() {
     local plugin_main_path="$plugin_dir/main.sh"
     local plugin_script_test_path="$plugin_scripts_dir/test.sh"
     
+    local slash="/"
+    local normal_slash="\/"
+    
     mkdir -p "$plugin_dir"
     mkdir -p "$plugin_scripts_dir"
     mkdir -p "$plugin_temp_dir"
     
-    cp "$TOOLS_PATH/templates/config_json.template" "$plugin_json_path"
-    sed -i "s/{plugin_name}/$plugin_name/g" "$plugin_json_path"
+    cat "$TOOLS_PATH/templates/config_json.template" > "$plugin_json_path"
+    sed -i "s/{plugin_name}/$(replace "$plugin_name" $slash  $normal_slash)/g" "$plugin_json_path"
     
-    cp "$TOOLS_PATH/templates/main_sh.template" "$plugin_main_path"
-    sed -i "s/{plugin_name}/$plugin_name/g" "$plugin_main_path"
-    sed -i "s/{plugin_dir}/$plugin_dir/g" "$plugin_main_path"
-    sed -i "s/{plugin_temp_dir}/$plugin_temp_dir/g" "$plugin_main_path"
-    sed -i "s/{plugin_json_path}/$plugin_json_path/g" "$plugin_main_path"
+    cat "$TOOLS_PATH/templates/main_sh.template" > "$plugin_main_path"
+    sed -i "s/{plugin_name}/$(replace "$plugin_name" $slash  $normal_slash)/g" "$plugin_main_path"
+    sed -i "s/{plugin_dir}/$(replace "$plugin_dir" $slash  $normal_slash)/g" "$plugin_main_path"
+    sed -i "s/{plugin_temp_dir}/$(replace "$plugin_temp_dir" $slash  $normal_slash)/g" "$plugin_main_path"
+    sed -i "s/{plugin_json_path}/$(replace "$plugin_json_path" $slash  $normal_slash)/g" "$plugin_main_path"
     
-    cp "$TOOLS_PATH/templates/script_test.template" "$plugin_script_test_path"
+    cat "$TOOLS_PATH/templates/script_test.template" > "$plugin_script_test_path"
 }
