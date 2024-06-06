@@ -41,6 +41,8 @@ function add-plugin() {
     local plugins=($(ls -l "$TOOLS_PATH/plugins" | grep '^d' | awk '{print $NF}'))
     
     > "$TOOLS_PATH/plugins/init.sh"
+    echo -e "#!/bin/bash" >> "$TOOLS_PATH/plugins/init.sh"
+    echo -e "" >> "$TOOLS_PATH/plugins/init.sh"
     for plugin in "${plugins[@]}"; do
         echo -e "source \"\$TOOLS_PATH/plugins/$plugin/main.sh\"" >> "$TOOLS_PATH/plugins/init.sh"
     done

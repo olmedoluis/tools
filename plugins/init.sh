@@ -1,2 +1,3 @@
-source "$TOOLS_PATH/plugins/pix/main.sh"
+#!/bin/bash
 
+source "$TOOLS_PATH/plugins/pix/main.sh"
