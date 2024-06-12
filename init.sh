@@ -21,7 +21,7 @@ function tools-init () {
         local identation="$(get_indentation $line)"
         
         sed -i "${old_tools_path_line}s#.*#TOOLS_PATH=\"$TOOLS_PATH\"#" "$BASHRC"
-        echo -e "${TAB}${IDOT}${YELLOW}${IWARN}Tools path is updated.${END_COLOR}"
+        echo -e "${TAB}${IDOT}${GREEN}${IOK}Tools path is updated.${END_COLOR}"
     fi
     
     if [[ -n $old_main_source_line ]]; then
@@ -29,7 +29,7 @@ function tools-init () {
         local identation="$(get_indentation $line)"
         
         sed -i "${old_main_source_line}s#.*#source \"$TOOLS_PATH\/main.sh\"#" "$BASHRC"
-        echo -e "${TAB}${IDOT}${YELLOW}${IWARN}Main Tools source is updated.${END_COLOR}"
+        echo -e "${TAB}${IDOT}${GREEN}${IOK}Main Tools source is updated.${END_COLOR}"
     fi
     
     if ! grep -q "TOOLS VARIABLES" "$BASHRC"; then
