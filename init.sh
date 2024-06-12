@@ -52,10 +52,14 @@ function tools-init () {
     if ! [[ -d "$TOOLS_PATH/temp/tools" ]]; then
         mkdir "$TOOLS_PATH/temp/tools"
     fi
+    rm -rf "$TOOLS_PATH/temp/tools/*"
     
     local built_in_plugins=$(ls -l "$TOOLS_PATH/plugins" | grep "^d" | awk '{print $NF}')
     for plugin_name in "${built_in_plugins[@]}"; do
+        rm -rf "$TOOLS_PATH/temp/tools/$plugin_name"
+        rm -rf "$TOOLS_PATH/temp/$plugin_name"
         mv "$TOOLS_PATH/plugins/$plugin_name" "$TOOLS_PATH/temp/tools"
+        
         tools add-plugin "$TOOLS_PATH/temp/tools/$plugin_name"
     done
     
