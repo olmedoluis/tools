@@ -4,6 +4,7 @@ function add-plugin() {
     source $TOOLS_PATH/constants/colors.sh
     source $TOOLS_PATH/lib/string.sh
     source $TOOLS_PATH/lib/json.sh
+    source $TOOLS_PATH/lib/file.sh
     
     local PLUGIN_DIRECTORY="$1"
     local PLUGIN_BASENAME="$(basename "$PLUGIN_DIRECTORY")"
@@ -49,32 +50,26 @@ function add-plugin() {
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin initialization is ready.${END_COLOR}"
     
     
-    local line=""
-    local plugin_main_file=()
-    while IFS= read -r line; do
-        if [[ $line =~ "local PLUGIN_PATH" ]]; then
-            local indentation="$(get_indentation "$line")"
-            local formatted_line="$indentation""local PLUGIN_PATH=\"\$TOOLS_PATH/plugins/$plugin_name\""
-            
-            plugin_main_file+=("$formatted_line")
-            continue
-        fi
-        if [[ $line =~ "local PLUGIN_TEMP_PATH" ]]; then
-            local indentation="$(get_indentation "$line")"
-            local formatted_line="$indentation""local PLUGIN_TEMP_PATH=\"\$TOOLS_PATH/temp/$plugin_name\""
-            
-            plugin_main_file+=("$formatted_line")
-            continue
-        fi
-        
-        plugin_main_file+=("$line")
-    done < <(cat "$TOOLS_PATH/plugins/$plugin_name/main.sh")
+    local old_plugin_path_line="$(get_file_number "$TOOLS_PATH/plugins/$plugin_name/main.sh" '^.*local PLUGIN_PATH=.*$')"
+    local old_plugin_temp_path_line="$(get_file_number "$TOOLS_PATH/plugins/$plugin_name/main.sh" '^.*local PLUGIN_TEMP_PATH=.*$')"
+    local slash="/"
+    local normal_slash="\/"
     
-    > "$TOOLS_PATH/plugins/$plugin_name/main.sh"
-    for line in "${plugin_main_file[@]}"; do
-        echo -e "$line" >> "$TOOLS_PATH/plugins/$plugin_name/main.sh"
-    done
-    echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin paths are ready.${END_COLOR}"
+    if [[ -n $old_plugin_path_line ]]; then
+        local line=$(sed -n "${old_plugin_path_line}p" "$TOOLS_PATH/plugins/$plugin_name/main.sh")
+        local indentation="$(get_indentation "$line")"
+        
+        sed -i "${old_plugin_path_line}s#.*#${indentation}local PLUGIN_PATH=\"\$TOOLS_PATH/plugins/$plugin_name\"#" "$TOOLS_PATH/plugins/$plugin_name/main.sh"
+        echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin path is updated.${END_COLOR}"
+    fi
+    if [[ -n $old_plugin_temp_path_line ]]; then
+        local line=$(sed -n "${old_plugin_temp_path_line}p" "$TOOLS_PATH/plugins/$plugin_name/main.sh")
+        local indentation="$(get_indentation "$line")"
+        
+        sed -i "${old_plugin_temp_path_line}s#.*#${indentation}local PLUGIN_TEMP_PATH=\"\$TOOLS_PATH/temp/$plugin_name\"#" "$TOOLS_PATH/plugins/$plugin_name/main.sh"
+        echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin temp path is updated.${END_COLOR}"
+    fi
+    
     
     if ! [[ -d "$TOOLS_PATH/temp/$plugin_name" ]]; then
         mkdir "$TOOLS_PATH/temp/$plugin_name"
