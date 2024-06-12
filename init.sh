@@ -61,6 +61,8 @@ function tools-init () {
         mv "$TOOLS_PATH/plugins/$plugin_name" "$TOOLS_PATH/temp/tools"
         
         tools add-plugin "$TOOLS_PATH/temp/tools/$plugin_name"
+        
+        rm -rf "$TOOLS_PATH/temp/tools/$plugin_name"
     done
     
     source "$BASHRC"
