@@ -14,10 +14,10 @@ function pix() {
             status ${@:2}
         ;;
         
-        stash)
-            source "$PLUGIN_PATH/scripts/stash.sh"
+        stash-in)
+            source "$PLUGIN_PATH/scripts/stash-in.sh"
             
-            stash ${@:2}
+            stash-in ${@:2}
         ;;
         
         stage)
