@@ -86,7 +86,5 @@ function add-plugin() {
     mkdir "$TOOLS_PATH/temp/$plugin_name"
     echo -e "${TAB}${IDOT}${GREEN}${IOK}Plugin temp folder is ready.${END_COLOR}"
     
-    find "$TOOLS_PATH/plugins" -type f -exec dos2unix {} \;
-    
     source "$BASH_PROFILE"
 }
