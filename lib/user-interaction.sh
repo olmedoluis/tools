@@ -11,6 +11,7 @@ show_options() {
 create_form() {
     source "$TOOLS_PATH/constants/colors.sh"
     source "$TOOLS_PATH/lib/json.sh"
+    source "$TOOLS_PATH/lib/string.sh"
     
     local CONFIG_FILE="$1"
     local form="$2"
@@ -48,12 +49,13 @@ create_form() {
                 return 1
             fi
             
-            field_value="$(echo "$field_value" | tr ' ' '-')"
+            
+            field_value="$(replace "$field_value" " "  "-")"
         fi
         
         echo -e "${TAB}⋆ ${IVAL}${YELLOW}${field_value}${END_COLOR}"
         
-        local_pattern="${local_pattern//\{$field_name\}/$field_value}"
+        local_pattern="$(replace "$local_pattern" "\{$field_name\}"  "$field_value")"
     done
     
     eval "pattern=\"$local_pattern\""
