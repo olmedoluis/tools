@@ -29,16 +29,15 @@ function branch() {
     echo -e "${IINFO}Please validate the output before creation."
     echo -e "${TAB}${ISTAR}${MAGENTA}${IBRCH}${pattern}${END_COLOR}"
     
-    local validation=""
-    echo -e "${TAB}${ISTAR}${BLUE}${IINFO}Should it be created? (y/n)${END_COLOR}"
-    read -p $"${TAB}${IDOT}${IINP}" validation
+    if git rev-parse --verify "$pattern" >/dev/null 2>&1; then
+        echo -e "${TAB}${ISTAR}${RED}${IERR}Branch name already exists.${END_COLOR}"
+        return 1
+    fi
     
-    if [[ "${validation}" =~ "y" ]]; then
-        git checkout -b $pattern > /dev/null 2>&1
-        
+    if git checkout -b $pattern > /dev/null 2>&1; then
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch creation completed.${END_COLOR}"
     else
-        echo -e "${TAB}${ISTAR}${RED}${IERR}Branch creation canceled.${END_COLOR}"
+        echo -e "${TAB}${ISTAR}${RED}${IERR}Branch creation failed.${END_COLOR}"
         return 1
     fi
 }
