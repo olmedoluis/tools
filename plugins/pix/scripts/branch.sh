@@ -20,7 +20,7 @@ function branch() {
     local pattern=$(read_json_array $CONFIG_FILE branch_rules.pattern)
     
     echo -e "${IINFO}Creating form."
-    create_form "$CONFIG_FILE" "commit_rules.form" "pattern"
+    create_form "$CONFIG_FILE" "branch_rules.form" "$pattern"
     echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch template completed.${END_COLOR}"
     
     echo -e "${IINFO}Please validate the output before creation."

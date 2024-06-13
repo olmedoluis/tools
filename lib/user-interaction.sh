@@ -16,17 +16,19 @@ create_form() {
     local form="$2"
     local local_pattern="$3"
     
+    local field_names=($(read_json_object_keys "$CONFIG_FILE" $form))
+    
     for field_name in "${field_names[@]}"; do
-        local title=$(read_json_value $CONFIG_FILE commit_rules.form.$field_name.title)
-        local error=$(read_json_value $CONFIG_FILE commit_rules.form.$field_name.error)
-        local type=$(read_json_value $CONFIG_FILE commit_rules.form.$field_name.type)
+        local title=$(read_json_value $CONFIG_FILE $form.$field_name.title)
+        local error=$(read_json_value $CONFIG_FILE $form.$field_name.error)
+        local type=$(read_json_value $CONFIG_FILE $form.$field_name.type)
         local possible_values=()
         local field_value
         
         echo -e "${TAB}⋆ ${BLUE}${IINFO}${title}${END_COLOR}"
         
         if [ "$type" == "selection" ]; then
-            possible_values=($(read_json_object_values $CONFIG_FILE commit_rules.form.${field_name}.values))
+            possible_values=($(read_json_object_values $CONFIG_FILE $form.${field_name}.values))
             
             show_options ${possible_values[@]}
         fi
