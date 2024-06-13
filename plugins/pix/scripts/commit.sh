@@ -27,6 +27,6 @@ function commit() {
     echo -e "${IINFO}Saving changes."
     echo -e "${TAB}⋆ ${MAGENTA}${IBRCH}${pattern}${END_COLOR}"
     
-    # git commit -no-verify -m "$pattern" > /dev/null 2>&1
+    git commit -no-verify -m "$pattern" > /dev/null 2>&1
     echo -e "${TAB}⋆ ${GREEN}${IOK}Staged changes commited.${END_COLOR}"
 }
