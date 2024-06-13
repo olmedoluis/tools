@@ -10,23 +10,26 @@ function branch() {
         return 1
     fi
     
-    local CONFIG_FILE=$1
+    local CONFIG_FILE="$1"
+    local pattern="$2"
     
     if [ ! -f "$CONFIG_FILE" ]; then
         echo -e "${RED}${IERR}Config JSON file not found.${END_COLOR}"
         return 1
     fi
     
-    local pattern=$(read_json_array $CONFIG_FILE branch_rules.pattern)
-    
-    echo -e "${IINFO}Creating form."
-    create_form "$CONFIG_FILE" "branch_rules.form" "$pattern"
-    echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch template completed.${END_COLOR}"
+    if [[ -z $pattern ]]; then
+        echo -e "${IINFO}Creating form."
+        pattern=$(read_json_array $CONFIG_FILE branch_rules.pattern)
+        
+        create_form "$CONFIG_FILE" "branch_rules.form" "$pattern"
+        echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch template completed.${END_COLOR}"
+    fi
     
     echo -e "${IINFO}Please validate the output before creation."
     echo -e "${TAB}${ISTAR}${MAGENTA}${IBRCH}${pattern}${END_COLOR}"
     
-    local validation="n"
+    local validation=""
     echo -e "${TAB}${ISTAR}${BLUE}${IINFO}Should it be created? (y/n)${END_COLOR}"
     read -p $"${TAB}${IDOT}${IINP}" validation
     
