@@ -22,7 +22,7 @@ function commit() {
     
     echo -e "${IINFO}Creating form."
     create_form "$CONFIG_FILE" "commit_rules.form" "$pattern"
-    echo -e "${TAB}⋆ ${GREEN}${IOK}Commit template completed.${END_COLOR}"
+    echo -e "${TAB}⋆ ${GREEN}${IOK}Commit form completed.${END_COLOR}"
     
     echo -e "${IINFO}Saving changes."
     echo -e "${TAB}⋆ ${MAGENTA}${IBRCH}${pattern}${END_COLOR}"

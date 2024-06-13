@@ -23,11 +23,12 @@ function branch() {
         pattern=$(read_json_array $CONFIG_FILE branch_rules.pattern)
         
         create_form "$CONFIG_FILE" "branch_rules.form" "$pattern"
-        echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch template completed.${END_COLOR}"
+        echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch form completed.${END_COLOR}"
+    else
+        echo -e "${IINFO}Creating given branch."
     fi
     
-    echo -e "${IINFO}Please validate the output before creation."
-    echo -e "${TAB}${ISTAR}${MAGENTA}${IBRCH}${pattern}${END_COLOR}"
+    echo -e "${TAB}${IDOT}${MAGENTA}${IBRCH}${pattern}${END_COLOR}"
     
     if git rev-parse --verify "$pattern" >/dev/null 2>&1; then
         echo -e "${TAB}${ISTAR}${RED}${IERR}Branch name already exists.${END_COLOR}"
