@@ -24,6 +24,7 @@ function branch() {
         
         create_form "$CONFIG_FILE" "branch_rules.form" "$pattern"
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch form completed.${END_COLOR}"
+        echo -e "${IINFO}Creating branch."
     else
         echo -e "${IINFO}Creating given branch."
     fi

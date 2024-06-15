@@ -26,7 +26,7 @@ create_form() {
         local possible_values=()
         local field_value
         
-        echo -e "${TAB}⋆ ${BLUE}${IINFO}${title}${END_COLOR}"
+        echo -e "${TAB}${ISTAR}${BLUE}${IINFO}${title}${END_COLOR}"
         
         if [ "$type" == "selection" ]; then
             possible_values=($(read_json_object_values $CONFIG_FILE $form.${field_name}.values))
@@ -53,7 +53,7 @@ create_form() {
             field_value="$(replace "$field_value" " "  "-")"
         fi
         
-        echo -e "${TAB}⋆ ${IVAL}${YELLOW}${field_value}${END_COLOR}"
+        echo -e "${TAB}${IDOT}${YELLOW}${IVAL}${field_value}${END_COLOR}"
         
         local_pattern="$(replace "$local_pattern" "\{$field_name\}"  "$field_value")"
     done
