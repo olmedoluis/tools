@@ -11,7 +11,7 @@ function commit() {
     fi
     
     local CONFIG_FILE=$1
-    local pattern="$2"
+    local pattern="${@:2}"
     
     if [ ! -f "$CONFIG_FILE" ]; then
         echo -e "${RED}${IERR}Config JSON file not found.${END_COLOR}"
@@ -32,6 +32,43 @@ function commit() {
     
     echo -e "${TAB}${IDOT}${CYAN}${ICMT}${pattern}${END_COLOR}"
     
+    local commit_info="$(git commit --no-verify -m "$pattern")"
+    
+    local files_change_count="$(echo "$commit_info" | grep -oP '\d+(?= files changed)')"
+    local insertions="$(echo "$commit_info" | grep -oP '\d+(?= insertions\(\+\))')"
+    local deletions="$(echo "$commit_info" | grep -oP '\d+(?= deletions\(\-\))')"
+    local files_created_count="$(echo "$commit_info" | grep -c 'create mode')"
+    local files_renamed="$(echo "$commit_info" | grep -c 'rename ')"
+    
+    files_change_count=${files_change_count:-"0"}
+    insertions=${insertions:-"0"}
+    deletions=${deletions:-"0"}
+    files_created_count=${files_created_count:-"0"}
+    files_renamed=${files_renamed:-"0"}
+    
+    local additions=""
+    local file_counters=""
+    
+    if [[ $insertions != "" ]]; then
+        additions+="${GREEN}${IPLUS}${insertions}${END_COLOR} "
+    fi
+    if [[ $deletions != "" ]]; then
+        additions+="${RED}${ILESS}${deletions}${END_COLOR} "
+    fi
+    if [[ $files_change_count != "" ]]; then
+        file_counters+="${YELLOW}${IMOD}${files_change_count}${END_COLOR} "
+    fi
+    if [[ $files_created_count != "" ]]; then
+        file_counters+="${CYAN}${IUNTR}${files_created_count}${END_COLOR} "
+    fi
+    if [[ $files_renamed != "" ]]; then
+        file_counters+="${BLUE}${IRNM}${files_renamed}${END_COLOR} "
+    fi
+    echo -e "${TAB}${IDOT}${file_counters}${END_COLOR}"
+    echo -e "${TAB}${IDOT}${additions}${END_COLOR}"
+    echo -e "${TAB}${ISTAR}${GREEN}${IOK}Changes commited.${END_COLOR}"
+    
+    return
     if git commit --no-verify -m "$pattern" > /dev/null 2>&1; then
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}Changes commited.${END_COLOR}"
     else
