@@ -20,7 +20,7 @@ function branch() {
     
     if [[ -z $pattern ]]; then
         echo -e "${IINFO}Creating form."
-        pattern=$(read_json_array $CONFIG_FILE branch_rules.pattern)
+        pattern=$(read_json_array "$CONFIG_FILE" "branch_rules.pattern")
         
         create_form "$CONFIG_FILE" "branch_rules.form" "$pattern"
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}Branch form completed.${END_COLOR}"
