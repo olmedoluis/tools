@@ -29,6 +29,7 @@ local IPLUS="+ "
 local IREAD="⚙ "
 local ISTAR="⋆ "
 local IUNTR="♦ "
+local IRNM="♟ "
 local IVAL="$ "
 local IWARN="⚠ "
 
