@@ -67,12 +67,4 @@ function commit() {
     echo -e "${TAB}${IDOT}${file_counters}${END_COLOR}"
     echo -e "${TAB}${IDOT}${additions}${END_COLOR}"
     echo -e "${TAB}${ISTAR}${GREEN}${IOK}Changes commited.${END_COLOR}"
-    
-    return
-    if git commit --no-verify -m "$pattern" > /dev/null 2>&1; then
-        echo -e "${TAB}${ISTAR}${GREEN}${IOK}Changes commited.${END_COLOR}"
-    else
-        echo -e "${TAB}${ISTAR}${RED}${IERR}Commit failed.${END_COLOR}"
-        return 1
-    fi
 }
