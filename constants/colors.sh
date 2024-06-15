@@ -11,6 +11,7 @@ local DTAB=$"$TAB$TAB"
 
 # Icons temporarily disabled because of tertminal font.
 local IADD="+ "
+local ICMT="⊸ "
 local IARRW="↳ "
 local IBRCH="☉ "
 local ICONF="✸ "
@@ -33,6 +34,7 @@ local IWARN="⚠ "
 
 # Icons temporarily disabled because of tertminal font.
 # local IADD=""
+# local ICMT=" "
 # local IARRW="> "
 # local IBRCH=""
 # local ICONF=""
