@@ -30,7 +30,7 @@ function commit() {
         echo -e "${IINFO}Commiting changes."
     fi
     
-    echo -e "${TAB}${IDOT}${CYAN}${ICMT}${pattern}${END_COLOR}"
+    echo -e "${TAB}${ISTAR}${CYAN}${ICMT}${pattern}${END_COLOR}"
     
     local commit_info="$(git commit --no-verify -m "$pattern")"
     
