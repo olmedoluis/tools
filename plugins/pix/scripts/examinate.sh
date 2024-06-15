@@ -222,8 +222,8 @@ function examinate() {
         git apply $PLUGIN_TEMP_PATH/.patch > /dev/null 2>&1
         
         rm $PLUGIN_TEMP_PATH/.patch
-        echo -e "${TAB}${GREEN}${ISTAR}${IOK}${#modified_files[@]} Hunks staged.${END_COLOR}"
+        echo -e "${TAB}${GREEN}${ISTAR}${IOK}${#modified_files[@]} file(s) staged.${END_COLOR}"
     else
-        echo -e "${TAB}${YELLOW}${ISTAR}${IWARN}No Hunks has been staged.${END_COLOR}"
+        echo -e "${TAB}${YELLOW}${ISTAR}${IWARN}No files has been staged.${END_COLOR}"
     fi
 }
