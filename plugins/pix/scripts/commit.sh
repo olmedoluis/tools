@@ -23,7 +23,7 @@ function commit() {
         pattern=$(read_json_array "$CONFIG_FILE" "commit_rules.pattern")
         pattern="${pattern[@]}"
         
-        create_form "$CONFIG_FILE" "branch_rules.form" "$pattern"
+        create_form "$CONFIG_FILE" "commit_rules.form" "$pattern"
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}Commit form completed.${END_COLOR}"
         echo -e "${IINFO}Creating commit."
     else
