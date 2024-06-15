@@ -34,9 +34,9 @@ function commit() {
     
     local commit_info="$(git commit --no-verify -m "$pattern")"
     
-    local files_change_count="$(echo "$commit_info" | grep -oP '\d+(?= files changed)')"
-    local insertions="$(echo "$commit_info" | grep -oP '\d+(?= insertions\(\+\))')"
-    local deletions="$(echo "$commit_info" | grep -oP '\d+(?= deletions\(\-\))')"
+    local files_change_count="$(echo "$commit_info" | grep -oP '\d+(?= files changed)|\d+(?= file changed)')"
+    local insertions="$(echo "$commit_info" | grep -oP '\d+(?= insertions\(\+\))|\d+(?= insertion\(\+\))')"
+    local deletions="$(echo "$commit_info" | grep -oP '\d+(?= deletions\(\-\))|\d+(?= deletion\(\-\))')"
     local files_created_count="$(echo "$commit_info" | grep -c 'create mode')"
     local files_renamed="$(echo "$commit_info" | grep -c 'rename ')"
     
