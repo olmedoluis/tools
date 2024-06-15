@@ -27,12 +27,15 @@ function commit() {
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}Commit form completed.${END_COLOR}"
         echo -e "${IINFO}Creating commit."
     else
-        echo -e "${IINFO}Creating given commit."
+        echo -e "${IINFO}Commiting changes."
     fi
     
-    echo -e "${IINFO}Saving changes."
-    echo -e "${TAB}⋆ ${MAGENTA}${IBRCH}${pattern}${END_COLOR}"
+    echo -e "${TAB}${IDOT}${CYAN}${ICMT}${pattern}${END_COLOR}"
     
-    git commit -no-verify -m "$pattern" > /dev/null 2>&1
-    echo -e "${TAB}⋆ ${GREEN}${IOK}Staged changes commited.${END_COLOR}"
+    if git commit --no-verify -m "$pattern" > /dev/null 2>&1; then
+        echo -e "${TAB}${ISTAR}${GREEN}${IOK}Changes commited.${END_COLOR}"
+    else
+        echo -e "${TAB}${ISTAR}${RED}${IERR}Commit failed.${END_COLOR}"
+        return 1
+    fi
 }
