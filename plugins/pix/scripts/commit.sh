@@ -33,6 +33,7 @@ function commit() {
     echo -e "${TAB}${ISTAR}${CYAN}${ICMT}${pattern}${END_COLOR}"
     
     local commit_info="$(git commit --no-verify -m "$pattern")"
+    commit_info="${commit_info#*$'\n'}"
     
     local files_change_count="$(echo "$commit_info" | grep -oP '\d+(?= files changed)|\d+(?= file changed)')"
     local insertions="$(echo "$commit_info" | grep -oP '\d+(?= insertions\(\+\))|\d+(?= insertion\(\+\))')"
