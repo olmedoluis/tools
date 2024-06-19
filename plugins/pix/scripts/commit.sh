@@ -11,58 +11,61 @@ function commit() {
     fi
     
     local CONFIG_FILE=$1
+    local pattern="${@:2}"
     
     if [ ! -f "$CONFIG_FILE" ]; then
         echo -e "${RED}${IERR}Config JSON file not found.${END_COLOR}"
         return 1
     fi
     
-    local pattern=$(read_json_array $CONFIG_FILE commit_rules.pattern)
-    local field_names=($(read_json_object_keys $CONFIG_FILE commit_rules.form))
+    if [[ -z $pattern ]]; then
+        echo -e "${IINFO}Creating form."
+        pattern=$(read_json_array "$CONFIG_FILE" "commit_rules.pattern")
+        pattern="${pattern[@]}"
+        
+        create_form "$CONFIG_FILE" "commit_rules.form" "$pattern"
+        echo -e "${TAB}${ISTAR}${GREEN}${IOK}Commit form completed.${END_COLOR}"
+        echo -e "${IINFO}Creating commit."
+    else
+        echo -e "${IINFO}Commiting changes."
+    fi
     
-    echo -e "${IINFO}Creating form."
-    for field_name in "${field_names[@]}"; do
-        local title=$(read_json_value $CONFIG_FILE commit_rules.form.$field_name.title)
-        local error=$(read_json_value $CONFIG_FILE commit_rules.form.$field_name.error)
-        local type=$(read_json_value $CONFIG_FILE commit_rules.form.$field_name.type)
-        local possible_values=()
-        local field_value
-        
-        echo -e "${TAB}⋆ ${BLUE}${IINFO}${title}${END_COLOR}"
-        
-        if [ "$type" == "selection" ]; then
-            possible_values=($(read_json_object_values $CONFIG_FILE commit_rules.form.${field_name}.values))
-            
-            show_options ${possible_values[@]}
-        fi
-        
-        read -p $"${TAB}${IDOT}${IINP}" field_value
-        
-        if [ "$type" == "selection" ]; then
-            field_value=${possible_values[((--field_value))]}
-            
-            if ! [[ "${possible_values[@]}" =~ $field_value ]]; then
-                echo -e "${RED}${IERR}$error.${END_COLOR}"
-                return 1
-            fi
-        else
-            if [ -z "$field_value" ]; then
-                echo -e "${RED}${IERR}$error.${END_COLOR}"
-                return 1
-            fi
-            
-            field_value="$(echo "$field_value" | tr ' ' '-')"
-        fi
-        
-        echo -e "${TAB}⋆ ${IVAL}${YELLOW}${field_value}${END_COLOR}"
-        
-        pattern="${pattern//\{$field_name\}/$field_value}"
-    done
-    echo -e "${TAB}⋆ ${GREEN}${IOK}Commit template completed.${END_COLOR}"
+    echo -e "${TAB}${ISTAR}${CYAN}${ICMT}${pattern}${END_COLOR}"
     
-    echo -e "${IINFO}Saving changes."
-    echo -e "${TAB}⋆ ${MAGENTA}${IBRCH}${pattern}${END_COLOR}"
+    local commit_info="$(git commit --no-verify -m "$pattern")"
+    commit_info="${commit_info#*$'\n'}"
     
-    git commit -no-verify -m "$pattern" > /dev/null 2>&1
-    echo -e "${TAB}⋆ ${GREEN}${IOK}Staged changes commited.${END_COLOR}"
+    local files_change_count="$(echo "$commit_info" | grep -oP '\d+(?= files changed)|\d+(?= file changed)')"
+    local insertions="$(echo "$commit_info" | grep -oP '\d+(?= insertions\(\+\))|\d+(?= insertion\(\+\))')"
+    local deletions="$(echo "$commit_info" | grep -oP '\d+(?= deletions\(\-\))|\d+(?= deletion\(\-\))')"
+    local files_created_count="$(echo "$commit_info" | grep -c 'create mode')"
+    local files_renamed="$(echo "$commit_info" | grep -c 'rename ')"
+    
+    files_change_count=${files_change_count:-"0"}
+    insertions=${insertions:-"0"}
+    deletions=${deletions:-"0"}
+    files_created_count=${files_created_count:-"0"}
+    files_renamed=${files_renamed:-"0"}
+    
+    local additions=""
+    local file_counters=""
+    
+    if [[ $insertions != "" ]]; then
+        additions+="${GREEN}${IPLUS}${insertions}${END_COLOR} "
+    fi
+    if [[ $deletions != "" ]]; then
+        additions+="${RED}${ILESS}${deletions}${END_COLOR} "
+    fi
+    if [[ $files_change_count != "" ]]; then
+        file_counters+="${YELLOW}${IMOD}${files_change_count}${END_COLOR} "
+    fi
+    if [[ $files_created_count != "" ]]; then
+        file_counters+="${CYAN}${IUNTR}${files_created_count}${END_COLOR} "
+    fi
+    if [[ $files_renamed != "" ]]; then
+        file_counters+="${BLUE}${IRNM}${files_renamed}${END_COLOR} "
+    fi
+    echo -e "${TAB}${IDOT}${file_counters}${END_COLOR}"
+    echo -e "${TAB}${IDOT}${additions}${END_COLOR}"
+    echo -e "${TAB}${ISTAR}${GREEN}${IOK}Changes commited.${END_COLOR}"
 }

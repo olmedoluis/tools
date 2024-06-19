@@ -27,6 +27,8 @@ function examinate() {
     local is_code="false"
     local last_file_path=""
     while IFS= read -r line; do
+        line="${line//\\/\\\\}"
+        
         if [[ $line =~ ^diff ]]; then
             is_code="false"
             
@@ -124,10 +126,6 @@ function examinate() {
     local ignored_patch=""
     local index=0
     for colored_code_block in "${colored_code_blocks[@]}"; do
-        if [[ $has_quit == "true" ]]; then
-            break
-        fi
-        
         colored_code_block="${colored_code_block%\\n}"
         
         local file_path_raw="${file_paths[index]}"
@@ -138,7 +136,7 @@ function examinate() {
         local file_path=${file_path_raw#*/}
         local start_line=${start_line_raw#-}
         
-        if [[ $rest_of_path_ignored == $file_path ]]; then
+        if [[ $rest_of_path_ignored == $file_path || $has_quit == "true" ]]; then
             ignored_patch+="$metadata_block$code_block"
             ((index++))
             continue
@@ -179,6 +177,7 @@ function examinate() {
                     echo -e "${TAB}${YELLOW}${ISTAR}${IWARN}Rest of hunks in file will be ignored.${END_COLOR}"
                 ;;
                 s)
+                    ignored_patch+="$metadata_block$code_block"
                     has_quit="true"
                     echo -e "${TAB}${GREEN}${ISTAR}${IOK}Selected hunks will be staged.${END_COLOR}"
                     break
@@ -218,12 +217,14 @@ function examinate() {
         local modified_files=($(git diff --name-only))
         git add "${modified_files[@]}" > /dev/null 2>&1
         
-        echo -e "$ignored_patch" > $PLUGIN_TEMP_PATH/.patch
-        git apply $PLUGIN_TEMP_PATH/.patch > /dev/null 2>&1
+        if [ -n "$ignored_patch" ]; then
+            echo -e "$ignored_patch" > $PLUGIN_TEMP_PATH/.patch
+            git apply $PLUGIN_TEMP_PATH/.patch > /dev/null 2>&1
+        fi
         
         rm $PLUGIN_TEMP_PATH/.patch
-        echo -e "${TAB}${GREEN}${ISTAR}${IOK}${#modified_files[@]} Hunks staged.${END_COLOR}"
+        echo -e "${TAB}${GREEN}${ISTAR}${IOK}${#modified_files[@]} file(s) staged.${END_COLOR}"
     else
-        echo -e "${TAB}${YELLOW}${ISTAR}${IWARN}No Hunks has been staged.${END_COLOR}"
+        echo -e "${TAB}${YELLOW}${ISTAR}${IWARN}No files has been staged.${END_COLOR}"
     fi
 }
