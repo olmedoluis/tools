@@ -39,13 +39,13 @@ function unstage() {
         
         for file in "${matches[@]}"; do
             git reset -- $file > /dev/null 2>&1
-            echo -e "${TAB}${IDOT}${CYAN}${ILESS}$file${END_COLOR}."
+            echo -e "${TAB}${IDOT}${CYAN}${IRMV}$file${END_COLOR}."
             
             if some "$file" "${renamed_files[@]}"; then
                 local original_file="${original_renamed_files[renamed_files_index]}"
                 git reset -- $original_file > /dev/null 2>&1
                 (( renamed_files_index++ ))
-                echo -e "${TAB}${IDOT}${CYAN}${ILESS}$original_file${END_COLOR}."
+                echo -e "${TAB}${IDOT}${CYAN}${IRMV}$original_file${END_COLOR}."
             fi
         done
         
@@ -62,13 +62,13 @@ function unstage() {
         
         for file in "${files[@]}"; do
             git reset -- $file > /dev/null 2>&1
-            echo -e "${TAB}${IDOT}${CYAN}${ILESS}$file.${END_COLOR}"
+            echo -e "${TAB}${IDOT}${CYAN}${IRMV}$file.${END_COLOR}"
             
             if some "$file" "${renamed_files[@]}"; then
                 local original_file="${original_renamed_files[renamed_files_index]}"
                 git reset -- $original_file > /dev/null 2>&1
                 (( renamed_files_index++ ))
-                echo -e "${TAB}${IDOT}${CYAN}${ILESS}$original_file${END_COLOR}."
+                echo -e "${TAB}${IDOT}${CYAN}${IRMV}$original_file${END_COLOR}."
             fi
         done
         
@@ -159,13 +159,13 @@ function unstage() {
     
     for file in "${unstaged_files[@]}"; do
         git reset -- $file > /dev/null 2>&1
-        echo -e "${TAB}${IDOT}${CYAN}${ILESS}$file${END_COLOR}."
+        echo -e "${TAB}${IDOT}${CYAN}${IRMV}$file${END_COLOR}."
         
         if some "$file" "${renamed_files[@]}"; then
             local original_file="${original_renamed_files[renamed_files_index]}"
             git reset -- $original_file > /dev/null 2>&1
             (( renamed_files_index++ ))
-            echo -e "${TAB}${IDOT}${CYAN}${ILESS}$original_file${END_COLOR}."
+            echo -e "${TAB}${IDOT}${CYAN}${IRMV}$original_file${END_COLOR}."
         fi
     done
     

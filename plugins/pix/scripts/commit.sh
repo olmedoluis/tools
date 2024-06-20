@@ -54,7 +54,7 @@ function commit() {
         additions+="${GREEN}${IPLUS}${insertions}${END_COLOR} "
     fi
     if [[ $deletions != "" ]]; then
-        additions+="${RED}${ILESS}${deletions}${END_COLOR} "
+        additions+="${RED}${IRMV}${deletions}${END_COLOR} "
     fi
     if [[ $files_change_count != "" ]]; then
         file_counters+="${YELLOW}${IMOD}${files_change_count}${END_COLOR} "
