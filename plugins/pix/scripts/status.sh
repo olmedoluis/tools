@@ -26,11 +26,30 @@ function status() {
     fi
     
     if [[ ${#staged_files} != 0 ]]; then
-        local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
+        if [[ -n $renamed_files ]]; then
+            local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
+            local renamed_files_index=0
+        fi
         
         for file in "${staged_files[@]}"; do
             if some "$file" "${renamed_files[@]}"; then
-                echo -e "${TAB}· ${GREEN}${IRNM}${file}${END_COLOR}"
+                local original_file="${original_renamed_files[renamed_files_index]}"
+                
+                local prefix_length=0
+                for (( i=0; i<${#original_file} && i<${#file}; i++ )); do
+                    if [[ ${original_file:i:1} == ${file:i:1} ]]; then
+                        (( prefix_length++ ))
+                    else
+                        break
+                    fi
+                done
+                
+                local static_file_part="${original_file:0:prefix_length}"
+                local modified_file_part="${file:prefix_length}"
+                
+                echo -e "${TAB}· ${GREEN}${IRNM}${static_file_part}${YELLOW}${modified_file_part}${END_COLOR}"
+                (( renamed_files_index++ ))
+                
                 continue
             fi
             
