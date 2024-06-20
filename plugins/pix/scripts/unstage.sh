@@ -12,6 +12,7 @@ function unstage() {
     fi
     
     local files=($(git diff --cached --name-only))
+    local renamed_files=($(git status -s | grep -oP "^R\s+.+?\s->\s\K.+$"))
     
     local matches=()
     if [[ ${#files} != 0 ]]; then
@@ -30,9 +31,22 @@ function unstage() {
     
     if [[ ${#files[@]} == "${#matches[@]}" || ${#matches[@]} == 1 ]]; then
         echo -e "${IINFO}Unstaging files."
+        
+        if [[ -n $renamed_files ]]; then
+            local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
+            local renamed_files_index=0
+        fi
+        
         for file in "${matches[@]}"; do
             git reset -- $file > /dev/null 2>&1
             echo -e "${TAB}${IDOT}${CYAN}${ILESS}$file${END_COLOR}."
+            
+            if some "$file" "${renamed_files[@]}"; then
+                local original_file="${original_renamed_files[renamed_files_index]}"
+                git reset -- $original_file > /dev/null 2>&1
+                (( renamed_files_index++ ))
+                echo -e "${TAB}${IDOT}${CYAN}${ILESS}$original_file${END_COLOR}."
+            fi
         done
         
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#matches[@]} File(s) unstaged.${END_COLOR}"
@@ -40,9 +54,22 @@ function unstage() {
     fi
     if [[ ${#files[@]} == 1 && "$#" == 0 ]]; then
         echo -e "${IINFO}Unstaging files."
+        
+        if [[ -n $renamed_files ]]; then
+            local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
+            local renamed_files_index=0
+        fi
+        
         for file in "${files[@]}"; do
             git reset -- $file > /dev/null 2>&1
             echo -e "${TAB}${IDOT}${CYAN}${ILESS}$file.${END_COLOR}"
+            
+            if some "$file" "${renamed_files[@]}"; then
+                local original_file="${original_renamed_files[renamed_files_index]}"
+                git reset -- $original_file > /dev/null 2>&1
+                (( renamed_files_index++ ))
+                echo -e "${TAB}${IDOT}${CYAN}${ILESS}$original_file${END_COLOR}."
+            fi
         done
         
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#files[@]} File(s) unstaged.${END_COLOR}"
@@ -124,9 +151,22 @@ function unstage() {
     done
     
     echo -e "${IINFO}Unstaging files."
+    
+    if [[ -n $renamed_files ]]; then
+        local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
+        local renamed_files_index=0
+    fi
+    
     for file in "${unstaged_files[@]}"; do
         git reset -- $file > /dev/null 2>&1
         echo -e "${TAB}${IDOT}${CYAN}${ILESS}$file${END_COLOR}."
+        
+        if some "$file" "${renamed_files[@]}"; then
+            local original_file="${original_renamed_files[renamed_files_index]}"
+            git reset -- $original_file > /dev/null 2>&1
+            (( renamed_files_index++ ))
+            echo -e "${TAB}${IDOT}${CYAN}${ILESS}$original_file${END_COLOR}."
+        fi
     done
     
     echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#unstaged_files[@]} File(s) unstaged.${END_COLOR}"
