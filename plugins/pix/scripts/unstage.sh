@@ -31,7 +31,6 @@ function unstage() {
     
     if [[ ${#files[@]} == "${#matches[@]}" || ${#matches[@]} == 1 ]]; then
         echo -e "${IINFO}Unstaging files."
-        echo -e "${TAB}${IDOT}"
         
         if [[ -n $renamed_files ]]; then
             local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
@@ -50,13 +49,11 @@ function unstage() {
             fi
         done
         
-        echo -e "${TAB}${IDOT}"
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#matches[@]} File(s) unstaged.${END_COLOR}"
         return 0
     fi
     if [[ ${#files[@]} == 1 && "$#" == 0 ]]; then
         echo -e "${IINFO}Unstaging files."
-        echo -e "${TAB}${IDOT}"
         
         if [[ -n $renamed_files ]]; then
             local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
@@ -75,7 +72,6 @@ function unstage() {
             fi
         done
         
-        echo -e "${TAB}${IDOT}"
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#files[@]} File(s) unstaged.${END_COLOR}"
         return 0
     fi
@@ -155,7 +151,6 @@ function unstage() {
     done
     
     echo -e "${IINFO}Unstaging files."
-    echo -e "${TAB}${IDOT}"
     
     if [[ -n $renamed_files ]]; then
         local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
@@ -174,6 +169,5 @@ function unstage() {
         fi
     done
     
-    echo -e "${TAB}${IDOT}"
     echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#unstaged_files[@]} File(s) unstaged.${END_COLOR}"
 }
