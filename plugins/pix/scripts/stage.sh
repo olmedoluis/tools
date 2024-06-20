@@ -32,7 +32,7 @@ function stage() {
         echo -e "${IINFO}Staging files."
         for file in "${matches[@]}"; do
             git add -- $file > /dev/null 2>&1
-            echo -e "${TAB}${IDOT}${CYAN}${IADD}$file.${END_COLOR}"
+            echo -e "${TAB}${IDOT}${GREEN}${IADD}$file${END_COLOR}"
         done
         
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#matches[@]} File(s) staged.${END_COLOR}"
@@ -42,7 +42,7 @@ function stage() {
         echo -e "${IINFO}Staging files."
         for file in "${files[@]}"; do
             git add -- $file > /dev/null 2>&1
-            echo -e "${TAB}${IDOT}${CYAN}${IADD}$file.${END_COLOR}"
+            echo -e "${TAB}${IDOT}${GREEN}${IADD}$file${END_COLOR}"
         done
         
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#files[@]} File(s) staged.${END_COLOR}"
@@ -126,7 +126,7 @@ function stage() {
     echo -e "${IINFO}Staging files."
     for file in "${staged_files[@]}"; do
         git add -- $file > /dev/null 2>&1
-        echo -e "${TAB}${IDOT}${CYAN}${IADD}$file${END_COLOR}."
+        echo -e "${TAB}${IDOT}${GREEN}${IADD}$file${END_COLOR}"
     done
     
     echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#staged_files[@]} File(s) staged.${END_COLOR}"
