@@ -13,6 +13,7 @@ function unstage() {
     
     local files=($(git diff --cached --name-only))
     local renamed_files=($(git status -s | grep -oP "^R\s+.+?\s->\s\K.+$"))
+    local files_unstaged_count=0
     
     local matches=()
     if [[ ${#files} != 0 ]]; then
@@ -31,6 +32,7 @@ function unstage() {
     
     if [[ ${#files[@]} == "${#matches[@]}" || ${#matches[@]} == 1 ]]; then
         echo -e "${IINFO}Unstaging files."
+        local unstaged_files_count=${#matches[@]}
         
         if [[ -n $renamed_files ]]; then
             local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
@@ -44,16 +46,18 @@ function unstage() {
             if some "$file" "${renamed_files[@]}"; then
                 local original_file="${original_renamed_files[renamed_files_index]}"
                 git reset -- $original_file > /dev/null 2>&1
+                (( unstaged_files_count++ ))
                 (( renamed_files_index++ ))
                 echo -e "${TAB}${IDOT}${RED}${IRMV}$original_file${END_COLOR}"
             fi
         done
         
-        echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#matches[@]} File(s) unstaged.${END_COLOR}"
+        echo -e "${TAB}${ISTAR}${GREEN}${IOK}${unstaged_files_count} File(s) unstaged.${END_COLOR}"
         return 0
     fi
     if [[ ${#files[@]} == 1 && "$#" == 0 ]]; then
         echo -e "${IINFO}Unstaging files."
+        local unstaged_files_count=${#files[@]}
         
         if [[ -n $renamed_files ]]; then
             local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
@@ -67,12 +71,13 @@ function unstage() {
             if some "$file" "${renamed_files[@]}"; then
                 local original_file="${original_renamed_files[renamed_files_index]}"
                 git reset -- $original_file > /dev/null 2>&1
+                (( unstaged_files_count++ ))
                 (( renamed_files_index++ ))
                 echo -e "${TAB}${IDOT}${RED}${IRMV}$original_file${END_COLOR}"
             fi
         done
         
-        echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#files[@]} File(s) unstaged.${END_COLOR}"
+        echo -e "${TAB}${ISTAR}${GREEN}${IOK}${unstaged_files_count} File(s) unstaged.${END_COLOR}"
         return 0
     fi
     
@@ -151,6 +156,7 @@ function unstage() {
     done
     
     echo -e "${IINFO}Unstaging files."
+    local unstaged_files_count=${#unstaged_files[@]}
     
     if [[ -n $renamed_files ]]; then
         local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
@@ -164,10 +170,11 @@ function unstage() {
         if some "$file" "${renamed_files[@]}"; then
             local original_file="${original_renamed_files[renamed_files_index]}"
             git reset -- $original_file > /dev/null 2>&1
+            (( unstaged_files_count++ ))
             (( renamed_files_index++ ))
             echo -e "${TAB}${IDOT}${RED}${IRMV}$original_file${END_COLOR}"
         fi
     done
     
-    echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#unstaged_files[@]} File(s) unstaged.${END_COLOR}"
+    echo -e "${TAB}${ISTAR}${GREEN}${IOK}${unstaged_files_count} File(s) unstaged.${END_COLOR}"
 }
