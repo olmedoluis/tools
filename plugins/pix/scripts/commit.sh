@@ -30,7 +30,7 @@ function commit() {
         echo -e "${IINFO}Commiting changes."
     fi
     
-    echo -e "${TAB}${ISTAR}${CYAN}${ICMT}${pattern}${END_COLOR}"
+    echo -e "${TAB}${ISTAR}${CYAN}${ICMT}\"${pattern}\"${END_COLOR}"
     
     local commit_info="$(git commit --no-verify -m "$pattern")"
     commit_info="${commit_info#*$'\n'}"
@@ -54,7 +54,7 @@ function commit() {
         additions+="${GREEN}${IPLUS}${insertions}${END_COLOR} "
     fi
     if [[ $deletions != "" ]]; then
-        additions+="${RED}${ILESS}${deletions}${END_COLOR} "
+        additions+="${RED}${j}${deletions}${END_COLOR} "
     fi
     if [[ $files_change_count != "" ]]; then
         file_counters+="${YELLOW}${IMOD}${files_change_count}${END_COLOR} "
