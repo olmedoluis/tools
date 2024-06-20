@@ -2,6 +2,7 @@
 
 function status() {
     source "$TOOLS_PATH/constants/colors.sh"
+    source "$TOOLS_PATH/lib/array.sh"
     
     if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         echo -e "${RED}${IERR}Not a git repository.${END_COLOR}"
@@ -13,6 +14,7 @@ function status() {
     local modified_files=($(git diff --name-only))
     local untracked_files=($(git ls-files --others --exclude-standard))
     local conflicted_files=($(git diff --name-only --diff-filter=U))
+    local renamed_files=($(git status -s | grep -oP "^R\s+.+?\s->\s\K.+$"))
     
     echo -e "${MAGENTA}${IBRCH}${current_branch_name}${END_COLOR}"
     if [[ ${#conflicted_files} != 0 ]]; then
@@ -24,7 +26,14 @@ function status() {
     fi
     
     if [[ ${#staged_files} != 0 ]]; then
+        local original_renamed_files=($(git status -s | grep -oP "^R\s+\K.+?(?=\s+->)"))
+        
         for file in "${staged_files[@]}"; do
+            if some "$file" "${renamed_files[@]}"; then
+                echo -e "${TAB}· ${GREEN}${IRNM}${file}${END_COLOR}"
+                continue
+            fi
+            
             echo -e "${TAB}· ${GREEN}${IADD}${file}${END_COLOR}"
         done
     fi
