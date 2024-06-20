@@ -19,7 +19,7 @@ function status() {
     echo -e "${MAGENTA}${IBRCH}${current_branch_name}${END_COLOR}"
     if [[ ${#conflicted_files} != 0 ]]; then
         for file in "${conflicted_files[@]}"; do
-            echo -e "${TAB}· ${BLUE}${ICONF}${file}${END_COLOR}"
+            echo -e "${TAB}${IDOT}${BLUE}${ICONF}${file}${END_COLOR}"
         done
         
         return 0
@@ -47,29 +47,29 @@ function status() {
                 local static_file_part="${original_file:0:prefix_length}"
                 local modified_file_part="${file:prefix_length}"
                 
-                echo -e "${TAB}· ${GREEN}${IRNM}${static_file_part}${YELLOW}${modified_file_part}${END_COLOR}"
+                echo -e "${TAB}${IDOT}${GREEN}${IRNM}${static_file_part}${YELLOW}${modified_file_part}${END_COLOR}"
                 (( renamed_files_index++ ))
                 
                 continue
             fi
             
-            echo -e "${TAB}· ${GREEN}${IADD}${file}${END_COLOR}"
+            echo -e "${TAB}${IDOT}${GREEN}${IADD}${file}${END_COLOR}"
         done
     fi
     
     if [[ ${#modified_files} != 0 ]]; then
         for file in "${modified_files[@]}"; do
-            echo -e "${TAB}· ${YELLOW}${IMOD}${file}${END_COLOR}"
+            echo -e "${TAB}${IDOT}${YELLOW}${IMOD}${file}${END_COLOR}"
         done
     fi
     
     if [[ ${#untracked_files} != 0 ]]; then
         for file in "${untracked_files[@]}"; do
-            echo -e "${TAB}· ${RED}${IUNTR}${file}${END_COLOR}"
+            echo -e "${TAB}${IDOT}${RED}${IUNTR}${file}${END_COLOR}"
         done
     fi
     
     if [[ ${#staged_files[@]} -eq 0 && ${#modified_files[@]} -eq 0 && ${#untracked_files[@]} -eq 0 ]]; then
-        echo -e "${TAB}· ${GREEN}${IOK}Nothing to commit, working tree clean.${END_COLOR}"
+        echo -e "${TAB}${ISTAR}${GREEN}${IOK}Nothing to commit, working tree clean.${END_COLOR}"
     fi
 }
