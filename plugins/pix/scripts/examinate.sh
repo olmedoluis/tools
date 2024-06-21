@@ -198,7 +198,7 @@ function examinate() {
                     continue
                 ;;
                 *)
-                    echo -e "${TAB}${RED}${ISTAR}${IERR}Unknown option.${END_COLOR}"
+                    echo -e "${TAB}${ISTAR}${RED}${IERR}Unknown option.${END_COLOR}"
                     return 1
                 ;;
             esac

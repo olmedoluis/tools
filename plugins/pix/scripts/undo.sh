@@ -37,7 +37,7 @@ function undo() {
             else
                 git checkout -- "$file"
             fi
-            echo -e "${TAB}${IDOT}${CYAN}${IUNDO}$file.${END_COLOR}"
+            echo -e "${TAB}${IDOT}${RED}${IUNDO}$file.${END_COLOR}"
         done
         
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#matches[@]} File(s) undone.${END_COLOR}"
@@ -52,7 +52,7 @@ function undo() {
                 git checkout -- "$file"
             fi
             
-            echo -e "${TAB}${IDOT}${CYAN}${IUNDO}$file.${END_COLOR}"
+            echo -e "${TAB}${IDOT}${RED}${IUNDO}$file.${END_COLOR}"
         done
         
         echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#files[@]} File(s) undone.${END_COLOR}"
@@ -140,7 +140,7 @@ function undo() {
         else
             git checkout -- "$file"
         fi
-        echo -e "${TAB}${IDOT}${CYAN}${IUNDO}$file${END_COLOR}."
+        echo -e "${TAB}${IDOT}${RED}${IUNDO}$file${END_COLOR}."
     done
     
     echo -e "${TAB}${ISTAR}${GREEN}${IOK}${#undone_files[@]} File(s) undone.${END_COLOR}"
